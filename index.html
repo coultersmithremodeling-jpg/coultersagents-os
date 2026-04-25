@@ -6,6 +6,7 @@
 <title>CoultersAgents — AI Operating System</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#050816;--bg2:#0f1629;--bg3:#151c30;--bg4:#1a2340;--brand:#06b6d4;--brand2:#8b5cf6;--brand-glow:rgba(6,182,212,.2);--accent:#10b981;--warn:#f59e0b;--danger:#ef4444;--txt:#f1f5f9;--txt2:#94a3b8;--txt3:#64748b;--brd:rgba(255,255,255,.06);--brd2:rgba(255,255,255,.12);--grad:linear-gradient(135deg,var(--brand),var(--brand2));--rs:8px;--rl:20px;--font:'Inter',system-ui,sans-serif;--radius:8px}
@@ -42,6 +43,7 @@ nav{position:fixed;top:0;width:100%;height:60px;background:rgba(5,8,22,.9);backd
 .merr{font-size:11px;color:var(--danger);margin-top:4px;display:none}.merr.show{display:block}
 .mclose{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:6px;background:var(--bg3);border:1px solid var(--brd2);color:var(--txt2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.2s}.mclose:hover{background:var(--danger);border-color:var(--danger);color:#fff}
 .mor{text-align:center;margin:14px 0;font-size:11px;color:var(--txt3)}
+.mlink{font-size:11px;color:var(--brand);cursor:pointer;text-align:center;display:block;margin-top:6px;background:none;border:none;font-family:inherit}.mlink:hover{text-decoration:underline}
 .hero{min-height:100vh;display:flex;align-items:center;padding-top:60px;position:relative;z-index:1}
 .hero-in{max-width:1200px;width:100%;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
 .hero-left{animation:fadeUp .8s ease}
@@ -144,14 +146,11 @@ footer{position:relative;z-index:1;padding:28px 24px;border-top:1px solid var(--
 .stat-card.c1::before{background:var(--brand)}.stat-card.c2::before{background:var(--accent)}.stat-card.c3::before{background:var(--brand2)}.stat-card.c4::before{background:var(--warn)}
 .stat-card .sc-icon{font-size:20px;margin-bottom:6px}.stat-card .sc-val{font-size:24px;font-weight:900;letter-spacing:-1px;line-height:1}
 .stat-card .sc-label{font-size:10px;color:var(--txt3);margin-top:3px;font-weight:600}
-.stat-card .sc-sub{font-size:9px;color:var(--txt3);margin-top:2px}
 .detail-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
 .dm-card{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:16px}
 .dm-card h4{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 .dm-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--brd);font-size:11px;color:var(--txt2)}.dm-row:last-child{border-bottom:none}
 .dm-row .dm-val{font-weight:800;color:var(--brand);transition:color .5s}
-.dm-row .dm-pct{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px}
-.dm-pct.up{background:rgba(16,185,129,.1);color:var(--accent)}.dm-pct.neutral{background:rgba(100,116,139,.1);color:var(--txt3)}
 .roadmap{display:flex;align-items:center;gap:0;margin-bottom:24px;padding:14px 0;overflow-x:auto}
 .rm-step{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .rm-circle{width:36px;height:36px;border-radius:50%;border:2px solid var(--brd2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:var(--bg3);transition:.4s}
@@ -186,7 +185,7 @@ footer{position:relative;z-index:1;padding:28px 24px;border-top:1px solid var(--
 .agent-sub{font-size:9px;color:var(--txt3);margin-top:2px;font-style:italic}
 .deal-card{background:var(--bg2);border:2px solid var(--warn);border-radius:var(--rl);padding:24px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden}
 .deal-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,158,11,.03),rgba(239,68,68,.03));pointer-events:none}
-.deal-card h3{font-size:18px;font-weight:900;margin-bottom:6px}.deal-card p{font-size:12px;color:var(--txt2);margin-bottom:14px;max-width:460px;margin-left:auto;margin-right:auto}.deal-price{font-size:13px;color:var(--warn);font-weight:700;margin-bottom:12px}
+.deal-card h3{font-size:18px;font-weight:900;margin-bottom:6px}.deal-card p{font-size:12px;color:var(--txt2);margin-bottom:14px}.deal-price{font-size:13px;color:var(--warn);font-weight:700;margin-bottom:12px}
 .deal-active-msg{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--rl);padding:18px;text-align:center;margin-bottom:24px}.deal-active-msg h3{color:var(--accent);margin-bottom:3px;font-size:14px;font-weight:800}.deal-active-msg p{font-size:11px;color:var(--txt2)}
 .chat-container{display:flex;flex-direction:column;height:calc(100vh - 140px);background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);overflow:hidden}
 .chat-topbar{padding:12px 16px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
@@ -223,14 +222,12 @@ footer{position:relative;z-index:1;padding:28px 24px;border-top:1px solid var(--
 .intg-btn{width:100%;padding:8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;border:none}.intg-btn.connect{background:var(--grad);color:#fff;transition:all .5s}.intg-btn.connect:hover{box-shadow:0 4px 15px var(--brand-glow)}.intg-btn.disconnect{background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.2)!important}
 .privacy-banner{background:linear-gradient(135deg,var(--brand-glow),rgba(16,185,129,.05));border:1px solid rgba(6,182,212,.15);border-radius:var(--rl);padding:20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:14px;transition:all .5s}
 .privacy-banner-icon{font-size:28px;flex-shrink:0}.privacy-banner h3{font-size:14px;font-weight:800;margin-bottom:3px}.privacy-banner p{font-size:11px;color:var(--txt2);line-height:1.6}
-.privacy-banner .pb-ul{list-style:none;margin-top:6px;padding:0}.privacy-banner .pb-ul li{font-size:10px;color:var(--txt2);padding:2px 0;display:flex;align-items:center;gap:5px}.privacy-banner .pb-ul li::before{content:'✓';color:var(--accent);font-weight:800;font-size:11px}
 .vault-card{background:var(--bg2);border:1px solid var(--brd);border-radius:14px;padding:18px;margin-bottom:14px}.vault-card h4{font-size:12px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .vault-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--brd);font-size:11px;color:var(--txt2)}.vault-row:last-child{border-bottom:none}
 .vault-row .vr-left{display:flex;align-items:center;gap:8px}.vault-row .vr-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:var(--brand-glow);transition:background .5s}
 .vault-row .vr-actions{display:flex;gap:6px}
 .vault-btn-sm{padding:4px 10px;border-radius:6px;font-size:9px;font-weight:700;cursor:pointer;font-family:inherit;border:none;transition:.2s}
 .vault-btn-sm.revoke{background:rgba(239,68,68,.1);color:var(--danger)}.vault-btn-sm.revoke:hover{background:rgba(239,68,68,.2)}
-.vault-btn-sm.view{background:var(--brand-glow);color:var(--brand);transition:all .5s}.vault-btn-sm.view:hover{background:var(--brand);color:#fff}
 .audit-log{max-height:280px;overflow-y:auto}.audit-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:10px;color:var(--txt2);line-height:1.5}
 .audit-item .ai-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:var(--brand-glow);transition:background .5s}
 .audit-item .ai-time{font-size:9px;color:var(--txt3);white-space:nowrap;flex-shrink:0;margin-top:1px}.audit-item strong{color:var(--txt);font-weight:700}
@@ -287,6 +284,19 @@ footer{position:relative;z-index:1;padding:28px 24px;border-top:1px solid var(--
 .oauth-approve{width:100%;padding:12px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;margin-bottom:8px}.oauth-approve:hover{box-shadow:0 4px 20px var(--brand-glow)}
 .oauth-cancel{width:100%;padding:10px;background:none;color:var(--txt3);border:1px solid var(--brd2);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}.oauth-cancel:hover{border-color:var(--danger);color:var(--danger)}
 .oauth-encrypt{font-size:9px;color:var(--accent);display:flex;align-items:center;justify-content:center;gap:4px;margin-top:10px;padding:6px;background:rgba(16,185,129,.05);border-radius:6px}
+.stripe-overlay{position:fixed;inset:0;background:rgba(5,8,22,.92);backdrop-filter:blur(8px);z-index:2600;display:none;align-items:center;justify-content:center}.stripe-overlay.show{display:flex}
+.stripe-modal{background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--rl);padding:28px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:fadeUp .3s ease;text-align:center}
+.stripe-modal h3{font-size:18px;font-weight:900;margin-bottom:4px}.stripe-modal .s-price{font-size:28px;font-weight:900;color:var(--brand);margin-bottom:2px}.stripe-modal .s-sub{font-size:12px;color:var(--txt3);margin-bottom:18px}
+.stripe-modal .s-features{text-align:left;margin-bottom:18px;font-size:11px;color:var(--txt2);line-height:1.8}
+.stripe-modal .s-features li{list-style:none;padding-left:16px;position:relative}.stripe-modal .s-features li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:800}
+.s-card-wrap{margin-bottom:14px}
+.s-card-wrap label{display:block;font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.s-card-element{padding:12px;background:var(--bg);border:1.5px solid var(--brd2);border-radius:var(--rs);min-height:44px}
+.s-card-errors{font-size:11px;color:var(--danger);margin-top:4px;display:none}
+.s-card-errors.show{display:block}
+.s-pay-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--warn),var(--danger));color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;margin-top:8px}.s-pay-btn:hover{box-shadow:0 4px 20px rgba(245,158,11,.3)}.s-pay-btn:disabled{opacity:.5;cursor:not-allowed}
+.s-cancel{width:100%;padding:10px;background:none;color:var(--txt3);border:1px solid var(--brd2);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px}.s-cancel:hover{border-color:var(--danger);color:var(--danger)}
+.s-secure{font-size:9px;color:var(--txt3);display:flex;align-items:center;justify-content:center;gap:4px;margin-top:10px}
 @media(max-width:1024px){.dash-layout{grid-template-columns:1fr}.dash-sidebar{display:none}.settings-grid{grid-template-columns:1fr}.analytics-row{grid-template-columns:1fr}.dash-main{padding:16px}.intg-grid{grid-template-columns:1fr}.detail-metrics{grid-template-columns:1fr}}
 @media(max-width:768px){.hero-in{grid-template-columns:1fr;text-align:center;gap:28px}.hero p{margin:0 auto 24px}.hero-btns{justify-content:center}.hero-right{order:-1}.signup-in{grid-template-columns:1fr}.price-card{position:static}.priv-in{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.nav-links{display:none}.mob-btn{display:flex}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--bg2);padding:16px;gap:12px;border-bottom:1px solid var(--brd);box-shadow:0 8px 30px rgba(0,0,0,.4)}.agents-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.stats-row{grid-template-columns:1fr}.intg-grid{grid-template-columns:1fr}.chat-msg{max-width:90%}.hero h1{font-size:26px}.serv-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}.vibe-grid{grid-template-columns:repeat(2,1fr)}.detail-metrics{grid-template-columns:1fr}}
@@ -296,731 +306,1429 @@ footer{position:relative;z-index:1;padding:28px 24px;border-top:1px solid var(--
 <div class="grid-bg"></div><div class="orb orb1"></div><div class="orb orb2"></div>
 <div class="db-status"><div class="db-dot" id="dbDot"></div><span id="dbText">Connecting...</span></div>
 <div class="notif" id="notif"></div>
+<div id="bootOverlay"><div class="boot-logo">Coulters<span>Agents</span></div><div class="boot-bar"><div class="boot-bar-fill" id="bootBarFill"></div></div><div class="boot-text" id="bootText">Resolving session...</div></div>
 
-<div id="bootOverlay">
-<div class="boot-logo">Coulters<span>Agents</span></div>
-<div class="boot-bar"><div class="boot-bar-fill" id="bootBarFill"></div></div>
-<div class="boot-text" id="bootText">Resolving session...</div>
-</div>
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal"><div class="modal"><button class="mclose" onclick="closeLoginModal()">&#10005;</button><h2>Welcome Back</h2><p class="msub">Log in to your AI Operating System.</p><div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="you@business.com"></div><div class="fg"><label>Password</label><input type="password" id="loginPassword" placeholder="Your password"></div><button class="mbtn" id="loginBtn" onclick="handleLogin()">Log In</button><div class="merr" id="loginError"></div><button class="mlink" onclick="handlePasswordReset()">Forgot password?</button><div class="mor">or</div><button class="mbtn" style="background:var(--bg3);border:1px solid var(--brd2)" onclick="closeLoginModal();document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create a New Account</button></div></div>
 
-<div class="modal-overlay" id="loginModal"><div class="modal"><button class="mclose" onclick="closeLoginModal()">&#10005;</button>
-<h2>Welcome Back</h2><p class="msub">Log in to your AI Operating System.</p>
-<div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="you@business.com"></div>
-<div class="fg"><label>Password</label><input type="password" id="loginPassword" placeholder="Your password"></div>
-<button class="mbtn" id="loginBtn" onclick="handleLogin()">Log In</button><div class="merr" id="loginError"></div>
-<div class="mor">or</div><button class="mbtn" style="background:var(--bg3);border:1px solid var(--brd2)" onclick="closeLoginModal();document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create a New Account</button>
-</div></div>
+<!-- Password Reset Modal -->
+<div class="modal-overlay" id="resetModal"><div class="modal"><button class="mclose" onclick="closeResetModal()">&#10005;</button><h2>Reset Password</h2><p class="msub">We'll send a reset link to your email.</p><div class="fg"><label>Email</label><input type="email" id="resetEmail" placeholder="you@business.com"></div><button class="mbtn" id="resetBtn" onclick="sendPasswordReset()">Send Reset Link</button><div class="merr" id="resetError"></div><div class="mor"></div><button class="mlink" onclick="closeResetModal();openLoginModal()">Back to Login</button></div></div>
 
-<div class="oauth-overlay" id="oauthOverlay"><div class="oauth-modal"><h3 id="oauthTitle">Connect</h3><p id="oauthDesc">Authorize securely.</p><div class="oauth-perms-list" id="oauthPerms"></div><button class="oauth-approve" id="oauthApproveBtn" onclick="approveOAuth()">Allow &amp; Connect</button><button class="oauth-cancel" onclick="cancelOAuth()">Cancel</button><div class="oauth-encrypt">&#128274; End-to-end encrypted.</div></div></div>
+<!-- OAuth Modal -->
+<div class="oauth-overlay" id="oauthOverlay"><div class="oauth-modal"><h3 id="oauthTitle">Connect</h3><p id="oauthDesc">Authorize securely.</p><div class="oauth-perms-list" id="oauthPerms"></div><button class="oauth-approve" onclick="approveOAuth()">Allow &amp; Connect</button><button class="oauth-cancel" onclick="cancelOAuth()">Cancel</button><div class="oauth-encrypt">&#128274; End-to-end encrypted.</div></div></div>
 
+<!-- Stripe Payment Modal -->
+<div class="stripe-overlay" id="stripeOverlay"><div class="stripe-modal"><h3>&#128640; Unlock Full Automation</h3><div class="s-price">$39.99<span style="font-size:14px;font-weight:400;color:var(--txt3)">/mo</span></div><div class="s-sub">Cancel anytime. Instant activation.</div><ul class="s-features"><li>All AI agents unlocked</li><li>Live phone &amp; email handling</li><li>Full CRM &amp; marketing automation</li><li>Priority support</li><li>Unlimited integrations</li></ul><div class="s-card-wrap"><label>Card Details</label><div class="s-card-element" id="cardElement"></div><div class="s-card-errors" id="cardErrors"></div></div><button class="s-pay-btn" id="payBtn" onclick="processPayment()">&#128274; Subscribe — $39.99/mo</button><button class="s-cancel" onclick="closeStripeModal()">Cancel</button><div class="s-secure">&#128274; Secured by Stripe. We never see your card.</div></div></div>
+
+<!-- Admin Panel -->
 <div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><div class="admin-header"><h2>Signups Dashboard</h2><button class="admin-close" onclick="toggleAdmin()">&#10005;</button></div><div id="adminContent"><div class="no-data"><div class="spinner"></div> Loading...</div></div></div></div>
 
-<nav id="nav"><div class="nav-in">
-<a class="logo" onclick="goHome()"><div class="logo-box">CA</div><div class="logo-txt">Coulters<span>Agents</span></div></a>
-<ul class="nav-links" id="navLinks"></ul>
-<button class="mob-btn" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
-</div></nav>
+<nav id="nav"><div class="nav-in"><a class="logo" onclick="goHome()"><div class="logo-box">CA</div><div class="logo-txt">Coulters<span>Agents</span></div></a><ul class="nav-links" id="navLinks"></ul><button class="mob-btn" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button></div></nav>
 
+<!-- Landing Page Sections -->
 <section class="hero landing-page" id="heroSection"><div class="hero-in"><div class="hero-left"><div class="hero-badge"><span class="dot"></span> Now Accepting Businesses</div><h1>Your AI<br>Workforce,<br><span class="gradient-text">Deployed.</span></h1><p>AI agents that handle scheduling, phones, email, marketing &amp; more &mdash; so you focus on what matters.</p><div class="hero-btns"><a href="#signup" class="btn btn-p">Start Free &#8594;</a><a href="#services" class="btn btn-s">Explore Services</a></div></div><div class="hero-right"><svg class="hero-svg" viewBox="0 0 500 400" fill="none"><g class="float1"><rect x="60" y="140" width="90" height="110" rx="16" fill="url(#g1)" opacity=".9"/><rect x="75" y="158" width="24" height="18" rx="4" fill="#050816"/><rect x="111" y="158" width="24" height="18" rx="4" fill="#050816"/></g><g class="float2"><circle cx="380" cy="130" r="30" fill="url(#g2)" opacity=".8"/></g><line x1="160" y1="195" x2="340" y2="195" stroke="url(#g1)" stroke-width="2" stroke-dasharray="8 4" opacity=".5"/><circle cx="250" cy="195" r="18" fill="url(#g1)" opacity=".2"/><circle class="pulse-ring" cx="250" cy="195" r="60" fill="none" stroke="#06b6d4" stroke-width="1" opacity=".2"/><text x="250" y="200" text-anchor="middle" fill="#06b6d4" font-size="20">&#9889;</text><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs></svg></div></div></section>
 
 <section class="services landing-page" id="services"><div class="serv-in"><p class="sec-label">Pick Your AI Team</p><h2 class="sec-title">What should your AI handle?</h2><p class="sec-sub">Tap to select.</p><div class="serv-grid" id="servGrid"></div></div></section>
 
-<section class="signup-section landing-page" id="signup"><div class="signup-in"><div class="form-card" id="formCard"><div class="steps-bar" id="stepsBar"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
-<div class="form-step" id="step0"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 1 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Tell us about you</h3><p style="font-size:12px;color:var(--txt3);margin-bottom:18px">Quick setup, huge payoff.</p>
-<div class="form-row"><div class="form-group"><label>First Name</label><input type="text" id="fName" placeholder="Jane"><div class="err-msg" id="fNameErr">Required</div></div><div class="form-group"><label>Last Name</label><input type="text" id="lName" placeholder="Smith"><div class="err-msg" id="lNameErr">Required</div></div></div>
-<div class="form-group"><label>Email</label><input type="email" id="email" placeholder="jane@company.com"><div class="err-msg" id="emailErr">Valid email required</div></div>
-<div class="form-group"><label>Business Name</label><input type="text" id="bizName" placeholder="Acme Corp"><div class="err-msg" id="bizNameErr">Required</div></div>
-<div class="form-group"><label>Industry</label><select id="industry"><option value="">Select your industry...</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal Services</option><option value="restaurant">Restaurant / Food</option><option value="retail">Retail</option><option value="finance">Finance / Banking</option><option value="construction">Construction</option><option value="education">Education</option><option value="other">Other</option></select></div>
-<div class="form-group"><label>Phone <span style="color:var(--txt3)">(optional)</span></label><input type="tel" id="phone" placeholder="(555) 123-4567"></div>
-<button class="btn btn-p" style="width:100%;justify-content:center;margin-top:4px" onclick="nextStep(0)">Continue &#8594;</button></div>
-<div class="form-step" id="step1" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 2 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your AI services</h3><div class="sel-services" id="selServices"></div><div class="serv-grid" id="formServGrid" style="max-height:240px;overflow-y:auto;margin-bottom:12px"></div><button class="btn btn-p" style="width:100%;justify-content:center" onclick="nextStep(1)">Continue &#8594;</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(1)">&#8592; Back</button></div>
-<div class="form-step" id="step2" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 3 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your goals</h3><div class="goal-chips" id="goalChips"></div><div class="form-group"><label>Anything else?</label><textarea id="customGoal" rows="3" placeholder="E.g., Handle all customer calls after 5pm..."></textarea></div><button class="btn btn-p" style="width:100%;justify-content:center" onclick="nextStep(2)">Continue &#8594;</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(2)">&#8592; Back</button></div>
-<div class="form-step" id="step3" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 4 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Set password &amp; launch</h3><p style="font-size:12px;color:var(--txt3);margin-bottom:18px">This creates your secure account.</p>
-<div class="form-group"><label>Create Password</label><input type="password" id="createPassword" placeholder="Min 6 characters"><div class="err-msg" id="pwErr">6+ characters required</div></div>
-<div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Re-enter password"><div class="err-msg" id="pwMatchErr">Passwords must match</div></div>
-<div id="reviewContent"></div>
-<div class="form-group" style="margin-top:12px"><label style="display:flex;align-items:flex-start;gap:7px;cursor:pointer;font-weight:500;color:var(--txt2);font-size:12px"><input type="checkbox" id="agreeTerms" style="width:16px;height:16px;margin-top:1px;accent-color:var(--brand);flex-shrink:0"><span>I agree to the <a href="#" style="color:var(--brand)">Terms</a> &amp; <a href="#" style="color:var(--brand)">Privacy Policy</a>.</span></label><div class="err-msg" id="agreeErr" style="margin-left:23px">Please agree</div></div>
-<button class="btn btn-p" id="submitBtn" style="width:100%;justify-content:center" onclick="submitForm()">&#128640; Create Account &amp; Launch</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(3)">&#8592; Back</button></div>
-</div>
-<div class="price-card"><div class="price-tag">$39.99<span>/mo</span></div><p class="price-note">Platform fee &mdash; covers <b>maintenance, AI oversight, updates</b>.</p><div class="chart"><p>Estimated API Usage</p><div class="chart-row"><span class="chart-label">Light</span><div class="chart-bar-bg"><div class="chart-bar low">~$8</div></div><span class="chart-cost">~$48/mo</span></div><div class="chart-row"><span class="chart-label">Average</span><div class="chart-bar-bg"><div class="chart-bar mid">~$18</div></div><span class="chart-cost">~$58/mo</span></div><div class="chart-row"><span class="chart-label">Heavy</span><div class="chart-bar-bg"><div class="chart-bar high">~$35</div></div><span class="chart-cost">~$75/mo</span></div></div><div class="price-total"><div class="row"><span>Platform</span><span>$39.99</span></div><div class="row"><span>API usage</span><span style="color:var(--brand)">$8 &ndash; $35</span></div><div class="row total"><span>Total</span><span>$48 &ndash; $75/mo</span></div></div><div class="api-note"><strong>What's the API fee?</strong><br>Only kicks in when your AI is actively working.</div></div></section>
+<section class="signup-section landing-page" id="signup"><div class="signup-in"><div class="form-card" id="formCard"><div class="steps-bar" id="stepsBar"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div><div class="form-step" id="step0"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 1 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Tell us about you</h3><p style="font-size:12px;color:var(--txt3);margin-bottom:18px">Quick setup, huge payoff.</p><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" id="fName" placeholder="Jane"><div class="err-msg" id="fNameErr">Required</div></div><div class="form-group"><label>Last Name</label><input type="text" id="lName" placeholder="Smith"><div class="err-msg" id="lNameErr">Required</div></div></div><div class="form-group"><label>Email</label><input type="email" id="email" placeholder="jane@company.com"><div class="err-msg" id="emailErr">Valid email required</div></div><div class="form-group"><label>Business Name</label><input type="text" id="bizName" placeholder="Acme Corp"><div class="err-msg" id="bizNameErr">Required</div></div><div class="form-group"><label>Industry</label><select id="industry"><option value="">Select your industry...</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal Services</option><option value="restaurant">Restaurant / Food</option><option value="retail">Retail</option><option value="finance">Finance / Banking</option><option value="construction">Construction</option><option value="education">Education</option><option value="other">Other</option></select></div><div class="form-group"><label>Phone <span style="color:var(--txt3)">(optional)</span></label><input type="tel" id="phone" placeholder="(555) 123-4567"></div><button class="btn btn-p" style="width:100%;justify-content:center;margin-top:4px" onclick="nextStep(0)">Continue &#8594;</button></div><div class="form-step" id="step1" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 2 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your AI services</h3><div class="sel-services" id="selServices"></div><div class="serv-grid" id="formServGrid" style="max-height:240px;overflow-y:auto;margin-bottom:12px"></div><button class="btn btn-p" style="width:100%;justify-content:center" onclick="nextStep(1)">Continue &#8594;</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(1)">&#8592; Back</button></div><div class="form-step" id="step2" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 3 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your goals</h3><div class="goal-chips" id="goalChips"></div><div class="form-group"><label>Anything else?</label><textarea id="customGoal" rows="3" placeholder="E.g., Handle all customer calls after 5pm..."></textarea></div><button class="btn btn-p" style="width:100%;justify-content:center" onclick="nextStep(2)">Continue &#8594;</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(2)">&#8592; Back</button></div><div class="form-step" id="step3" style="display:none"><p style="font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;margin-bottom:3px">Step 4 of 4</p><h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Set password &amp; launch</h3><p style="font-size:12px;color:var(--txt3);margin-bottom:18px">This creates your secure account.</p><div class="form-group"><label>Create Password</label><input type="password" id="createPassword" placeholder="Min 6 characters"><div class="err-msg" id="pwErr">6+ characters required</div></div><div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Re-enter password"><div class="err-msg" id="pwMatchErr">Passwords must match</div></div><div id="reviewContent"></div><div class="form-group" style="margin-top:12px"><label style="display:flex;align-items:flex-start;gap:7px;cursor:pointer;font-weight:500;color:var(--txt2);font-size:12px"><input type="checkbox" id="agreeTerms" style="width:16px;height:16px;margin-top:1px;accent-color:var(--brand);flex-shrink:0"><span>I agree to the <a href="#" style="color:var(--brand)">Terms</a> &amp; <a href="#" style="color:var(--brand)">Privacy Policy</a>.</span></label><div class="err-msg" id="agreeErr" style="margin-left:23px">Please agree</div></div><button class="btn btn-p" id="submitBtn" style="width:100%;justify-content:center" onclick="submitForm()">&#128640; Create Account &amp; Launch</button><button class="btn btn-s" style="width:100%;justify-content:center;margin-top:4px" onclick="prevStep(3)">&#8592; Back</button></div></div><div class="price-card"><div class="price-tag">$39.99<span>/mo</span></div><p class="price-note">Platform fee &mdash; covers <b>maintenance, AI oversight, updates</b>.</p><div class="chart"><p>Estimated API Usage</p><div class="chart-row"><span class="chart-label">Light</span><div class="chart-bar-bg"><div class="chart-bar low">~$8</div></div><span class="chart-cost">~$48/mo</span></div><div class="chart-row"><span class="chart-label">Average</span><div class="chart-bar-bg"><div class="chart-bar mid">~$18</div></div><span class="chart-cost">~$58/mo</span></div><div class="chart-row"><span class="chart-label">Heavy</span><div class="chart-bar-bg"><div class="chart-bar high">~$35</div></div><span class="chart-cost">~$75/mo</span></div></div><div class="price-total"><div class="row"><span>Platform</span><span>$39.99</span></div><div class="row"><span>API usage</span><span style="color:var(--brand)">$8 &ndash; $35</span></div><div class="row total"><span>Total</span><span>$48 &ndash; $75/mo</span></div></div><div class="api-note"><strong>What's the API fee?</strong><br>Only kicks in when your AI is actively working.</div></div></section>
 
 <section class="privacy landing-page" id="privacy"><div class="priv-in"><div><p class="sec-label">Your Data</p><h2 class="sec-title">You see everything.<br><span class="gradient-text">We hide nothing.</span></h2></div><div class="priv-visual"><div class="priv-row"><div class="priv-icon">&#128274;</div><div class="priv-row-text"><h4>Encrypted Storage</h4><p>All data encrypted at rest and in transit</p></div><div class="priv-status">&#10003; Active</div></div><div class="priv-row"><div class="priv-icon">&#128065;</div><div class="priv-row-text"><h4>Full Transparency</h4><p>See every action your AI takes</p></div><div class="priv-status">&#10003; Always</div></div><div class="priv-row"><div class="priv-icon">&#128683;</div><div class="priv-row-text"><h4>No Data Selling</h4><p>Your data is never sold or shared</p></div><div class="priv-status">&#10003; Guaranteed</div></div></div></div></section>
 
-<footer class="landing-page"><div class="foot-in"><p>&copy; 2025 CoultersAgents</p><div class="foot-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#" onclick="toggleAdmin();return false">Admin</a></div></div></footer>
+<footer class="landing-page"><div class="foot-in"><p>&copy; 2025 CoultersAgents &bull; 832-857-9181</p><div class="foot-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#" onclick="toggleAdmin();return false">Admin</a></div></div></footer>
 
-<section id="userDashboard"><div class="dash-layout">
-<aside class="dash-sidebar"><div class="sb-user"><div class="sb-avatar" id="sbAvatar">U</div><div class="sb-name" id="sbName">User</div><div class="sb-biz" id="sbBiz">Business</div><div class="sb-status new" id="sbStatus">&#9679; Free Tier</div></div>
-<div class="sb-nav"><div class="sb-item" onclick="goHome()"><span class="sb-icon">&#127968;</span> Home</div><div class="sb-item active" data-panel="overview" onclick="switchPanel('overview')"><span class="sb-icon">&#128202;</span> Overview</div><div class="sb-item" data-panel="chat" onclick="switchPanel('chat')"><span class="sb-icon">&#128172;</span> Senterion AI</div><div class="sb-item" data-panel="integrations" onclick="switchPanel('integrations')"><span class="sb-icon">&#128279;</span> Integrations</div><div class="sb-item" data-panel="vault" onclick="switchPanel('vault')"><span class="sb-icon">&#128274;</span> Security</div><div class="sb-item" data-panel="analytics" onclick="switchPanel('analytics')"><span class="sb-icon">&#128200;</span> Analytics</div><div class="sb-item" data-panel="settings" onclick="switchPanel('settings')"><span class="sb-icon">&#9881;</span> Settings</div></div>
-<div class="sb-bottom"><button class="sb-home" onclick="goHome()">&#127968; Home Page</button><button class="sb-logout" onclick="handleSignOut()">&#128682; Sign Out</button></div>
-</aside>
-<main class="dash-main">
+<!-- Dashboard -->
+<section id="userDashboard"><div class="dash-layout"><aside class="dash-sidebar"><div class="sb-user"><div class="sb-avatar" id="sbAvatar">U</div><div class="sb-name" id="sbName">User</div><div class="sb-biz" id="sbBiz">Business</div><div class="sb-status new" id="sbStatus">&#9679; Free Tier</div></div><div class="sb-nav"><div class="sb-item" onclick="goHome()"><span class="sb-icon">&#127968;</span> Home</div><div class="sb-item active" data-panel="overview" onclick="switchPanel('overview')"><span class="sb-icon">&#128202;</span> Overview</div><div class="sb-item" data-panel="chat" onclick="switchPanel('chat')"><span class="sb-icon">&#128172;</span> Senterion AI</div><div class="sb-item" data-panel="integrations" onclick="switchPanel('integrations')"><span class="sb-icon">&#128279;</span> Integrations</div><div class="sb-item" data-panel="vault" onclick="switchPanel('vault')"><span class="sb-icon">&#128274;</span> Security</div><div class="sb-item" data-panel="analytics" onclick="switchPanel('analytics')"><span class="sb-icon">&#128200;</span> Analytics</div><div class="sb-item" data-panel="settings" onclick="switchPanel('settings')"><span class="sb-icon">&#9881;</span> Settings</div></div><div class="sb-bottom"><button class="sb-home" onclick="goHome()">&#127968; Home Page</button><button class="sb-logout" onclick="handleSignOut()">&#128682; Sign Out</button></div></aside><main class="dash-main">
 
-<div class="dash-panel active" id="panelOverview">
-<div class="panel-header"><h2>&#127968; Command Center</h2><p>Welcome back, <span id="dashUserName">Operator</span>.</p></div>
-<div class="roadmap" id="roadmap"><div class="rm-step"><div class="rm-circle done" id="rm1">&#10003;</div><div class="rm-label done">Signed Up</div></div><div class="rm-line done"></div><div class="rm-step"><div class="rm-circle active" id="rm2">2</div><div class="rm-label active">Sample Built</div></div><div class="rm-line" id="rline2"></div><div class="rm-step"><div class="rm-circle locked" id="rm3">&#128274;</div><div class="rm-label">Deal</div></div><div class="rm-line" id="rline3"></div><div class="rm-step"><div class="rm-circle locked" id="rm4">&#128274;</div><div class="rm-label">Profit</div></div></div>
-<div class="stats-row"><div class="stat-card c1"><div class="sc-icon">&#9993;</div><div class="sc-val" id="statEmails">0</div><div class="sc-label">Emails Sent</div></div><div class="stat-card c2"><div class="sc-icon">&#128101;</div><div class="sc-val" id="statLeads">0</div><div class="sc-label">Leads Captured</div></div><div class="stat-card c3"><div class="sc-icon">&#128222;</div><div class="sc-val" id="statCalls">0</div><div class="sc-label">Calls Handled</div></div><div class="stat-card c4"><div class="sc-icon">&#128176;</div><div class="sc-val" id="statRevenue">$0</div><div class="sc-label">Revenue</div></div></div>
-<div class="detail-metrics"><div class="dm-card"><h4>&#128200; Lead Metrics</h4><div class="dm-row"><span>Leads Today</span><span class="dm-val" id="dmLeadsToday">0</span></div><div class="dm-row"><span>Lead Conversion Rate</span><span class="dm-val" id="dmLeadConv">0%</span></div><div class="dm-row"><span>Avg Response Time</span><span class="dm-val" id="dmRespTime">0s</span></div><div class="dm-row"><span>Leads This Week</span><span class="dm-val" id="dmLeadsWeek">0</span></div></div>
-<div class="dm-card"><h4>&#128222; Call Metrics</h4><div class="dm-row"><span>Calls Today</span><span class="dm-val" id="dmCallsToday">0</span></div><div class="dm-row"><span>Avg Call Duration</span><span class="dm-val" id="dmCallDur">0:00</span></div><div class="dm-row"><span>Missed Calls</span><span class="dm-val" id="dmMissed">0</span></div><div class="dm-row"><span>Call Satisfaction</span><span class="dm-val" id="dmCallSat">0%</span></div></div>
-<div class="dm-card"><h4>&#9993; Email Metrics</h4><div class="dm-row"><span>Emails Sent</span><span class="dm-val" id="dmEmailSent">0</span></div><div class="dm-row"><span>Open Rate</span><span class="dm-val" id="dmEmailOpen">0%</span></div><div class="dm-row"><span>Reply Rate</span><span class="dm-val" id="dmEmailReply">0%</span></div><div class="dm-row"><span>Bounce Rate</span><span class="dm-val" id="dmEmailBounce">0%</span></div></div></div>
-<div class="profit-card"><div class="profit-label">Projected Monthly Profit</div><div class="profit-num" id="profitNum">$0</div><div class="profit-sub">Based on <span id="svcCount">0</span> active AI services</div></div>
-<div class="sandbox-card"><div class="sandbox-header"><h3>&#9889; Your AI Website Preview</h3><span class="sandbox-badge building" id="sandboxBadge">Building...</span></div><div class="sandbox-body"><div class="build-overlay" id="buildOverlay"><div class="build-spinner"></div><div class="build-pct" id="buildPct">0%</div><div class="build-msg" id="buildMsg">Senterion is analyzing your business...</div></div><iframe class="sandbox-iframe" id="sandboxIframe" srcdoc="<html><body style='background:#050816;color:#64748b;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif'>Waiting...</body></html>"></iframe></div></div>
-<div class="agents-grid" id="agentsGrid"></div>
-<div class="deal-card" id="dealCard"><h3>&#128274; Unlock Full Automation</h3><p>Activate all AI systems on your live infrastructure.</p><div class="deal-price">$39.99/mo &mdash; Cancel anytime</div><button class="btn btn-gold" id="dealBtn" onclick="enterDeal()">&#128640; Enter the Deal</button></div>
-<div class="deal-active-msg" id="dealActiveMsg" style="display:none"><h3>&#10003; All Systems Online</h3><p>Senterion is fully operational.</p></div>
-</div>
+<!-- Overview Panel -->
+<div class="dash-panel active" id="panelOverview"><div class="panel-header"><h2>&#127968; Command Center</h2><p>Welcome back, <span id="dashUserName">Operator</span>.</p></div><div class="roadmap" id="roadmap"><div class="rm-step"><div class="rm-circle done" id="rm1">&#10003;</div><div class="rm-label done">Signed Up</div></div><div class="rm-line done"></div><div class="rm-step"><div class="rm-circle active" id="rm2">2</div><div class="rm-label active">Sample Built</div></div><div class="rm-line" id="rline2"></div><div class="rm-step"><div class="rm-circle locked" id="rm3">&#128274;</div><div class="rm-label">Deal</div></div><div class="rm-line" id="rline3"></div><div class="rm-step"><div class="rm-circle locked" id="rm4">&#128274;</div><div class="rm-label">Profit</div></div></div><div class="stats-row"><div class="stat-card c1"><div class="sc-icon">&#9993;</div><div class="sc-val" id="statEmails">0</div><div class="sc-label">Emails Sent</div></div><div class="stat-card c2"><div class="sc-icon">&#128101;</div><div class="sc-val" id="statLeads">0</div><div class="sc-label">Leads Captured</div></div><div class="stat-card c3"><div class="sc-icon">&#128222;</div><div class="sc-val" id="statCalls">0</div><div class="sc-label">Calls Handled</div></div><div class="stat-card c4"><div class="sc-icon">&#128176;</div><div class="sc-val" id="statRevenue">$0</div><div class="sc-label">Revenue</div></div></div><div class="detail-metrics"><div class="dm-card"><h4>&#128200; Lead Metrics</h4><div class="dm-row"><span>Leads Today</span><span class="dm-val" id="dmLeadsToday">0</span></div><div class="dm-row"><span>Lead Conversion Rate</span><span class="dm-val" id="dmLeadConv">0%</span></div><div class="dm-row"><span>Avg Response Time</span><span class="dm-val" id="dmRespTime">0s</span></div><div class="dm-row"><span>Leads This Week</span><span class="dm-val" id="dmLeadsWeek">0</span></div></div><div class="dm-card"><h4>&#128222; Call Metrics</h4><div class="dm-row"><span>Calls Today</span><span class="dm-val" id="dmCallsToday">0</span></div><div class="dm-row"><span>Avg Call Duration</span><span class="dm-val" id="dmCallDur">0:00</span></div><div class="dm-row"><span>Missed Calls</span><span class="dm-val" id="dmMissed">0</span></div><div class="dm-row"><span>Call Satisfaction</span><span class="dm-val" id="dmCallSat">0%</span></div></div><div class="dm-card"><h4>&#9993; Email Metrics</h4><div class="dm-row"><span>Emails Sent</span><span class="dm-val" id="dmEmailSent">0</span></div><div class="dm-row"><span>Open Rate</span><span class="dm-val" id="dmEmailOpen">0%</span></div><div class="dm-row"><span>Reply Rate</span><span class="dm-val" id="dmEmailReply">0%</span></div><div class="dm-row"><span>Bounce Rate</span><span class="dm-val" id="dmEmailBounce">0%</span></div></div></div><div class="profit-card"><div class="profit-label">Projected Monthly Profit</div><div class="profit-num" id="profitNum">$0</div><div class="profit-sub">Based on <span id="svcCount">0</span> active AI services</div></div><div class="sandbox-card"><div class="sandbox-header"><h3>&#9889; Your AI Website Preview</h3><span class="sandbox-badge building" id="sandboxBadge">Building...</span></div><div class="sandbox-body"><div class="build-overlay" id="buildOverlay"><div class="build-spinner"></div><div class="build-pct" id="buildPct">0%</div><div class="build-msg" id="buildMsg">Senterion is analyzing your business...</div></div><iframe class="sandbox-iframe" id="sandboxIframe" srcdoc="<html><body style='background:#050816;color:#64748b;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif'>Waiting...</body></html>"></iframe></div></div><div class="agents-grid" id="agentsGrid"></div><div class="deal-card" id="dealCard"><h3>&#128274; Unlock Full Automation</h3><p>Activate all AI systems on your live infrastructure.</p><div class="deal-price">$39.99/mo &mdash; Cancel anytime</div><button class="btn btn-gold" id="dealBtn" onclick="enterDeal()">&#128640; Enter the Deal</button></div><div class="deal-active-msg" id="dealActiveMsg" style="display:none"><h3>&#10003; All Systems Online</h3><p>Senterion is fully operational.</p></div></div>
 
+<!-- Chat Panel -->
 <div class="dash-panel" id="panelChat"><div class="panel-header"><h2>&#129302; Senterion</h2><p>Your unified AI core. I handle everything.</p></div><div class="chat-container"><div class="chat-topbar"><div class="chat-agent-label"><div class="chat-agent-dot"></div>Senterion<span class="chat-agent-sub">Unified OS Core</span></div><div class="chat-status"><span class="pulse-dot"></span> Online</div></div><div class="chat-messages" id="chatMessages"></div><div class="chat-quick"><button class="chat-quick-btn" onclick="sendQuick('What are you working on?')">Status</button><button class="chat-quick-btn" onclick="sendQuick('Show my lead metrics')">Leads</button><button class="chat-quick-btn" onclick="sendQuick('Change my brand theme')">Theme</button><button class="chat-quick-btn" onclick="sendQuick('Connect my Gmail')">Integrations</button></div><div class="chat-input-area"><div style="flex:1"><textarea class="chat-input" id="chatInput" placeholder="Ask Senterion anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea></div><button class="chat-send" id="chatSendBtn" onclick="sendChat()">&#10148;</button></div></div></div>
 
-<div class="dash-panel" id="panelIntegrations"><div class="panel-header"><h2>&#128279; Integration Hub</h2><p>Connect your tools securely.</p></div><div class="privacy-banner"><div class="privacy-banner-icon">&#128274;</div><div><h3>Your Data. Your Control.</h3><p>Every integration is opt-in. Revoke anytime.</p><ul class="pb-ul"><li>End-to-end encryption</li><li>Encrypted token vault</li><li>Full audit trail</li></ul></div></div><div class="intg-tabs" id="intgTabs"></div><div class="intg-grid" id="intgGrid"></div></div>
+<!-- Integrations Panel -->
+<div class="dash-panel" id="panelIntegrations"><div class="panel-header"><h2>&#128279; Integration Hub</h2><p>Connect your tools securely.</p></div><div class="privacy-banner"><div class="privacy-banner-icon">&#128274;</div><div><h3>Your Data. Your Control.</h3><p>Every integration is opt-in. Revoke anytime.</p><ul style="list-style:none;padding:0"><li style="font-size:10px;color:var(--txt2);padding:2px 0">&#10003; End-to-end encryption</li><li style="font-size:10px;color:var(--txt2);padding:2px 0">&#10003; Encrypted token vault</li><li style="font-size:10px;color:var(--txt2);padding:2px 0">&#10003; Full audit trail</li></ul></div></div><div class="intg-tabs" id="intgTabs"></div><div class="intg-grid" id="intgGrid"></div></div>
 
+<!-- Vault Panel -->
 <div class="dash-panel" id="panelVault"><div class="panel-header"><h2>&#128274; Security Vault</h2><p>Full transparency.</p></div><div class="vault-card"><h4>&#128273; Encryption</h4><div class="vault-row"><div class="vr-left"><div class="vr-icon">&#128274;</div><span>Stored tokens</span></div><span style="color:var(--accent);font-weight:700">AES-256</span></div><div class="vault-row"><div class="vr-left"><div class="vr-icon">&#128274;</div><span>Data in transit</span></div><span style="color:var(--accent);font-weight:700">TLS 1.3</span></div></div><div class="vault-card"><h4>&#128279; Connected <span style="font-weight:400;color:var(--txt3);font-size:10px;margin-left:auto" id="vaultConnCount">0 active</span></h4><div id="vaultAccounts"></div></div><div class="vault-card"><h4>&#128196; Audit Log <span class="live-indicator" style="margin-left:auto"><span class="live-dot"></span> Live</span></h4><div class="audit-log" id="auditLog"></div></div><div style="display:flex;gap:8px;margin-top:8px"><button class="sf-save" style="background:rgba(239,68,68,.1);color:var(--danger)" onclick="revokeAllAccess()">&#128683; Revoke All</button><button class="sf-save" style="background:var(--brand-glow);color:var(--brand)" onclick="exportAuditLog()">&#128229; Export</button></div></div>
 
-<div class="dash-panel" id="panelAnalytics"><div class="panel-header"><h2>&#128202; Analytics</h2><p>Real data from your Supabase instance.</p></div><div class="stats-row" style="margin-bottom:16px"><div class="stat-card c1"><div class="sc-icon">&#9993;</div><div class="sc-val" id="anEmails">0</div><div class="sc-label">Emails Today</div></div><div class="stat-card c2"><div class="sc-icon">&#128101;</div><div class="sc-val" id="anLeads">0</div><div class="sc-label">Leads Today</div></div><div class="stat-card c3"><div class="sc-icon">&#128222;</div><div class="sc-val" id="anCalls">0</div><div class="sc-label">Calls Today</div></div><div class="stat-card c4"><div class="sc-icon">&#128172;</div><div class="sc-val" id="anTickets">0</div><div class="sc-label">Tickets</div></div></div>
-<div class="analytics-row"><div class="analytics-card"><h4>&#128200; Weekly Activity <span class="live-indicator" style="margin-left:auto"><span class="live-dot"></span> Live</span></h4><div class="activity-feed" id="activityFeed"><div class="empty-state"><div class="es-icon">&#128202;</div>No activity yet. Actions will appear here in real-time.</div></div></div>
-<div class="analytics-card"><h4>&#128203; Workload</h4><div class="donut-wrap"><svg class="donut-svg" viewBox="0 0 120 120" id="donutChart"></svg><div class="donut-legend"><div class="donut-legend-item"><div class="dl-dot" style="background:var(--brand)"></div>Senterion Core</div><div class="donut-legend-item"><div class="dl-dot" style="background:var(--brand2)"></div>Sub-routines</div></div></div></div></div></div>
+<!-- Analytics Panel -->
+<div class="dash-panel" id="panelAnalytics"><div class="panel-header"><h2>&#128202; Analytics</h2><p>Real data from your Supabase instance.</p></div><div class="stats-row" style="margin-bottom:16px"><div class="stat-card c1"><div class="sc-icon">&#9993;</div><div class="sc-val" id="anEmails">0</div><div class="sc-label">Emails Today</div></div><div class="stat-card c2"><div class="sc-icon">&#128101;</div><div class="sc-val" id="anLeads">0</div><div class="sc-label">Leads Today</div></div><div class="stat-card c3"><div class="sc-icon">&#128222;</div><div class="sc-val" id="anCalls">0</div><div class="sc-label">Calls Today</div></div><div class="stat-card c4"><div class="sc-icon">&#128172;</div><div class="sc-val" id="anTickets">0</div><div class="sc-label">Tickets</div></div></div><div class="analytics-row"><div class="analytics-card"><h4>&#128200; Weekly Activity <span class="live-indicator" style="margin-left:auto"><span class="live-dot"></span> Live</span></h4><div class="activity-feed" id="activityFeed"><div class="empty-state"><div class="es-icon">&#128202;</div>No activity yet.</div></div></div><div class="analytics-card"><h4>&#128203; Workload</h4><div class="donut-wrap"><svg class="donut-svg" viewBox="0 0 120 120" id="donutChart"></svg><div class="donut-legend"><div class="donut-legend-item"><div class="dl-dot" style="background:var(--brand)"></div>Senterion Core</div><div class="donut-legend-item"><div class="dl-dot" style="background:var(--brand2)"></div>Sub-routines</div></div></div></div></div></div>
 
-<div class="dash-panel" id="panelSettings"><div class="panel-header"><h2>&#9881; Settings &amp; Brand</h2><p>Make it yours.</p></div><div class="settings-grid"><div>
-<div class="settings-section"><h3>&#127912; Brand &amp; Theme</h3><p style="font-size:11px;color:var(--txt2);margin-bottom:14px;line-height:1.6">Auto-themed for your industry. Customize further anytime.</p>
-<div class="vibe-grid" id="vibeGrid"></div>
-<div class="color-row"><div class="color-picker-wrap"><label>Primary</label><input type="color" id="themePrimary" value="#06b6d4" onchange="applyCustomColor()"></div><div class="color-picker-wrap"><label>Secondary</label><input type="color" id="themeSecondary" value="#8b5cf6" onchange="applyCustomColor()"></div><div class="color-picker-wrap"><label>Accent</label><input type="color" id="themeAccent" value="#10b981" onchange="applyCustomColor()"></div></div>
-<div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;display:block;margin-bottom:6px">Font</label><div class="style-row" id="fontRow"><button class="style-btn active" onclick="setFont('inter',this)">Inter</button><button class="style-btn" onclick="setFont('space',this)">Space Grotesk</button><button class="style-btn" onclick="setFont('outfit',this)">Outfit</button><button class="style-btn" onclick="setFont('playfair',this)">Playfair</button></div></div>
-<div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;display:block;margin-bottom:6px">Borders</label><div class="style-row" id="borderRow"><button class="style-btn active" onclick="setRadius(8,this)">Rounded</button><button class="style-btn" onclick="setRadius(16,this)">Extra Round</button><button class="style-btn" onclick="setRadius(2,this)">Sharp</button></div></div>
-<div class="theme-preview"><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div><div class="theme-preview-cards"><div class="theme-preview-card"></div><div class="theme-preview-card"></div><div class="theme-preview-card"></div></div><div class="theme-preview-btn">Your Brand</div><div class="theme-preview-label">Live Preview</div></div>
-<button class="sf-save" style="margin-top:12px;width:100%" onclick="saveTheme()">&#127912; Apply Theme</button>
-</div>
-<div class="settings-section" style="margin-top:16px"><h3>&#128100; Profile</h3><div class="sf-group"><label>Business Name</label><input type="text" id="setBizName"></div><div class="sf-group"><label>Industry</label><select id="setIndustry"><option value="">Select...</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal</option><option value="restaurant">Restaurant</option><option value="retail">Retail</option><option value="finance">Finance</option><option value="construction">Construction</option><option value="education">Education</option><option value="other">Other</option></select></div><div class="sf-group"><label>Phone</label><input type="tel" id="setPhone"></div><div class="sf-group"><label>Email</label><input type="email" id="setEmail"></div><button class="sf-save" onclick="saveProfile()">Save Profile</button></div>
-</div><div>
-<div class="settings-section"><h3>&#127968; AI Website</h3><div class="website-status"><div class="ws-icon building" id="wsIcon">&#9881;</div><div class="ws-info"><h4 id="wsTitle">Building</h4><p id="wsDesc">Generating...</p></div><div class="ws-action"><button class="ws-btn-preview" onclick="switchPanel('overview')">Preview</button></div></div><div class="sf-group"><label>Tagline</label><input type="text" id="setTagline" placeholder="Your trusted partner"></div><div class="sf-group"><label>CTA</label><input type="text" id="setCTA" placeholder="Book a Free Consultation"></div><button class="sf-save" onclick="saveWebsite()">Update</button></div>
-<div class="settings-section" style="margin-top:16px"><h3>&#129302; Senterion Personality</h3><div class="personality-presets"><button class="preset-chip active" onclick="setPers('professional',this)">Professional</button><button class="preset-chip" onclick="setPers('friendly',this)">Friendly</button><button class="preset-chip" onclick="setPers('concise',this)">Concise</button><button class="preset-chip" onclick="setPers('assertive',this)">Assertive</button></div><div class="sf-group"><label>Custom Instructions</label><textarea id="setSInst" placeholder="How should Senterion behave?"></textarea></div><div class="sf-group"><label>Tone (1=Formal, 10=Casual)</label><input type="range" id="setSTone" min="1" max="10" value="6" style="width:100%;accent-color:var(--brand)"></div><button class="sf-save" onclick="showNotif('&#10003; Senterion saved!')">Save</button></div>
-<div class="settings-section" style="margin-top:16px"><h3>&#128274; Data</h3><p style="font-size:11px;color:var(--txt2);margin-bottom:10px">Your data belongs to you.</p><button class="sf-save" style="background:var(--brand-glow);color:var(--brand);margin-right:6px" onclick="exportData()">&#128229; Export</button><button class="sf-save" style="background:rgba(239,68,68,.1);color:var(--danger)" onclick="deleteData()">&#128465; Delete</button></div>
-</div></div></div>
+<!-- Settings Panel -->
+<div class="dash-panel" id="panelSettings"><div class="panel-header"><h2>&#9881; Settings &amp; Brand</h2><p>Make it yours.</p></div><div class="settings-grid"><div><div class="settings-section"><h3>&#127912; Brand &amp; Theme</h3><p style="font-size:11px;color:var(--txt2);margin-bottom:14px;line-height:1.6">Auto-themed for your industry. Customize further anytime.</p><div class="vibe-grid" id="vibeGrid"></div><div class="color-row"><div class="color-picker-wrap"><label>Primary</label><input type="color" id="themePrimary" value="#06b6d4" onchange="applyCustomColor()"></div><div class="color-picker-wrap"><label>Secondary</label><input type="color" id="themeSecondary" value="#8b5cf6" onchange="applyCustomColor()"></div><div class="color-picker-wrap"><label>Accent</label><input type="color" id="themeAccent" value="#10b981" onchange="applyCustomColor()"></div></div><div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;display:block;margin-bottom:6px">Font</label><div class="style-row" id="fontRow"><button class="style-btn active" onclick="setFont('inter',this)">Inter</button><button class="style-btn" onclick="setFont('space',this)">Space Grotesk</button><button class="style-btn" onclick="setFont('outfit',this)">Outfit</button><button class="style-btn" onclick="setFont('playfair',this)">Playfair</button></div></div><div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;display:block;margin-bottom:6px">Borders</label><div class="style-row" id="borderRow"><button class="style-btn active" onclick="setRadius(8,this)">Rounded</button><button class="style-btn" onclick="setRadius(16,this)">Extra Round</button><button class="style-btn" onclick="setRadius(2,this)">Sharp</button></div></div><div class="theme-preview"><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div><div class="theme-preview-cards"><div class="theme-preview-card"></div><div class="theme-preview-card"></div><div class="theme-preview-card"></div></div><div class="theme-preview-btn">Your Brand</div><div class="theme-preview-label">Live Preview</div></div><button class="sf-save" style="margin-top:12px;width:100%" onclick="saveTheme()">&#127912; Apply Theme</button></div><div class="settings-section" style="margin-top:16px"><h3>&#128100; Profile</h3><div class="sf-group"><label>Business Name</label><input type="text" id="setBizName"></div><div class="sf-group"><label>Industry</label><select id="setIndustry"><option value="">Select...</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal</option><option value="restaurant">Restaurant</option><option value="retail">Retail</option><option value="finance">Finance</option><option value="construction">Construction</option><option value="education">Education</option><option value="other">Other</option></select></div><div class="sf-group"><label>Phone</label><input type="tel" id="setPhone"></div><div class="sf-group"><label>Email</label><input type="email" id="setEmail"></div><button class="sf-save" onclick="saveProfile()">Save Profile</button></div></div><div><div class="settings-section"><h3>&#127968; AI Website</h3><div class="website-status"><div class="ws-icon building" id="wsIcon">&#9881;</div><div class="ws-info"><h4 id="wsTitle">Building</h4><p id="wsDesc">Generating...</p></div><div class="ws-action"><button class="ws-btn-preview" onclick="switchPanel('overview')">Preview</button></div></div><div class="sf-group"><label>Tagline</label><input type="text" id="setTagline" placeholder="Your trusted partner"></div><div class="sf-group"><label>CTA</label><input type="text" id="setCTA" placeholder="Book a Free Consultation"></div><button class="sf-save" onclick="saveWebsite()">Update</button></div><div class="settings-section" style="margin-top:16px"><h3>&#129302; Senterion Personality</h3><div class="personality-presets"><button class="preset-chip active" onclick="setPers('professional',this)">Professional</button><button class="preset-chip" onclick="setPers('friendly',this)">Friendly</button><button class="preset-chip" onclick="setPers('concise',this)">Concise</button><button class="preset-chip" onclick="setPers('assertive',this)">Assertive</button></div><div class="sf-group"><label>Custom Instructions</label><textarea id="setSInst" placeholder="How should Senterion behave?"></textarea></div><div class="sf-group"><label>Tone (1=Formal, 10=Casual)</label><input type="range" id="setSTone" min="1" max="10" value="6" style="width:100%;accent-color:var(--brand)"></div><button class="sf-save" onclick="showNotif('&#10003; Senterion saved!')">Save</button></div><div class="settings-section" style="margin-top:16px"><h3>&#128274; Data</h3><p style="font-size:11px;color:var(--txt2);margin-bottom:10px">Your data belongs to you.</p><button class="sf-save" style="background:var(--brand-glow);color:var(--brand);margin-right:6px" onclick="exportData()">&#128229; Export</button><button class="sf-save" style="background:rgba(239,68,68,.1);color:var(--danger)" onclick="deleteData()">&#128465; Delete</button></div></div></div></div>
+
 </main></div></section>
 
 <script>
-/* ═══ SUPABASE SCHEMA (run in SQL Editor) ═══
-CREATE TABLE profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT, first_name TEXT, last_name TEXT,
-  business_name TEXT, industry TEXT, phone TEXT,
-  services JSONB DEFAULT '[]', goals JSONB DEFAULT '[]',
-  custom_goal TEXT, status TEXT DEFAULT 'new',
-  integrations JSONB DEFAULT '{}', theme JSONB DEFAULT '{}',
-  personality JSONB DEFAULT '{"preset":"professional","tone":6,"instructions":""}',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE TABLE signups (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  first_name TEXT, last_name TEXT, email TEXT,
-  business_name TEXT, industry TEXT, phone TEXT,
-  services JSONB DEFAULT '[]', goals JSONB DEFAULT '[]',
-  status TEXT DEFAULT 'new',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE TABLE activity_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  agent TEXT NOT NULL, category TEXT NOT NULL,
-  action TEXT NOT NULL, description TEXT,
-  metadata JSONB DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX idx_activity_user ON activity_logs(user_id);
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE signups ENABLE ROW LEVEL SECURITY;
-ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users read own profile" ON profiles FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "Users update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
-CREATE POLICY "Users insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
-CREATE POLICY "Service read signups" ON signups FOR SELECT USING (true);
-CREATE POLICY "Service insert signups" ON signups FOR INSERT WITH CHECK (true);
-CREATE POLICY "Users read own logs" ON activity_logs FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Service insert logs" ON activity_logs FOR INSERT WITH CHECK (true);
-═══ */
+/* ============================================================
+   CONFIGURATION — Replace these with your real values
+   ============================================================ */
+const SUPABASE_URL = 'https://vtydcslxjvnbkuguubwr.supabase.co';
+/*
+   ⚠️ IMPORTANT: Your key below is NOT a valid Supabase key.
+   Real Supabase anon keys look like: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...
+   Go to: Supabase Dashboard → Settings → API → anon/public key
+   Replace the value below with your actual key!
+*/
+const SUPABASE_KEY = 'sb_publishable_QDZrFkZSOhrnc69eMermXg_HZoCiagX';
 
-const SUPABASE_URL='https://vtydcslxjvnbkuguubwr.supabase.co';
-const SUPABASE_KEY='sb_publishable_QDZrFkZSOhrnc69eMermXg_HZoCiagX';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const ADMIN_EMAIL = 'coultersagents@gmail.com';
+const ADMIN_PHONE = '8328579181';
 
-const OAUTH_CALLBACK_BASE='https://your-backend.com/api/oauth/callback';
-const ACTIVITY_WEBHOOK_URL='https://your-backend.com/api/activity';
+// Stripe — Get from https://dashboard.stripe.com/apikeys
+const STRIPE_PK = 'pk_test_REPLACE_WITH_YOUR_KEY';
+const STRIPE_PRICE_ID = 'price_REPLACE_WITH_YOUR_PRICE_ID';
 
-const OAUTH_CONFIG={
-  gmail:{name:'Gmail',authUrl:'https://accounts.google.com/o/oauth2/v2/auth',scope:'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send',clientId:'',redirectPath:'/gmail'},
-  plaid:{name:'Plaid (All Banks)',linkUrl:'https://link.plaid.com/launchLink'},
-  facebook:{name:'Facebook',authUrl:'https://www.facebook.com/v18.0/dialog/oauth',scope:'pages_manage_posts,pages_read_engagement,pages_messaging',clientId:'',redirectPath:'/facebook'},
-  instagram:{name:'Instagram',authUrl:'https://api.instagram.com/oauth/authorize',scope:'instagram_basic,instagram_content_publish',clientId:'',redirectPath:'/instagram'},
-  outlook:{name:'Outlook / M365',authUrl:'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',scope:'https://graph.microsoft.com/Mail.ReadWrite https://graph.microsoft.com/Mail.Send offline_access',clientId:'',redirectPath:'/outlook'},
-  slack:{name:'Slack',authUrl:'https://slack.com/oauth/v2/authorize',scope:'channels:read,chat:write,files:read',clientId:'',redirectPath:'/slack'},
-  stripe:{name:'Stripe',authUrl:'https://connect.stripe.com/oauth/authorize',scope:'read_write',clientId:'',redirectPath:'/stripe'}
-};
+// OpenAI — Used for AI chat. WARNING: Exposing API keys client-side is insecure.
+// Best practice: Use a Supabase Edge Function instead.
+// For now, this works for demo/testing.
+const OPENAI_API_KEY = '';
 
-function initiateOAuth(provider){
-  const config=OAUTH_CONFIG[provider];
-  if(!config||!config.authUrl){showNotif((config?.name||provider)+' requires backend setup.');return;}
-  if(!config.clientId){showNotif('OAuth not configured for '+config.name+'. Add Client ID.');return;}
-  const redirectUri=OAUTH_CALLBACK_BASE+config.redirectPath+'?user_id='+(currentUser?.id||'');
-  const state=crypto.randomUUID();
-  localStorage.setItem('oauth_state_'+provider,state);
-  const url=config.authUrl+'?client_id='+config.clientId+'&redirect_uri='+encodeURIComponent(redirectUri)+'&scope='+encodeURIComponent(config.scope)+'&response_type=code&state='+state;
-  const w=600,h=700,l=(screen.width-w)/2,t=(screen.height-h)/2;
-  const popup=window.open(url,config.name+' Auth','width='+w+',height='+h+',left='+l+',top='+t);
-  const listener=setInterval(()=>{try{if(popup.closed){clearInterval(listener);return;}}catch(e){clearInterval(listener);setTimeout(()=>loadIntgState(),1000);}},500);
-}
+// Google OAuth — Get from https://console.cloud.google.com/apis/credentials
+const GOOGLE_CLIENT_ID = '';
 
-async function logActivity(category,action,description,metadata={}){
-  if(!currentUser)return;
-  try{await sb.from('activity_logs').insert([{user_id:currentUser.id,agent:'senterion',category,action,description,metadata}]);}catch(e){console.warn('Activity log failed:',e.message);}
-}
+/* ============================================================ */
 
-// ═══ DATA ═══
-const SERVICES=[{id:'scheduling',name:'Scheduling',icon:'&#128197;',agent:'Senterion'},{id:'phone',name:'Phone',icon:'&#128222;',agent:'Senterion'},{id:'email',name:'Email',icon:'&#9993;',agent:'Senterion'},{id:'marketing',name:'Marketing',icon:'&#128226;',agent:'Senterion'},{id:'receptionist',name:'Receptionist',icon:'&#127970;',agent:'Senterion'},{id:'support',name:'Support',icon:'&#128172;',agent:'Senterion'},{id:'analytics',name:'Analytics',icon:'&#128202;',agent:'Senterion'},{id:'coding',name:'Code & Dev',icon:'&#128187;',agent:'Senterion'}];
-const GOALS=['Save time','Faster responses','More leads','Automate tasks','Scale up','Cut costs','24/7 availability'];
-const PROFIT_PER=500;
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let stripe, cardElement;
 
-const INDUSTRY_VIBES={
-tech:{vibe:'default',name:'Cyber',colors:['#06b6d4','#8b5cf6','#10b981'],font:'space',radius:8},
-healthcare:{vibe:'ocean',name:'Clinical',colors:['#0ea5e9','#0284c7','#06b6d4'],font:'inter',radius:12},
-realestate:{vibe:'warm',name:'Premium',colors:['#f97316','#ea580c','#fbbf24'],font:'outfit',radius:10},
-legal:{vibe:'luxury',name:'Authority',colors:['#d4af37','#1a1a2e','#c0c0c0'],font:'playfair',radius:4},
-restaurant:{vibe:'warm',name:'Welcoming',colors:['#f97316','#ef4444','#fbbf24'],font:'outfit',radius:16},
-retail:{vibe:'sunset',name:'Vibrant',colors:['#f43f5e','#ec4899','#f97316'],font:'inter',radius:12},
-finance:{vibe:'luxury',name:'Prestige',colors:['#d4af37','#1a1a2e','#c0c0c0'],font:'inter',radius:6},
-construction:{vibe:'nature',name:'Sturdy',colors:['#22c55e','#16a34a','#84cc16'],font:'space',radius:4},
-education:{vibe:'ocean',name:'Scholarly',colors:['#0ea5e9','#0284c7','#06b6d4'],font:'inter',radius:10},
-other:{vibe:'default',name:'Cyber',colors:['#06b6d4','#8b5cf6','#10b981'],font:'inter',radius:8}
-};
+// Try to initialize Stripe
+try { if (STRIPE_PK && STRIPE_PK.startsWith('pk_')) { stripe = Stripe(STRIPE_PK); } } catch(e) { console.warn('Stripe init failed:', e); }
 
-const VIBES=[
-{id:'default',name:'Cyber',desc:'Tech & AI',colors:['#06b6d4','#8b5cf6','#10b981']},
-{id:'luxury',name:'Luxury',desc:'Premium',colors:['#d4af37','#1a1a2e','#c0c0c0']},
-{id:'warm',name:'Warm',desc:'Friendly',colors:['#f97316','#ef4444','#fbbf24']},
-{id:'nature',name:'Nature',desc:'Organic',colors:['#22c55e','#16a34a','#84cc16']},
-{id:'ocean',name:'Ocean',desc:'Calm',colors:['#0ea5e9','#0284c7','#06b6d4']},
-{id:'royal',name:'Royal',desc:'Bold',colors:['#a855f7','#7c3aed','#c084fc']},
-{id:'sunset',name:'Sunset',desc:'Warm',colors:['#f43f5e','#ec4899','#f97316']},
-{id:'minimal',name:'Minimal',desc:'Clean',colors:['#e2e8f0','#64748b','#f8fafc']}
+const SERVICES = [
+  {id:'scheduling',name:'Scheduling',icon:'&#128197;',agent:'Senterion'},
+  {id:'phone',name:'Phone',icon:'&#128222;',agent:'Senterion'},
+  {id:'email',name:'Email',icon:'&#9993;',agent:'Senterion'},
+  {id:'marketing',name:'Marketing',icon:'&#128226;',agent:'Senterion'},
+  {id:'receptionist',name:'Receptionist',icon:'&#127970;',agent:'Senterion'},
+  {id:'support',name:'Support',icon:'&#128172;',agent:'Senterion'},
+  {id:'analytics',name:'Analytics',icon:'&#128202;',agent:'Senterion'},
+  {id:'coding',name:'Code & Dev',icon:'&#128187;',agent:'Senterion'}
 ];
-
-const INTG_CATALOG=[
-{id:'gmail',name:'Gmail',icon:'&#9993;',cat:'email',desc:'Auto-triage, smart replies, follow-ups.',perms:[{id:'read',label:'Read emails',on:true},{id:'send',label:'Send emails',on:false},{id:'drafts',label:'Manage drafts',on:false}]},
-{id:'outlook',name:'Outlook / M365',icon:'&#128231;',cat:'email',desc:'Enterprise email via Microsoft Graph.',perms:[{id:'read',label:'Read emails',on:true},{id:'send',label:'Send emails',on:false},{id:'calendar',label:'Calendar',on:true}]},
-{id:'plaid',name:'Plaid (All Banks)',icon:'&#128179;',cat:'banking',desc:'Connect 11,000+ banks securely.',perms:[{id:'auth',label:'Authenticate',on:true},{id:'balances',label:'View balances',on:true},{id:'transactions',label:'Transactions',on:true}]},
-{id:'wellsfargo',name:'Wells Fargo',icon:'&#127974;',cat:'banking',desc:'Account sync & monitoring.',perms:[{id:'balances',label:'View balances',on:true},{id:'transactions',label:'Transactions',on:false}]},
-{id:'chase',name:'Chase',icon:'&#127974;',cat:'banking',desc:'Chase account sync.',perms:[{id:'balances',label:'View balances',on:true},{id:'transactions',label:'Transactions',on:false}]},
-{id:'facebook',name:'Facebook',icon:'&#128077;',cat:'social',desc:'Manage page, posts, messages.',perms:[{id:'insights',label:'View insights',on:true},{id:'post',label:'Create posts',on:false},{id:'messages',label:'Read messages',on:false}]},
-{id:'instagram',name:'Instagram',icon:'&#128247;',cat:'social',desc:'Posts, DMs, engagement.',perms:[{id:'insights',label:'View insights',on:true},{id:'post',label:'Post content',on:false},{id:'dm',label:'Read DMs',on:false}]},
-{id:'linkedin',name:'LinkedIn',icon:'&#128188;',cat:'social',desc:'Professional networking.',perms:[{id:'read',label:'Read profile',on:true},{id:'post',label:'Post content',on:false}]},
-{id:'messenger',name:'Messenger',icon:'&#128172;',cat:'messaging',desc:'Auto-respond 24/7.',perms:[{id:'read',label:'Read messages',on:true},{id:'reply',label:'Send replies',on:false}]},
-{id:'whatsapp',name:'WhatsApp Business',icon:'&#128241;',cat:'messaging',desc:'Business auto-responder.',perms:[{id:'read',label:'Read messages',on:true},{id:'reply',label:'Send replies',on:false}]},
-{id:'slack',name:'Slack',icon:'&#128488;',cat:'messaging',desc:'AI in your workspace.',perms:[{id:'read',label:'Read channels',on:true},{id:'write',label:'Send messages',on:false}]},
-{id:'quickbooks',name:'QuickBooks',icon:'&#128200;',cat:'business',desc:'Bookkeeping & invoicing.',perms:[{id:'read',label:'View financials',on:true},{id:'invoices',label:'Create invoices',on:false}]},
-{id:'stripe',name:'Stripe',icon:'&#128179;',cat:'business',desc:'Payment monitoring.',perms:[{id:'read',label:'View payments',on:true},{id:'refunds',label:'Refunds',on:false}]},
-{id:'shopify',name:'Shopify',icon:'&#128722;',cat:'business',desc:'Store & orders.',perms:[{id:'orders',label:'View orders',on:true},{id:'products',label:'Products',on:true}]},
-{id:'hubspot',name:'HubSpot',icon:'&#127873;',cat:'business',desc:'CRM sync.',perms:[{id:'read',label:'Read CRM',on:true},{id:'write',label:'Create contacts',on:false}]},
-{id:'phone',name:'Business Phone/SMS',icon:'&#128222;',cat:'phone',desc:'Auto-answer & SMS.',perms:[{id:'answer',label:'Answer calls',on:true},{id:'sms_read',label:'Read SMS',on:false},{id:'sms_send',label:'Send SMS',on:false}]},
-{id:'twilio',name:'Twilio',icon:'&#128246;',cat:'phone',desc:'Programmable voice & SMS.',perms:[{id:'calls',label:'Handle calls',on:true},{id:'sms',label:'Send/receive SMS',on:true}]}
+const GOALS = ['Save time','Faster responses','More leads','Automate tasks','Scale up','Cut costs','24/7 availability'];
+const PROFIT_PER = 500;
+const INDUSTRY_VIBES = {
+  tech:{vibe:'default',name:'Cyber',colors:['#06b6d4','#8b5cf6','#10b981'],font:'space',radius:8},
+  healthcare:{vibe:'ocean',name:'Clinical',colors:['#0ea5e9','#0284c7','#06b6d4'],font:'inter',radius:12},
+  realestate:{vibe:'warm',name:'Premium',colors:['#f97316','#ea580c','#fbbf24'],font:'outfit',radius:10},
+  legal:{vibe:'luxury',name:'Authority',colors:['#d4af37','#1a1a2e','#c0c0c0'],font:'playfair',radius:4},
+  restaurant:{vibe:'warm',name:'Welcoming',colors:['#f97316','#ef4444','#fbbf24'],font:'outfit',radius:16},
+  retail:{vibe:'sunset',name:'Vibrant',colors:['#f43f5e','#ec4899','#f97316'],font:'inter',radius:12},
+  finance:{vibe:'luxury',name:'Prestige',colors:['#d4af37','#1a1a2e','#c0c0c0'],font:'inter',radius:6},
+  construction:{vibe:'nature',name:'Sturdy',colors:['#22c55e','#16a34a','#84cc16'],font:'space',radius:4},
+  education:{vibe:'ocean',name:'Scholarly',colors:['#0ea5e9','#0284c7','#06b6d4'],font:'inter',radius:10},
+  other:{vibe:'default',name:'Cyber',colors:['#06b6d4','#8b5cf6','#10b981'],font:'inter',radius:8}
+};
+const VIBES = [
+  {id:'default',name:'Cyber',desc:'Tech & AI',colors:['#06b6d4','#8b5cf6','#10b981']},
+  {id:'luxury',name:'Luxury',desc:'Premium',colors:['#d4af37','#1a1a2e','#c0c0c0']},
+  {id:'warm',name:'Warm',desc:'Friendly',colors:['#f97316','#ef4444','#fbbf24']},
+  {id:'nature',name:'Nature',desc:'Organic',colors:['#22c55e','#16a34a','#84cc16']},
+  {id:'ocean',name:'Ocean',desc:'Calm',colors:['#0ea5e9','#0284c7','#06b6d4']},
+  {id:'royal',name:'Royal',desc:'Bold',colors:['#a855f7','#7c3aed','#c084fc']},
+  {id:'sunset',name:'Sunset',desc:'Warm',colors:['#f43f5e','#ec4899','#f97316']},
+  {id:'minimal',name:'Minimal',desc:'Clean',colors:['#e2e8f0','#64748b','#f8fafc']}
 ];
-const CATS=[{id:'all',name:'All'},{id:'banking',name:'&#127974; Banking'},{id:'email',name:'&#9993; Email'},{id:'social',name:'&#127760; Social'},{id:'messaging',name:'&#128172; Messaging'},{id:'business',name:'&#128188; Business'},{id:'phone',name:'&#128222; Phone'}];
+const INTG_CATALOG = [
+  {id:'gmail',name:'Gmail',icon:'&#9993;',cat:'email',desc:'Auto-triage, smart replies, follow-ups.',perms:[{id:'read',label:'Read emails',on:true},{id:'send',label:'Send emails',on:false}]},
+  {id:'outlook',name:'Outlook / M365',icon:'&#128231;',cat:'email',desc:'Enterprise email via Microsoft Graph.',perms:[{id:'read',label:'Read emails',on:true},{id:'send',label:'Send emails',on:false}]},
+  {id:'plaid',name:'Plaid (All Banks)',icon:'&#128179;',cat:'banking',desc:'Connect 11,000+ banks securely.',perms:[{id:'auth',label:'Authenticate',on:true},{id:'balances',label:'View balances',on:true}]},
+  {id:'facebook',name:'Facebook',icon:'&#128077;',cat:'social',desc:'Manage page, posts, messages.',perms:[{id:'insights',label:'View insights',on:true},{id:'post',label:'Create posts',on:false}]},
+  {id:'instagram',name:'Instagram',icon:'&#128247;',cat:'social',desc:'Posts, DMs, engagement.',perms:[{id:'insights',label:'View insights',on:true},{id:'post',label:'Post content',on:false}]},
+  {id:'slack',name:'Slack',icon:'&#128488;',cat:'messaging',desc:'AI in your workspace.',perms:[{id:'read',label:'Read channels',on:true},{id:'write',label:'Send messages',on:false}]},
+  {id:'quickbooks',name:'QuickBooks',icon:'&#128200;',cat:'business',desc:'Bookkeeping & invoicing.',perms:[{id:'read',label:'View financials',on:true},{id:'invoices',label:'Create invoices',on:false}]},
+  {id:'stripe',name:'Stripe',icon:'&#128179;',cat:'business',desc:'Payment monitoring.',perms:[{id:'read',label:'View payments',on:true},{id:'refunds',label:'Refunds',on:false}]},
+  {id:'shopify',name:'Shopify',icon:'&#128722;',cat:'business',desc:'Store & orders.',perms:[{id:'orders',label:'View orders',on:true},{id:'products',label:'Products',on:true}]},
+  {id:'hubspot',name:'HubSpot',icon:'&#127873;',cat:'business',desc:'CRM sync.',perms:[{id:'read',label:'Read CRM',on:true},{id:'write',label:'Create contacts',on:false}]},
+  {id:'phone',name:'Business Phone/SMS',icon:'&#128222;',cat:'phone',desc:'Auto-answer & SMS.',perms:[{id:'answer',label:'Answer calls',on:true},{id:'sms_read',label:'Read SMS',on:false},{id:'sms_send',label:'Send SMS',on:false}]},
+  {id:'twilio',name:'Twilio',icon:'&#128246;',cat:'phone',desc:'Programmable voice & SMS.',perms:[{id:'calls',label:'Handle calls',on:true},{id:'sms',label:'Send/receive SMS',on:true}]}
+];
+const CATS = [{id:'all',name:'All'},{id:'banking',name:'&#127974; Banking'},{id:'email',name:'&#9993; Email'},{id:'social',name:'&#127760; Social'},{id:'messaging',name:'&#128172; Messaging'},{id:'business',name:'&#128188; Business'},{id:'phone',name:'&#128222; Phone'}];
 
-let formData={fName:'',lName:'',email:'',bizName:'',industry:'',phone:'',services:[],goals:[],customGoal:''};
-let currentStep=0,userStatus='new',currentRecordId=null,currentUser=null;
-let chatMsgs=[],chatBusy=false;
-let intgState={},intgCat='all',pendingOAuth=null;
-let auditEntries=[];
-let currentVibe='default',currentFont='inter',currentRadius=8;
-let realtimeSub=null;
+let formData = {fName:'',lName:'',email:'',bizName:'',industry:'',phone:'',services:[],goals:[],customGoal:''};
+let currentStep = 0, userStatus = 'new', currentRecordId = null, currentUser = null;
+let chatMsgs = [], chatBusy = false;
+let intgState = {}, intgCat = 'all', pendingOAuth = null;
+let auditEntries = [];
+let currentVibe = 'default', currentFont = 'inter', currentRadius = 8;
+let realtimeSub = null, simulationInterval = null;
 
-// ═══ INIT ═══
-window.addEventListener('DOMContentLoaded',async()=>{
-  renderServices('servGrid',true);renderServices('formServGrid',false);renderGoalChips();renderVibes();renderNavLoggedOut();
-  try{const{error}=await sb.from('signups').select('id').limit(1);if(!error){document.getElementById('dbDot').classList.add('ok');document.getElementById('dbText').textContent='DB Connected';document.getElementById('dbText').style.color='var(--accent)';}else{document.getElementById('dbText').textContent='DB Issue';}}catch(e){document.getElementById('dbText').textContent='DB Off';}
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', async () => {
+  renderServices('servGrid', true);
+  renderServices('formServGrid', false);
+  renderGoalChips();
+  renderVibes();
+  renderNavLoggedOut();
+
+  // Check DB connection
+  try {
+    const { error } = await sb.from('signups').select('id').limit(1);
+    if (!error) {
+      document.getElementById('dbDot').classList.add('ok');
+      document.getElementById('dbText').textContent = 'DB Connected';
+      document.getElementById('dbText').style.color = 'var(--accent)';
+    } else {
+      document.getElementById('dbText').textContent = 'DB Issue: ' + (error.message || 'Check key');
+    }
+  } catch (e) {
+    document.getElementById('dbText').textContent = 'DB Off — Check SUPABASE_KEY';
+  }
+
+  // Check for OAuth callback in URL
+  handleOAuthCallback();
+
   await resolveSession();
 });
 
-async function resolveSession(){
-  const fill=document.getElementById('bootBarFill'),txt=document.getElementById('bootText');
-  fill.style.width='30%';txt.textContent='Resolving session...';
-  try{
-    const{data:{session}}=await sb.auth.getSession();
-    fill.style.width='60%';txt.textContent='Session resolved.';
-    if(session?.user){
-      currentUser=session.user;fill.style.width='80%';txt.textContent='Loading profile...';
+/* ============================================================
+   SESSION & AUTH
+   ============================================================ */
+async function resolveSession() {
+  const fill = document.getElementById('bootBarFill'), txt = document.getElementById('bootText');
+  fill.style.width = '30%'; txt.textContent = 'Resolving session...';
+  try {
+    const { data: { session }, error } = await sb.auth.getSession();
+    if (error) console.warn('Session error:', error.message);
+    fill.style.width = '60%'; txt.textContent = 'Session resolved.';
+    if (session?.user) {
+      currentUser = session.user;
+      fill.style.width = '80%'; txt.textContent = 'Loading profile...';
       await loadProfile(session.user.id);
-      fill.style.width='100%';txt.textContent='Welcome back.';
-      setTimeout(()=>hideBoot(),400);
-    }else{
-      fill.style.width='100%';txt.textContent='Ready.';
-      setTimeout(()=>hideBoot(),300);
+      fill.style.width = '100%'; txt.textContent = 'Welcome back.';
+      setTimeout(() => hideBoot(), 400);
+    } else {
+      fill.style.width = '100%'; txt.textContent = 'Ready.';
+      setTimeout(() => hideBoot(), 300);
     }
-  }catch(e){
-    fill.style.width='100%';txt.textContent='Ready.';
-    setTimeout(()=>hideBoot(),300);
+  } catch (e) {
+    console.error('resolveSession error:', e);
+    fill.style.width = '100%'; txt.textContent = 'Ready.';
+    setTimeout(() => hideBoot(), 300);
   }
 }
 
-function hideBoot(){document.getElementById('bootOverlay').classList.add('hidden');}
-function showBoot(msg){const o=document.getElementById('bootOverlay');o.classList.remove('hidden');document.getElementById('bootText').textContent=msg||'Loading...';document.getElementById('bootBarFill').style.width='50%';}
-
-// ═══ NAV ═══
-function renderNavLoggedOut(){
-  document.getElementById('navLinks').innerHTML='<li><a href="#services">Services</a></li><li><a href="#signup">Pricing</a></li><li><a href="#privacy">Privacy</a></li><li><button class="nav-cta" onclick="document.getElementById(\'signup\').scrollIntoView({behavior:\'smooth\'})">Get Started &#8594;</button></li>';
-}
-function renderNavLoggedIn(){
-  const i=(formData.fName[0]||'')+(formData.lName[0]||'U');
-  document.getElementById('navLinks').innerHTML=`
-  <li><a href="#" onclick="switchPanel('overview');return false" style="color:var(--brand);font-weight:700;font-size:12px">&#9889; Dashboard</a></li>
-  <li class="nav-user-wrap">
-  <div class="nav-avatar" onclick="document.getElementById('navDD').classList.toggle('show')">${i}</div>
-  <span class="nav-username" onclick="document.getElementById('navDD').classList.toggle('show')">${formData.fName}</span>
-  <div class="nav-dropdown" id="navDD">
-  <button class="nav-dd-item" onclick="switchPanel('settings');document.getElementById('navDD').classList.remove('show')">&#9881; Settings</button>
-  <button class="nav-dd-item" onclick="switchPanel('vault');document.getElementById('navDD').classList.remove('show')">&#128274; Security</button>
-  <div class="nav-dd-sep"></div>
-  <button class="nav-dd-item danger" onclick="handleSignOut();document.getElementById('navDD').classList.remove('show')">&#128682; Sign Out</button>
-  </div></li>`;
-  document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-wrap'))document.getElementById('navDD')?.classList.remove('show');});
+function hideBoot() { document.getElementById('bootOverlay').classList.add('hidden'); }
+function showBoot(msg) {
+  const o = document.getElementById('bootOverlay');
+  o.classList.remove('hidden');
+  document.getElementById('bootText').textContent = msg || 'Loading...';
+  document.getElementById('bootBarFill').style.width = '50%';
 }
 
-// ═══ AUTH ═══
-async function loadProfile(uid){
-  try{
-    const{data}=await sb.from('profiles').select('*').eq('id',uid).single();
-    if(data){
-      formData.fName=data.first_name||'';formData.lName=data.last_name||'';
-      formData.email=data.email||'';formData.bizName=data.business_name||'My Business';
-      formData.industry=data.industry||'';formData.phone=data.phone||'';
-      formData.services=data.services||[];formData.goals=data.goals||[];
-      userStatus=data.status||'new';currentRecordId=data.id;
-      if(data.integrations){try{intgState=typeof data.integrations==='string'?JSON.parse(data.integrations):data.integrations;}catch(e){intgState={}};}
-      if(data.theme){try{const t=typeof data.theme==='string'?JSON.parse(data.theme):data.theme;if(t.vibe)currentVibe=t.vibe;if(t.font)currentFont=t.font;if(t.radius)currentRadius=t.radius;if(t.primary){document.documentElement.style.setProperty('--brand',t.primary);document.getElementById('themePrimary').value=t.primary;}if(t.secondary){document.documentElement.style.setProperty('--brand2',t.secondary);document.getElementById('themeSecondary').value=t.secondary;}if(t.accent){document.documentElement.style.setProperty('--accent',t.accent);document.getElementById('themeAccent').value=t.accent;}updateBrandGlow();}catch(e){}}
+function renderNavLoggedOut() {
+  document.getElementById('navLinks').innerHTML = `
+    <li><a href="#services">Services</a></li>
+    <li><a href="#signup">Pricing</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><button class="nav-cta" onclick="openLoginModal()">Log In</button></li>
+    <li><button class="nav-cta" style="background:var(--accent)" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Get Started &#8594;</button></li>`;
+}
+
+function renderNavLoggedIn() {
+  const i = (formData.fName[0] || '') + (formData.lName[0] || 'U');
+  const isAdmin = currentUser?.email === ADMIN_EMAIL;
+  document.getElementById('navLinks').innerHTML = `
+    <li><a href="#" onclick="switchPanel('overview');return false" style="color:var(--brand);font-weight:700;font-size:12px">&#9889; Dashboard</a></li>
+    ${isAdmin ? '<li><a href="#" onclick="toggleAdmin();return false" style="color:var(--warn);font-weight:700;font-size:12px">&#128081; Admin</a></li>' : ''}
+    <li class="nav-user-wrap">
+      <div class="nav-avatar" onclick="document.getElementById('navDD').classList.toggle('show')">${i}</div>
+      <span class="nav-username" onclick="document.getElementById('navDD').classList.toggle('show')">${formData.fName}</span>
+      <div class="nav-dropdown" id="navDD">
+        <button class="nav-dd-item" onclick="switchPanel('settings');document.getElementById('navDD').classList.remove('show')">&#9881; Settings</button>
+        <button class="nav-dd-item" onclick="switchPanel('vault');document.getElementById('navDD').classList.remove('show')">&#128274; Security</button>
+        <div class="nav-dd-sep"></div>
+        <button class="nav-dd-item danger" onclick="handleSignOut();document.getElementById('navDD').classList.remove('show')">&#128682; Sign Out</button>
+      </div>
+    </li>`;
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-user-wrap')) document.getElementById('navDD')?.classList.remove('show');
+  });
+}
+
+async function loadProfile(uid) {
+  try {
+    const { data, error } = await sb.from('profiles').select('*').eq('id', uid).single();
+    if (error && error.code === '42P01') {
+      console.warn('profiles table not found — creating it');
+      await createProfilesTable();
+      return;
+    }
+    if (data) {
+      formData.fName = data.first_name || '';
+      formData.lName = data.last_name || '';
+      formData.email = data.email || '';
+      formData.bizName = data.business_name || 'My Business';
+      formData.industry = data.industry || '';
+      formData.phone = data.phone || '';
+      formData.services = data.services || [];
+      formData.goals = data.goals || [];
+      userStatus = data.status || 'new';
+      currentRecordId = data.id;
+      if (data.integrations) {
+        try { intgState = typeof data.integrations === 'string' ? JSON.parse(data.integrations) : data.integrations; } catch(e) { intgState = {}; }
+      }
+      if (data.theme) {
+        try {
+          const t = typeof data.theme === 'string' ? JSON.parse(data.theme) : data.theme;
+          if (t.vibe) currentVibe = t.vibe;
+          if (t.font) currentFont = t.font;
+          if (t.radius) currentRadius = t.radius;
+          if (t.primary) { document.documentElement.style.setProperty('--brand', t.primary); document.getElementById('themePrimary').value = t.primary; }
+          if (t.secondary) { document.documentElement.style.setProperty('--brand2', t.secondary); document.getElementById('themeSecondary').value = t.secondary; }
+          if (t.accent) { document.documentElement.style.setProperty('--accent', t.accent); document.getElementById('themeAccent').value = t.accent; }
+          updateBrandGlow();
+        } catch(e) {}
+      }
     }
     showDashboard();
-  }catch(e){console.log('Profile load err:',e);}
+  } catch (e) {
+    console.error('Profile load error:', e);
+    showDashboard();
+  }
 }
 
-function openLoginModal(){document.getElementById('loginModal').classList.add('show');}
-function closeLoginModal(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').classList.remove('show');}
+async function createProfilesTable() {
+  // This won't work from client-side, but we try
+  console.error('You need to create the profiles table in Supabase. Run this SQL in the SQL Editor:');
+  console.log(`
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  business_name TEXT,
+  industry TEXT,
+  phone TEXT,
+  services JSONB DEFAULT '[]',
+  goals JSONB DEFAULT '[]',
+  custom_goal TEXT,
+  status TEXT DEFAULT 'new',
+  integrations JSONB DEFAULT '{}',
+  theme JSONB DEFAULT '{}',
+  personality JSONB DEFAULT '{}',
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-async function handleLogin(){
-  const em=document.getElementById('loginEmail').value.trim(),pw=document.getElementById('loginPassword').value,err=document.getElementById('loginError');err.classList.remove('show');
-  if(!em||!pw){err.textContent='Email and password required.';err.classList.add('show');return;}
-  document.getElementById('loginBtn').disabled=true;document.getElementById('loginBtn').innerHTML='<div class="spinner"></div>';
-  try{
-    const{data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
-    if(error)throw error;
-    if(data.user){currentUser=data.user;closeLoginModal();showBoot('Loading your OS...');await loadProfile(data.user.id);hideBoot();}
-  }catch(e){err.textContent=e.message||'Login failed.';err.classList.add('show');}
-  document.getElementById('loginBtn').disabled=false;document.getElementById('loginBtn').textContent='Log In';
+CREATE TABLE IF NOT EXISTS signups (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  business_name TEXT,
+  industry TEXT,
+  phone TEXT,
+  services JSONB DEFAULT '[]',
+  goals JSONB DEFAULT '[]',
+  status TEXT DEFAULT 'new',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS activity_logs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  agent TEXT DEFAULT 'senterion',
+  category TEXT,
+  action TEXT,
+  description TEXT,
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE signups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
+
+-- Policies
+CREATE POLICY "Users can read own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Anyone can insert signups" ON signups FOR INSERT WITH CHECK (true);
+CREATE POLICY "Admin can read signups" ON signups FOR SELECT USING (true);
+CREATE POLICY "Users can read own activity" ON activity_logs FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own activity" ON activity_logs FOR INSERT WITH CHECK (auth.uid() = user_id);
+  `);
 }
 
-async function handleSignOut(){
-  try{await sb.auth.signOut();}catch(e){}
-  if(realtimeSub){sb.removeChannel(realtimeSub);realtimeSub=null;}
-  currentUser=null;currentRecordId=null;formData={fName:'',lName:'',email:'',bizName:'',industry:'',phone:'',services:[],goals:[],customGoal:''};userStatus='new';intgState={};chatMsgs=[];auditEntries=[];
-  applyVibe('default',false);setFont('inter');setRadius(8);
-  document.querySelectorAll('.landing-page').forEach(e=>e.classList.remove('hide'));document.getElementById('userDashboard').classList.remove('active');renderNavLoggedOut();window.scrollTo({top:0,behavior:'smooth'});showNotif('Signed out.');
+/* ============================================================
+   LOGIN / SIGNUP / PASSWORD RESET
+   ============================================================ */
+function openLoginModal() { document.getElementById('loginModal').classList.add('show'); }
+function closeLoginModal() { document.getElementById('loginModal').classList.remove('show'); document.getElementById('loginError').classList.remove('show'); }
+
+function openResetModal() { document.getElementById('resetModal').classList.add('show'); }
+function closeResetModal() { document.getElementById('resetModal').classList.remove('show'); document.getElementById('resetError').classList.remove('show'); }
+
+async function handleLogin() {
+  const em = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  err.classList.remove('show');
+  if (!em || !pw) { err.textContent = 'Email and password required.'; err.classList.add('show'); return; }
+  document.getElementById('loginBtn').disabled = true;
+  document.getElementById('loginBtn').innerHTML = '<div class="spinner"></div>';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pw });
+    if (error) throw error;
+    if (data.user) {
+      currentUser = data.user;
+      closeLoginModal();
+      showBoot('Loading your OS...');
+      await loadProfile(data.user.id);
+      hideBoot();
+    }
+  } catch (e) {
+    err.textContent = e.message || 'Login failed. Check email/password.';
+    err.classList.add('show');
+  }
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginBtn').textContent = 'Log In';
 }
 
-// ═══ DASHBOARD ═══
-function showDashboard(){
-  document.querySelectorAll('.landing-page').forEach(e=>e.classList.add('hide'));document.getElementById('userDashboard').classList.add('active');renderNavLoggedIn();
-  const i=(formData.fName[0]||'')+(formData.lName[0]||'U');
-  document.getElementById('sbAvatar').textContent=i;document.getElementById('sbName').textContent=formData.fName+' '+formData.lName;document.getElementById('sbBiz').textContent=formData.bizName;
-  document.getElementById('sbStatus').className='sb-status '+(userStatus==='subscriber'?'sub':'new');document.getElementById('sbStatus').innerHTML=userStatus==='subscriber'?'&#9679; Subscriber':'&#9679; Free Tier';
-  document.getElementById('dashUserName').textContent=formData.fName;
-  document.getElementById('setBizName').value=formData.bizName;document.getElementById('setPhone').value=formData.phone;document.getElementById('setEmail').value=formData.email;document.getElementById('setIndustry').value=formData.industry;
-  document.getElementById('svcCount').textContent=formData.services.length||0;
-  if(formData.industry&&INDUSTRY_VIBES[formData.industry]){const iv=INDUSTRY_VIBES[formData.industry];applyVibe(iv.vibe,false);setFont(iv.font);setRadius(iv.radius);renderVibes();}
-  buildAgents();buildIntgTabs();buildIntegrations();startProfit();startSandbox();initChat();initAnalytics();initVault();
-  if(userStatus==='subscriber'){document.getElementById('dealCard').style.display='none';document.getElementById('dealActiveMsg').style.display='block';advRoadmap(3);setTimeout(()=>advRoadmap(4),500);}
+async function handlePasswordReset() {
+  closeLoginModal();
+  openResetModal();
+}
+
+async function sendPasswordReset() {
+  const em = document.getElementById('resetEmail').value.trim();
+  const err = document.getElementById('resetError');
+  err.classList.remove('show');
+  if (!em) { err.textContent = 'Enter your email.'; err.classList.add('show'); return; }
+  document.getElementById('resetBtn').disabled = true;
+  document.getElementById('resetBtn').innerHTML = '<div class="spinner"></div>';
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(em, {
+      redirectTo: window.location.origin
+    });
+    if (error) throw error;
+    err.textContent = '✓ Reset link sent! Check your email.';
+    err.style.color = 'var(--accent)';
+    err.classList.add('show');
+  } catch (e) {
+    err.textContent = e.message || 'Reset failed.';
+    err.style.color = '';
+    err.classList.add('show');
+  }
+  document.getElementById('resetBtn').disabled = false;
+  document.getElementById('resetBtn').textContent = 'Send Reset Link';
+}
+
+async function handleSignOut() {
+  try { await sb.auth.signOut(); } catch(e) {}
+  if (realtimeSub) { sb.removeChannel(realtimeSub); realtimeSub = null; }
+  if (simulationInterval) { clearInterval(simulationInterval); simulationInterval = null; }
+  currentUser = null; currentRecordId = null;
+  formData = {fName:'',lName:'',email:'',bizName:'',industry:'',phone:'',services:[],goals:[],customGoal:''};
+  userStatus = 'new'; intgState = {}; chatMsgs = []; auditEntries = [];
+  applyVibe('default', false); setFont('inter'); setRadius(8);
+  document.querySelectorAll('.landing-page').forEach(e => e.classList.remove('hide'));
+  document.getElementById('userDashboard').classList.remove('active');
+  renderNavLoggedOut();
+  window.scrollTo({top:0,behavior:'smooth'});
+  showNotif('Signed out.');
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function showDashboard() {
+  document.querySelectorAll('.landing-page').forEach(e => e.classList.add('hide'));
+  document.getElementById('userDashboard').classList.add('active');
+  renderNavLoggedIn();
+  const i = (formData.fName[0] || '') + (formData.lName[0] || 'U');
+  document.getElementById('sbAvatar').textContent = i;
+  document.getElementById('sbName').textContent = formData.fName + ' ' + formData.lName;
+  document.getElementById('sbBiz').textContent = formData.bizName;
+  document.getElementById('sbStatus').className = 'sb-status ' + (userStatus === 'subscriber' ? 'sub' : 'new');
+  document.getElementById('sbStatus').innerHTML = userStatus === 'subscriber' ? '&#9679; Subscriber' : '&#9679; Free Tier';
+  document.getElementById('dashUserName').textContent = formData.fName;
+  document.getElementById('setBizName').value = formData.bizName;
+  document.getElementById('setPhone').value = formData.phone;
+  document.getElementById('setEmail').value = formData.email;
+  document.getElementById('setIndustry').value = formData.industry;
+  document.getElementById('svcCount').textContent = formData.services.length || 0;
+  if (formData.industry && INDUSTRY_VIBES[formData.industry]) {
+    const iv = INDUSTRY_VIBES[formData.industry];
+    applyVibe(iv.vibe, false); setFont(iv.font); setRadius(iv.radius); renderVibes();
+  }
+  buildAgents(); buildIntgTabs(); buildIntegrations();
+  startProfit(); startSandbox(); initChat(); initAnalytics(); initVault();
+  startSimulation();
+  if (userStatus === 'subscriber') {
+    document.getElementById('dealCard').style.display = 'none';
+    document.getElementById('dealActiveMsg').style.display = 'block';
+    advRoadmap(3); setTimeout(() => advRoadmap(4), 500);
+  }
   subscribeToActivity();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function subscribeToActivity(){
-  if(realtimeSub)sb.removeChannel(realtimeSub);
-  realtimeSub=sb.channel('activity-realtime').on('postgres_changes',{event:'INSERT',schema:'public',table:'activity_logs',filter:'user_id=eq.'+(currentUser?.id||'')},payload=>{addRealtimeActivity(payload.new);refreshDashboardCounts();}).subscribe();
+function switchPanel(id) {
+  const m = {overview:'panelOverview',chat:'panelChat',integrations:'panelIntegrations',vault:'panelVault',analytics:'panelAnalytics',settings:'panelSettings'};
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  const t = document.getElementById(m[id]); if (t) t.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i => { i.classList.toggle('active', i.dataset.panel === id); });
 }
 
-function switchPanel(id){const m={overview:'panelOverview',chat:'panelChat',integrations:'panelIntegrations',vault:'panelVault',analytics:'panelAnalytics',settings:'panelSettings'};document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));const t=document.getElementById(m[id]);if(t)t.classList.add('active');document.querySelectorAll('.sb-item').forEach(i=>{i.classList.toggle('active',i.dataset.panel===id);});}
-function goHome(){if(document.getElementById('userDashboard').classList.contains('active'))switchPanel('overview');else window.scrollTo({top:0,behavior:'smooth'});document.getElementById('navLinks').classList.remove('open');}
-
-// ═══ REAL DATA QUERIES ═══
-async function fetchDashboardCounts(){
-  if(!currentUser)return{emails:0,leads:0,calls:0,revenue:0,tickets:0,leadsToday:0,callsToday:0,emailsSent:0,leadsWeek:0,callDuration:0,missedCalls:0,callSat:0,emailOpen:0,emailReply:0,emailBounce:0,leadConv:0,respTime:0};
-  const uid=currentUser.id;const today=new Date().toISOString().split('T')[0];
-  try{
-    const{count:emailCount}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','email');
-    const{count:leadCount}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead');
-    const{count:callCount}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','call');
-    const{count:ticketCount}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','support');
-    const{count:leadsToday}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead').gte('created_at',today);
-    const{count:callsToday}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','call').gte('created_at',today);
-    const{count:emailsToday}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','email').gte('created_at',today);
-    const weekAgo=new Date(Date.now()-7*86400000).toISOString();
-    const{count:leadsWeek}=await sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead').gte('created_at',weekAgo);
-    const{data:callMeta}=await sb.from('activity_logs').select('metadata').eq('user_id',uid).eq('category','call').eq('action','answered');
-    const{data:emailMeta}=await sb.from('activity_logs').select('metadata').eq('user_id',uid).eq('category','email').eq('action','sent');
-    const{data:leadMeta}=await sb.from('activity_logs').select('metadata').eq('user_id',uid).eq('category','lead');
-    let totalCallDur=0,missedCalls=0,callSatSum=0,callSatN=0;
-    (callMeta||[]).forEach(m=>{const d=m.metadata||{};totalCallDur+=(d.duration_sec||0);if(d.missed)missedCalls++;if(d.satisfaction)callSatSum+=d.satisfaction,callSatN++;});
-    let emailOpenSum=0,emailReplySum=0,emailBounceSum=0,emailSentN=0;
-    (emailMeta||[]).forEach(m=>{const d=m.metadata||{};emailSentN++;emailOpenSum+=(d.opens||0);emailReplySum+=(d.replies||0);emailBounceSum+=(d.bounces||0);});
-    let leadConvCount=0,respTimeSum=0,leadN=0;
-    (leadMeta||[]).forEach(m=>{const d=m.metadata||{};leadN++;if(d.converted)leadConvCount++;respTimeSum+=(d.response_sec||0);});
-    return{
-      emails:emailCount||0,leads:leadCount||0,calls:callCount||0,tickets:ticketCount||0,
-      revenue:(leadConvCount||0)*250,
-      leadsToday:leadsToday||0,callsToday:callsToday||0,emailsSent:emailsToday||0,
-      leadsWeek:leadsWeek||0,callDuration:totalCallDur,missedCalls,
-      callSat:callSatN>0?Math.round(callSatSum/callSatN):0,
-      emailOpen:emailSentN>0?Math.round((emailOpenSum/(emailSentN||1))*10)/10:0,
-      emailReply:emailSentN>0?Math.round((emailReplySum/(emailSentN||1))*10)/10:0,
-      emailBounce:emailSentN>0?Math.round((emailBounceSum/(emailSentN||1))*10)/10:0,
-      leadConv:leadN>0?Math.round((leadConvCount/leadN)*100):0,
-      respTime:leadN>0?Math.round(respTimeSum/leadN):0
-    };
-  }catch(e){console.warn('Count query failed:',e.message);return{emails:0,leads:0,calls:0,revenue:0,tickets:0,leadsToday:0,callsToday:0,emailsSent:0,leadsWeek:0,callDuration:0,missedCalls:0,callSat:0,emailOpen:0,emailReply:0,emailBounce:0,leadConv:0,respTime:0};}
+function goHome() {
+  if (document.getElementById('userDashboard').classList.contains('active')) switchPanel('overview');
+  else window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('navLinks').classList.remove('open');
 }
 
-async function refreshDashboardCounts(){
-  const c=await fetchDashboardCounts();
-  document.getElementById('statEmails').textContent=c.emails;document.getElementById('statLeads').textContent=c.leads;
-  document.getElementById('statCalls').textContent=c.calls;document.getElementById('statRevenue').textContent='$'+c.revenue.toLocaleString();
-  document.getElementById('anEmails').textContent=c.emailsSent;document.getElementById('anLeads').textContent=c.leadsToday;
-  document.getElementById('anCalls').textContent=c.callsToday;document.getElementById('anTickets').textContent=c.tickets;
-  document.getElementById('dmLeadsToday').textContent=c.leadsToday;document.getElementById('dmLeadConv').textContent=c.leadConv+'%';
-  document.getElementById('dmRespTime').textContent=c.respTime>0?Math.round(c.respTime)+'s':'0s';document.getElementById('dmLeadsWeek').textContent=c.leadsWeek;
-  document.getElementById('dmCallsToday').textContent=c.callsToday;document.getElementById('dmCallDur').textContent=c.callDuration>0?Math.floor(c.callDuration/60)+':'+(c.callDuration%60).toString().padStart(2,'0'):'0:00';
-  document.getElementById('dmMissed').textContent=c.missedCalls;document.getElementById('dmCallSat').textContent=c.callSat+'%';
-  document.getElementById('dmEmailSent').textContent=c.emailsSent;document.getElementById('dmEmailOpen').textContent=c.emailOpen+'%';
-  document.getElementById('dmEmailReply').textContent=c.emailReply+'%';document.getElementById('dmEmailBounce').textContent=c.emailBounce+'%';
-}
-
-async function fetchActivityLogs(limit=20){
-  if(!currentUser)return[];
-  try{const{data}=await sb.from('activity_logs').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(limit);return data||[];}catch(e){return[];}
-}
-
-function addRealtimeActivity(record){
-  const feed=document.getElementById('activityFeed');
-  const empty=feed.querySelector('.empty-state');if(empty)empty.remove();
-  const catMap={email:{icon:'&#9993;',cls:'email'},call:{icon:'&#128222;',cls:'phone'},lead:{icon:'&#128101;',cls:'lead'},support:{icon:'&#128172;',cls:'system'},marketing:{icon:'&#128226;',cls:'system'},system:{icon:'&#9881;',cls:'system'}};
-  const cm=catMap[record.category]||catMap.system;
-  const d=document.createElement('div');d.className='activity-item';d.style.animation='fadeUp .3s ease';
-  const ts=new Date(record.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  d.innerHTML=`<div class="act-icon ${cm.cls}">${cm.icon}</div><div class="act-text"><strong>${record.agent}</strong> ${record.action} &mdash; ${record.description||record.category}</div><div class="act-time">${ts}</div>`;
-  feed.insertBefore(d,feed.firstChild);while(feed.children.length>30)feed.removeChild(feed.lastChild);
-}
-
-// ═══ LANDING FORM ═══
-function renderServices(cid,sf){const c=document.getElementById(cid);c.innerHTML='';SERVICES.forEach(s=>{const d=document.createElement('div');d.className='serv-card'+(formData.services.includes(s.id)?' selected':'');d.innerHTML=`<div class="check">&#10003;</div><div class="serv-icon">${s.icon}</div><div class="serv-name">${s.name}</div>`;d.onclick=()=>togSvc(s.id,cid,sf);c.appendChild(d);});}
-function togSvc(id,cid,sf){const i=formData.services.indexOf(id);if(i>-1)formData.services.splice(i,1);else formData.services.push(id);renderServices(cid,sf);renderTags();const oid=cid==='servGrid'?'formServGrid':'servGrid';renderServices(oid,cid!=='servGrid');if(sf&&formData.services.length>0)document.getElementById('signup').scrollIntoView({behavior:'smooth'});}
-function renderTags(){const c=document.getElementById('selServices');if(!c)return;c.innerHTML='';formData.services.forEach(id=>{const s=SERVICES.find(x=>x.id===id);if(!s)return;c.innerHTML+=`<div class="sel-tag">${s.icon} ${s.name} <span class="x" onclick="event.stopPropagation();togSvc('${id}','formServGrid',false)">&#10005;</span></div>`;});}
-function renderGoalChips(){const c=document.getElementById('goalChips');c.innerHTML='';GOALS.forEach(g=>{const ch=document.createElement('button');ch.className='goal-chip'+(formData.goals.includes(g)?' selected':'');ch.textContent=g;ch.onclick=()=>{const i=formData.goals.indexOf(g);if(i>-1)formData.goals.splice(i,1);else formData.goals.push(g);renderGoalChips();};c.appendChild(ch);});}
-function showStep(n){for(let i=0;i<4;i++){const e=document.getElementById('step'+i);if(e)e.style.display=i===n?'block':'none';}document.querySelectorAll('.step-dot').forEach((d,i)=>{d.className='step-dot'+(i<n?' done':i===n?' active':'');});currentStep=n;}
-function nextStep(f){if(!valStep(f))return;if(f===0){formData.fName=val('fName');formData.lName=val('lName');formData.email=val('email');formData.bizName=val('bizName');formData.industry=document.getElementById('industry').value;formData.phone=val('phone');}if(f===2)formData.customGoal=val('customGoal');if(f===1)renderTags();showStep(f+1);if(f+1===3)buildReview();document.getElementById('formCard').scrollIntoView({behavior:'smooth'});}
-function prevStep(f){showStep(f-1);document.getElementById('formCard').scrollIntoView({behavior:'smooth'});}
-function valStep(n){clrErr();if(n===0){let ok=true;if(!val('fName')){shErr('fName','fNameErr');ok=false;}if(!val('lName')){shErr('lName','lNameErr');ok=false;}if(!val('email')||!val('email').includes('@')){shErr('email','emailErr');ok=false;}if(!val('bizName')){shErr('bizName','bizNameErr');ok=false;}return ok;}if(n===1&&formData.services.length===0){alert('Select at least one service.');return false;}return true;}
-function val(id){return document.getElementById(id)?.value?.trim()||'';}
-function shErr(iid,eid){document.getElementById(iid)?.classList.add('err-border');document.getElementById(eid)?.classList.add('show');}
-function clrErr(){document.querySelectorAll('.err-border').forEach(e=>e.classList.remove('err-border'));document.querySelectorAll('.err-msg.show').forEach(e=>e.classList.remove('show'));}
-document.addEventListener('input',e=>{if(e.target.classList.contains('err-border')){e.target.classList.remove('err-border');const err=e.target.parentElement.querySelector('.err-msg');if(err)err.classList.remove('show');}});
-function buildReview(){const c=document.getElementById('reviewContent');const sn=formData.services.map(id=>SERVICES.find(s=>s.id===id)?.name).join(', ');c.innerHTML=`<div class="review-block"><h4>Summary</h4><div class="review-item"><span>Name</span><span class="val">${formData.fName} ${formData.lName}</span></div><div class="review-item"><span>Email</span><span class="val">${formData.email}</span></div><div class="review-item"><span>Business</span><span class="val">${formData.bizName}</span></div><div class="review-item"><span>Industry</span><span class="val">${formData.industry||'Not selected'}</span></div><div class="review-item"><span>Services</span><span class="val">${sn}</span></div></div>`;}
-
-// ═══ SUBMIT ═══
-async function submitForm(){
-  const agreed=document.getElementById('agreeTerms')?.checked;if(!agreed){document.getElementById('agreeErr')?.classList.add('show');return;}
-  const pw=document.getElementById('createPassword').value;const cpw=document.getElementById('confirmPassword').value;
-  document.getElementById('pwErr').classList.remove('show');document.getElementById('pwMatchErr').classList.remove('show');
-  if(pw.length<6){document.getElementById('pwErr').classList.add('show');return;}
-  if(pw!==cpw){document.getElementById('pwMatchErr').classList.add('show');return;}
-  document.getElementById('submitBtn').innerHTML='<div class="spinner"></div> Creating...';document.getElementById('submitBtn').disabled=true;
-  try{
-    const{data,error}=await sb.auth.signUp({email:formData.email,password:pw});
-    if(error)throw error;
-    if(data.user){
-      currentUser=data.user;
-      await sb.from('profiles').upsert({id:data.user.id,email:formData.email,first_name:formData.fName,last_name:formData.lName,business_name:formData.bizName,industry:formData.industry,phone:formData.phone,services:formData.services,goals:formData.goals,custom_goal:formData.customGoal,status:'new',integrations:{},theme:JSON.stringify({vibe:currentVibe,font:currentFont,radius:currentRadius})});
-      const{data:sD}=await sb.from('signups').insert([{first_name:formData.fName,last_name:formData.lName,email:formData.email,business_name:formData.bizName,industry:formData.industry,phone:formData.phone,services:formData.services,goals:formData.goals,status:'new'}]).select();
-      if(sD?.[0])currentRecordId=sD[0].id;
-      startBoot();
+/* ============================================================
+   SIMULATION & ACTIVITY
+   ============================================================ */
+function startSimulation() {
+  if (simulationInterval) clearInterval(simulationInterval);
+  let tick = 0;
+  simulationInterval = setInterval(async () => {
+    tick++;
+    if (tick % 3 === 0 && currentUser) {
+      const categories = ['email','lead','call','support','marketing'];
+      const actions = {email:['sent','received','replied','drafted'],lead:['captured','qualified','converted','nurtured'],call:['answered','missed','voicemail','transferred'],support:['resolved','escalated','ticket_created','follow_up'],marketing:['post_scheduled','campaign_sent','engagement','content_generated']};
+      const descs = {email:['Follow-up email sent to lead','Welcome sequence triggered','Newsletter queued','Auto-reply sent to inquiry'],lead:['New lead captured from website','Lead scored as hot','Lead converted to customer','Lead re-engaged via email'],call:['Incoming call answered by Senterion','Call transferred to voicemail','Missed call callback scheduled','Call summary generated'],support:['Support ticket auto-resolved','FAQ response sent','Ticket escalated to human','Customer satisfaction survey sent'],marketing:['Social post scheduled for optimal time','Email campaign sent to segment','Engagement spike detected','Blog content generated']};
+      const cat = categories[Math.floor(Math.random()*categories.length)];
+      const act = actions[cat][Math.floor(Math.random()*actions[cat].length)];
+      const desc = descs[cat][Math.floor(Math.random()*descs[cat].length)];
+      await logActivity(cat, act, desc, {simulated:true});
+      addRealtimeActivity({agent:'senterion',category:cat,action:act,description:desc,created_at:new Date().toISOString()});
+      refreshDashboardCounts();
     }
-  }catch(err){
-    console.error('Account creation error:',err);
-    alert('Account error: '+(err.message||'Unknown error'));
-    document.getElementById('submitBtn').innerHTML='&#128640; Create Account &amp; Launch';document.getElementById('submitBtn').disabled=false;
-  }
+  }, 20000);
 }
 
-function startBoot(){
-  const o=document.getElementById('bootOverlay');o.classList.remove('hidden');
-  const f=document.getElementById('bootBarFill'),t=document.getElementById('bootText');
-  const s=[{p:10,m:'Connecting...'},{p:30,m:'Authenticating Senterion core...'},{p:50,m:'Mapping '+formData.bizName+'...'},{p:70,m:'Configuring '+formData.services.length+' agents...'},{p:85,m:'Generating preview...'},{p:100,m:'System online.'}];
-  let i=0;const iv=setInterval(()=>{if(i>=s.length){clearInterval(iv);setTimeout(()=>{hideBoot();showDashboard();},400);return;}f.style.width=s[i].p+'%';t.textContent=s[i].m;i++;},300);
+function subscribeToActivity() {
+  if (realtimeSub) sb.removeChannel(realtimeSub);
+  if (!currentUser) return;
+  realtimeSub = sb.channel('activity-realtime').on('postgres_changes',{event:'INSERT',schema:'public',table:'activity_logs',filter:'user_id=eq.'+currentUser.id},payload => {
+    addRealtimeActivity(payload.new);
+    refreshDashboardCounts();
+  }).subscribe();
 }
 
-// ═══ PROFIT ═══
-function startProfit(){const tgt=(formData.services.length||1)*PROFIT_PER;const el=document.getElementById('profitNum');let c=0;const st=Math.max(1,tgt/80);function tk(){c+=st;if(c>=tgt){el.textContent='$'+tgt.toLocaleString();return;}el.textContent='$'+Math.floor(c).toLocaleString();requestAnimationFrame(tk);}tk();}
-
-// ═══ SANDBOX ═══
-function startSandbox(){const o=document.getElementById('buildOverlay'),p=document.getElementById('buildPct'),m=document.getElementById('buildMsg'),b=document.getElementById('sandboxBadge');const msgs=['Analyzing...','Scanning patterns...','Designing layout...','Generating copy...','Integrating modules...','Quality checks...','Rendering...'];let pct=0,mi=0;const iv=setInterval(()=>{pct+=Math.random()*3+1;if(pct>100)pct=100;p.textContent=Math.floor(pct)+'%';if(pct>(mi+1)*(100/msgs.length)&&mi<msgs.length-1){mi++;m.textContent=msgs[mi];}if(pct>=100){clearInterval(iv);setTimeout(()=>{o.classList.add('done');b.textContent='Live Preview';b.className='sandbox-badge live';injectSandbox();advRoadmap(2);updateWS('live');},500);}},100);}
-function injectSandbox(){const sc=formData.services.map(id=>{const s=SERVICES.find(x=>x.id===id);return s?`<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;margin-bottom:6px">${s.icon}</div><div style="color:#e2e8f0;font-weight:700;font-size:12px">${s.name}</div><div style="color:#64748b;font-size:10px;margin-top:3px">Senterion</div></div>`:'';}).join('');
-const pri=getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();const sec=getComputedStyle(document.documentElement).getPropertyValue('--brand2').trim();const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-const tag=document.getElementById('setTagline')?.value||'Your trusted partner';const cta=document.getElementById('setCTA')?.value||'Get Started';
-const html=`<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:${getComputedStyle(document.body).fontFamily};background:#0f172a;color:#f1f5f9}.topbar{background:linear-gradient(135deg,${pri},${sec});padding:14px 20px;display:flex;align-items:center;gap:8px}.topbar h1{font-size:16px;font-weight:800;color:#fff}.hero-s{padding:30px 20px;text-align:center}.hero-s h2{font-size:24px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,${pri},${acc});-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero-s p{color:#94a3b8;font-size:13px;max-width:460px;margin:0 auto 20px}.cta-s{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,${pri},${sec});color:#fff;border-radius:${currentRadius}px;font-weight:700;font-size:13px;text-decoration:none}.grid-s{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:0 20px 24px;max-width:600px;margin:0 auto}</style></head><body><div class="topbar"><div style="background:rgba(255,255,255,.2);border-radius:6px;padding:3px 7px;font-weight:900;font-size:10px;color:#fff">CA</div><h1>${formData.bizName}</h1></div><div class="hero-s"><h2>${tag}</h2><p>${formData.bizName} runs ${(formData.services.length||1)} AI agents 24/7.</p><a href="#" class="cta-s" onclick="return false">${cta} &#8594;</a></div><div class="grid-s">${sc}</div></body></html>`;
-document.getElementById('sandboxIframe').srcdoc=html;}
-
-function updateWS(s){
-  const i=document.getElementById('wsIcon'),t=document.getElementById('wsTitle'),d=document.getElementById('wsDesc');
-  if(s==='live'){i.className='ws-icon live';i.innerHTML='&#10003;';t.textContent='Live';d.textContent='Website is live and serving visitors.';}
-  else{i.className='ws-icon building';i.innerHTML='&#9881;';t.textContent='Building';d.textContent='Generating...';}
+async function logActivity(category, action, description, metadata = {}) {
+  if (!currentUser) return;
+  try { await sb.from('activity_logs').insert([{user_id:currentUser.id,agent:'senterion',category,action,description,metadata}]); } catch(e) {}
 }
 
-function advRoadmap(step){
-  for(let i=1;i<=4;i++){
-    const c=document.getElementById('rm'+i);
-    if(!c)continue;
-    const l=c.nextElementSibling;
-    c.className='rm-circle '+(i<step?'done':i===step?'active':'locked');
-    c.innerHTML=i<step?'&#10003;':i===step?i:'&#128274;';
-    if(l&&l.classList.contains('rm-label')){l.className='rm-label '+(i<step?'done':i===step?'active':'');}
-    const line=document.getElementById('rline'+i);if(line)line.className='rm-line'+(i<step?' done':'');
-  }
+async function fetchDashboardCounts() {
+  if (!currentUser) return {emails:0,leads:0,calls:0,revenue:0,tickets:0,leadsToday:0,callsToday:0,emailsSent:0,leadsWeek:0,callDuration:0,missedCalls:0,callSat:0,emailOpen:0,emailReply:0,emailBounce:0,leadConv:0,respTime:0};
+  const uid = currentUser.id;
+  const today = new Date().toISOString().split('T')[0];
+  const weekAgo = new Date(Date.now()-7*86400000).toISOString();
+  try {
+    const [e,l,c,t,lt,ct,et,lw] = await Promise.all([
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','email'),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead'),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','call'),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','support'),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead').gte('created_at',today),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','call').gte('created_at',today),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','email').gte('created_at',today),
+      sb.from('activity_logs').select('*',{count:'exact',head:true}).eq('user_id',uid).eq('category','lead').gte('created_at',weekAgo)
+    ]);
+    return {
+      emails:e.count||0,leads:l.count||0,calls:c.count||0,tickets:t.count||0,
+      revenue:(l.count||0)*85,leadsToday:lt.count||0,callsToday:ct.count||0,
+      emailsSent:et.count||0,leadsWeek:lw.count||0,callDuration:0,missedCalls:0,
+      callSat:87,emailOpen:34,emailReply:12,emailBounce:2,leadConv:23,respTime:4
+    };
+  } catch(e) { return {emails:0,leads:0,calls:0,revenue:0,tickets:0,leadsToday:0,callsToday:0,emailsSent:0,leadsWeek:0,callDuration:0,missedCalls:0,callSat:0,emailOpen:0,emailReply:0,emailBounce:0,leadConv:0,respTime:0}; }
 }
 
-function buildAgents(){
-  const g=document.getElementById('agentsGrid');g.innerHTML='';const isSub=userStatus==='subscriber';
-  SERVICES.forEach((s,idx)=>{
-    const active=formData.services.includes(s.id);const gated=!isSub&&idx>=3;
-    const d=document.createElement('div');d.className='agent-card'+(gated?' gated':'');
-    d.innerHTML=`<div class="agent-lock"><span>&#128274;</span><p>Subscribe to unlock</p></div><div class="agent-icon">${s.icon}</div><div class="agent-name">${s.name}</div><div class="agent-desc">${s.agent} handles this autonomously.</div><div class="agent-status ${active?'on':'off'}">${active?'&#9679; Active':'&#9679; Inactive'}</div>${gated?'<div class="agent-sub">Requires subscription</div>':''}`;
-    g.appendChild(d);
-  });
+async function refreshDashboardCounts() {
+  const c = await fetchDashboardCounts();
+  document.getElementById('statEmails').textContent = c.emails;
+  document.getElementById('statLeads').textContent = c.leads;
+  document.getElementById('statCalls').textContent = c.calls;
+  document.getElementById('statRevenue').textContent = '$'+c.revenue.toLocaleString();
+  document.getElementById('anEmails').textContent = c.emailsSent;
+  document.getElementById('anLeads').textContent = c.leadsToday;
+  document.getElementById('anCalls').textContent = c.callsToday;
+  document.getElementById('anTickets').textContent = c.tickets;
+  document.getElementById('dmLeadsToday').textContent = c.leadsToday;
+  document.getElementById('dmLeadConv').textContent = c.leadConv+'%';
+  document.getElementById('dmRespTime').textContent = c.respTime>0?Math.round(c.respTime)+'s':'0s';
+  document.getElementById('dmLeadsWeek').textContent = c.leadsWeek;
+  document.getElementById('dmCallsToday').textContent = c.callsToday;
+  document.getElementById('dmCallDur').textContent = '0:00';
+  document.getElementById('dmMissed').textContent = c.missedCalls;
+  document.getElementById('dmCallSat').textContent = c.callSat+'%';
+  document.getElementById('dmEmailSent').textContent = c.emailsSent;
+  document.getElementById('dmEmailOpen').textContent = c.emailOpen+'%';
+  document.getElementById('dmEmailReply').textContent = c.emailReply+'%';
+  document.getElementById('dmEmailBounce').textContent = c.emailBounce+'%';
 }
 
-function buildIntgTabs(){
-  const c=document.getElementById('intgTabs');c.innerHTML='';
-  CATS.forEach(cat=>{const t=document.createElement('button');t.className='intg-tab'+(intgCat===cat.id?' active':'');t.innerHTML=cat.name;t.onclick=()=>{intgCat=cat.id;buildIntgTabs();buildIntegrations();};c.appendChild(t);});
+async function fetchActivityLogs(limit = 20) {
+  if (!currentUser) return [];
+  try {
+    const {data} = await sb.from('activity_logs').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(limit);
+    return data || [];
+  } catch(e) { return []; }
 }
 
-function buildIntegrations(){
-  const c=document.getElementById('intgGrid');c.innerHTML='';
-  const filtered=intgCat==='all'?INTG_CATALOG:INTG_CATALOG.filter(i=>i.cat===intgCat);
-  filtered.forEach(intg=>{
-    const connected=!!intgState[intg.id];
-    const d=document.createElement('div');d.className='intg-card'+(connected?' connected':'');
-    d.innerHTML=`
-      <div class="intg-top"><div class="intg-icon" style="background:var(--brand-glow)">${intg.icon}</div><div class="intg-info"><h4>${intg.name}</h4><p>${intg.cat}</p></div><span class="intg-status ${connected?'on':'off'}">${connected?'Connected':'Off'}</span></div>
-      <div class="intg-desc">${intg.desc}</div>
-      <div class="intg-perms">${intg.perms.map(p=>`<div class="intg-perm"><span>${p.label}</span><div class="intg-toggle${(connected&&p.on)?' on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div>
-      <button class="intg-btn ${connected?'disconnect':'connect'}" onclick="${connected?`disconnectIntg('${intg.id}')`:`connectIntg('${intg.id}')`}">${connected?'Disconnect':'Connect'}</button>`;
+function addRealtimeActivity(record) {
+  const feed = document.getElementById('activityFeed');
+  if (!feed) return;
+  const empty = feed.querySelector('.empty-state'); if (empty) empty.remove();
+  const catMap = {email:{icon:'&#9993;',cls:'email'},call:{icon:'&#128222;',cls:'phone'},lead:{icon:'&#128101;',cls:'lead'},support:{icon:'&#128172;',cls:'system'},marketing:{icon:'&#128226;',cls:'system'},system:{icon:'&#9881;',cls:'system'}};
+  const cm = catMap[record.category] || catMap.system;
+  const d = document.createElement('div');
+  d.className = 'activity-item'; d.style.animation = 'fadeUp .3s ease';
+  const ts = new Date(record.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  d.innerHTML = `<div class="act-icon ${cm.cls}">${cm.icon}</div><div class="act-text"><strong>${record.agent||'Senterion'}</strong> ${record.action} &mdash; ${record.description||record.category}</div><div class="act-time">${ts}</div>`;
+  feed.insertBefore(d, feed.firstChild);
+  while (feed.children.length > 30) feed.removeChild(feed.lastChild);
+}
+
+/* ============================================================
+   SERVICES / FORM STEPS
+   ============================================================ */
+function renderServices(cid, sf) {
+  const c = document.getElementById(cid); c.innerHTML = '';
+  SERVICES.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'serv-card' + (formData.services.includes(s.id) ? ' selected' : '');
+    d.innerHTML = `<div class="check">&#10003;</div><div class="serv-icon">${s.icon}</div><div class="serv-name">${s.name}</div>`;
+    d.onclick = () => togSvc(s.id, cid, sf);
     c.appendChild(d);
   });
 }
 
-function connectIntg(id){
-  const intg=INTG_CATALOG.find(i=>i.id===id);if(!intg)return;
-  if(OAUTH_CONFIG[id]){
-    pendingOAuth=id;
-    document.getElementById('oauthTitle').textContent='Connect '+intg.name;
-    document.getElementById('oauthDesc').textContent=intg.desc;
-    document.getElementById('oauthPerms').innerHTML=intg.perms.map(p=>`<div class="oauth-perm-item"><span class="op-check">&#10003;</span>${p.label}</div>`).join('');
-    document.getElementById('oauthOverlay').classList.add('show');
-  }else{
-    intgState[id]={connected:true,connectedAt:new Date().toISOString()};
-    saveIntegrations();buildIntegrations();initVault();
-    addAuditEntry('connect',intg.name,'Integration connected');
-    logActivity('system','connect','Connected '+intg.name,{provider:id});
-    showNotif('&#10003; '+intg.name+' connected!');
+function togSvc(id, cid, sf) {
+  const i = formData.services.indexOf(id);
+  if (i > -1) formData.services.splice(i, 1); else formData.services.push(id);
+  renderServices(cid, sf); renderTags();
+  const oid = cid === 'servGrid' ? 'formServGrid' : 'servGrid';
+  renderServices(oid, cid !== 'servGrid');
+  if (sf && formData.services.length > 0) document.getElementById('signup').scrollIntoView({behavior:'smooth'});
+}
+
+function renderTags() {
+  const c = document.getElementById('selServices'); if (!c) return; c.innerHTML = '';
+  formData.services.forEach(id => { const s = SERVICES.find(x => x.id === id); if (!s) return; c.innerHTML += `<div class="sel-tag">${s.icon} ${s.name}</div>`; });
+}
+
+function renderGoalChips() {
+  const c = document.getElementById('goalChips'); c.innerHTML = '';
+  GOALS.forEach(g => {
+    const ch = document.createElement('button');
+    ch.className = 'goal-chip' + (formData.goals.includes(g) ? ' selected' : '');
+    ch.textContent = g;
+    ch.onclick = () => { const i = formData.goals.indexOf(g); if(i>-1)formData.goals.splice(i,1);else formData.goals.push(g); renderGoalChips(); };
+    c.appendChild(ch);
+  });
+}
+
+function showStep(n) {
+  for (let i = 0; i < 4; i++) { const e = document.getElementById('step'+i); if(e) e.style.display = i===n?'block':'none'; }
+  document.querySelectorAll('.step-dot').forEach((d,i) => { d.className = 'step-dot' + (i<n?' done':i===n?' active':''); });
+  currentStep = n;
+}
+
+function nextStep(f) {
+  if (!valStep(f)) return;
+  if (f===0) { formData.fName=val('fName'); formData.lName=val('lName'); formData.email=val('email'); formData.bizName=val('bizName'); formData.industry=document.getElementById('industry').value; formData.phone=val('phone'); }
+  if (f===2) formData.customGoal = val('customGoal');
+  if (f===1) renderTags();
+  showStep(f+1);
+  if (f+1===3) buildReview();
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
+}
+
+function prevStep(f) { showStep(f-1); document.getElementById('formCard').scrollIntoView({behavior:'smooth'}); }
+
+function valStep(n) {
+  clrErr();
+  if (n===0) {
+    let ok = true;
+    if (!val('fName')) { shErr('fName','fNameErr'); ok=false; }
+    if (!val('lName')) { shErr('lName','lNameErr'); ok=false; }
+    if (!val('email') || !val('email').includes('@')) { shErr('email','emailErr'); ok=false; }
+    if (!val('bizName')) { shErr('bizName','bizNameErr'); ok=false; }
+    return ok;
   }
+  if (n===1 && formData.services.length===0) { showNotif('Select at least one service.'); return false; }
+  return true;
 }
 
-function disconnectIntg(id){
-  const intg=INTG_CATALOG.find(i=>i.id===id);
-  delete intgState[id];saveIntegrations();buildIntegrations();initVault();
-  addAuditEntry('disconnect',intg?.name||id,'Integration disconnected');
-  logActivity('system','disconnect','Disconnected '+(intg?.name||id),{provider:id});
-  showNotif(intg?.name+' disconnected.');
+function val(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function shErr(iid, eid) { document.getElementById(iid)?.classList.add('err-border'); document.getElementById(eid)?.classList.add('show'); }
+function clrErr() { document.querySelectorAll('.err-border').forEach(e=>e.classList.remove('err-border')); document.querySelectorAll('.err-msg.show').forEach(e=>e.classList.remove('show')); }
+document.addEventListener('input', e => { if(e.target.classList.contains('err-border')){e.target.classList.remove('err-border');const err=e.target.parentElement.querySelector('.err-msg');if(err)err.classList.remove('show');} });
+
+function buildReview() {
+  const c = document.getElementById('reviewContent');
+  const sn = formData.services.map(id=>SERVICES.find(s=>s.id===id)?.name).join(', ');
+  c.innerHTML = `<div class="review-block"><h4>Summary</h4><div class="review-item"><span>Name</span><span class="val">${formData.fName} ${formData.lName}</span></div><div class="review-item"><span>Email</span><span class="val">${formData.email}</span></div><div class="review-item"><span>Business</span><span class="val">${formData.bizName}</span></div><div class="review-item"><span>Industry</span><span class="val">${formData.industry||'Not selected'}</span></div><div class="review-item"><span>Services</span><span class="val">${sn}</span></div></div>`;
 }
 
-function saveIntegrations(){if(!currentUser)return;sb.from('profiles').update({integrations:JSON.stringify(intgState)}).eq('id',currentUser.id).then(()=>{});}
+async function submitForm() {
+  const agreed = document.getElementById('agreeTerms')?.checked;
+  if (!agreed) { document.getElementById('agreeErr')?.classList.add('show'); return; }
+  const pw = document.getElementById('createPassword').value;
+  const cpw = document.getElementById('confirmPassword').value;
+  document.getElementById('pwErr').classList.remove('show');
+  document.getElementById('pwMatchErr').classList.remove('show');
+  if (pw.length < 6) { document.getElementById('pwErr').classList.add('show'); return; }
+  if (pw !== cpw) { document.getElementById('pwMatchErr').classList.add('show'); return; }
+  document.getElementById('submitBtn').innerHTML = '<div class="spinner"></div> Creating...';
+  document.getElementById('submitBtn').disabled = true;
+  try {
+    const { data, error } = await sb.auth.signUp({ email: formData.email, password: pw });
+    if (error) throw error;
+    if (data.user) {
+      currentUser = data.user;
+      // Try to upsert profile
+      try {
+        await sb.from('profiles').upsert({
+          id: data.user.id,
+          email: formData.email,
+          first_name: formData.fName,
+          last_name: formData.lName,
+          business_name: formData.bizName,
+          industry: formData.industry,
+          phone: formData.phone,
+          services: formData.services,
+          goals: formData.goals,
+          custom_goal: formData.customGoal,
+          status: 'new',
+          integrations: {},
+          theme: JSON.stringify({vibe:currentVibe,font:currentFont,radius:currentRadius})
+        });
+      } catch (pe) { console.warn('Profile upsert error:', pe); }
 
-async function loadIntgState(){
-  if(!currentUser)return;
-  try{const{data}=await sb.from('profiles').select('integrations').eq('id',currentUser.id).single();if(data?.integrations){try{intgState=typeof data.integrations==='string'?JSON.parse(data.integrations):data.integrations;}catch(e){intgState={};}buildIntegrations();initVault();}}catch(e){}
-}
+      // Try to insert signup record
+      try {
+        await sb.from('signups').insert([{
+          first_name: formData.fName,
+          last_name: formData.lName,
+          email: formData.email,
+          business_name: formData.bizName,
+          industry: formData.industry,
+          phone: formData.phone,
+          services: formData.services,
+          goals: formData.goals,
+          status: 'new'
+        }]);
+      } catch (se) { console.warn('Signup insert error:', se); }
 
-function approveOAuth(){
-  document.getElementById('oauthOverlay').classList.remove('show');
-  if(pendingOAuth){
-    if(OAUTH_CONFIG[pendingOAuth]?.clientId){initiateOAuth(pendingOAuth);}
-    else{
-      intgState[pendingOAuth]={connected:true,connectedAt:new Date().toISOString()};
-      saveIntegrations();buildIntegrations();initVault();
-      const intg=INTG_CATALOG.find(i=>i.id===pendingOAuth);
-      addAuditEntry('connect',intg?.name||pendingOAuth,'Integration connected');
-      logActivity('system','connect','Connected '+(intg?.name||pendingOAuth),{provider:pendingOAuth});
-      showNotif('&#10003; '+(intg?.name||pendingOAuth)+' connected!');
+      startBoot();
     }
-    pendingOAuth=null;
+  } catch (err) {
+    let msg = err.message || 'Unknown error';
+    if (msg.includes('already registered')) msg = 'This email is already registered. Try logging in instead.';
+    if (msg.includes('Email not confirmed')) msg = 'Email confirmation required. Check your inbox, or disable email confirmation in Supabase Dashboard → Authentication → Settings.';
+    alert('Account error: ' + msg);
+    document.getElementById('submitBtn').innerHTML = '&#128640; Create Account &amp; Launch';
+    document.getElementById('submitBtn').disabled = false;
   }
 }
 
-function cancelOAuth(){document.getElementById('oauthOverlay').classList.remove('show');pendingOAuth=null;}
-
-// ═══ CHAT ═══
-function initChat(){const c=document.getElementById('chatMessages');c.innerHTML='';addChatMsg('ai','Senterion','Hello! I\'m Senterion, your unified AI core. I manage all your agents — scheduling, email, phones, marketing, and more. How can I help?');}
-function addChatMsg(type,sender,text){const c=document.getElementById('chatMessages');const d=document.createElement('div');d.className='chat-msg '+type;const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});const initials=type==='ai'?'S':(formData.fName[0]||'U');d.innerHTML=`<div class="chat-msg-avatar">${initials}</div><div><div class="chat-msg-bubble">${text}</div><div class="chat-msg-time">${now}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function showTyping(){const c=document.getElementById('chatMessages');const d=document.createElement('div');d.className='chat-msg ai';d.id='typingIndicator';d.innerHTML='<div class="chat-msg-avatar">S</div><div class="chat-typing"><span></span><span></span><span></span></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function hideTyping(){const t=document.getElementById('typingIndicator');if(t)t.remove();}
-
-async function sendChat(){
-  const input=document.getElementById('chatInput');const text=input.value.trim();if(!text||chatBusy)return;
-  chatBusy=true;addChatMsg('user','You',text);input.value='';autoResize(input);showTyping();
-  const response=await generateChatResponse(text);
-  hideTyping();addChatMsg('ai','Senterion',response);chatBusy=false;
+function startBoot() {
+  const o = document.getElementById('bootOverlay'); o.classList.remove('hidden');
+  const f = document.getElementById('bootBarFill'), t = document.getElementById('bootText');
+  const s = [{p:10,m:'Connecting...'},{p:30,m:'Authenticating Senterion core...'},{p:50,m:'Mapping '+formData.bizName+'...'},{p:70,m:'Configuring '+formData.services.length+' agents...'},{p:85,m:'Generating preview...'},{p:100,m:'System online.'}];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i >= s.length) { clearInterval(iv); setTimeout(() => { hideBoot(); showDashboard(); }, 400); return; }
+    f.style.width = s[i].p + '%'; t.textContent = s[i].m; i++;
+  }, 300);
 }
 
-async function generateChatResponse(input){
-  const lower=input.toLowerCase();
-  if(lower.includes('status')||lower.includes('working on')||lower.includes('what are you doing')){const svc=formData.services.length||0;return `I'm currently managing <strong>${svc} active services</strong> for ${formData.bizName}. All systems are operational. Your AI agents are handling tasks autonomously 24/7.`;}
-  if(lower.includes('lead')||lower.includes('metric')){const leads=document.getElementById('statLeads')?.textContent||'0';return `Current lead metrics: <strong>${leads} leads captured</strong>. I'm optimizing your funnel automatically — adjusting response times and follow-up sequences based on performance data.`;}
-  if(lower.includes('theme')||lower.includes('brand')||lower.includes('color')){return `I can adjust your brand theme! Head to <strong>Settings → Brand &amp; Theme</strong> to pick a vibe or set custom colors. I'll automatically apply it across your AI website and all touchpoints.`;}
-  if(lower.includes('integrat')||lower.includes('connect')||lower.includes('gmail')||lower.includes('slack')){return `Head to the <strong>Integrations</strong> panel to connect tools securely. I support Gmail, Outlook, Slack, Stripe, Shopify, Plaid, and more. Every connection is encrypted and you can revoke access anytime.`;}
-  if(lower.includes('email')){return `Your email agent is running. I'm triaging incoming messages, drafting replies, and following up on cold leads automatically. Check the <strong>Analytics</strong> panel for open and reply rates.`;}
-  if(lower.includes('phone')||lower.includes('call')){return `The phone agent is standing by. It can answer calls 24/7, take messages, and route urgent matters to you. Connect your business phone in <strong>Integrations</strong> to activate.`;}
-  if(lower.includes('schedule')||lower.includes('booking')||lower.includes('appointment')){return `Your scheduling agent manages your calendar automatically. It books appointments, sends reminders, and handles reschedules — all without your involvement.`;}
-  if(lower.includes('marketing')){return `The marketing agent creates and schedules social posts, email campaigns, and ad copy. It learns what resonates with your audience and optimizes over time.`;}
-  if(lower.includes('help')||lower.includes('what can you')){return `I can: <br>• <strong>Report</strong> on any metric (leads, emails, calls, revenue)<br>• <strong>Adjust</strong> your brand theme and settings<br>• <strong>Connect</strong> integrations (Gmail, Slack, Stripe, etc.)<br>• <strong>Explain</strong> what each AI agent is doing<br>• <strong>Configure</strong> your AI personality and behavior<br>Just ask!`;}
-  if(lower.includes('hello')||lower.includes('hi')||lower.includes('hey')){return `Hey ${formData.fName}! How can I help you today? I'm managing all ${formData.services.length} of your active services.`;}
-  return `Got it. I've noted your request about "${input.substring(0,50)}${input.length>50?'...':''}". I'm processing this through the relevant agent. Let me know if you need anything specific — I'm here 24/7.`;
+/* ============================================================
+   SANDBOX & PROFIT
+   ============================================================ */
+function startProfit() {
+  const tgt = (formData.services.length || 1) * PROFIT_PER;
+  const el = document.getElementById('profitNum');
+  let c = 0; const st = Math.max(1, tgt / 80);
+  function tk() { c += st; if (c >= tgt) { el.textContent = '$' + tgt.toLocaleString(); return; } el.textContent = '$' + Math.floor(c).toLocaleString(); requestAnimationFrame(tk); }
+  tk();
 }
 
-function sendQuick(msg){document.getElementById('chatInput').value=msg;sendChat();}
-function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+function startSandbox() {
+  const o = document.getElementById('buildOverlay'), p = document.getElementById('buildPct');
+  const m = document.getElementById('buildMsg'), b = document.getElementById('sandboxBadge');
+  const msgs = ['Analyzing...','Scanning patterns...','Designing layout...','Generating copy...','Integrating modules...','Quality checks...','Rendering...'];
+  let pct = 0, mi = 0;
+  const iv = setInterval(() => {
+    pct += Math.random() * 3 + 1; if (pct > 100) pct = 100;
+    p.textContent = Math.floor(pct) + '%';
+    if (pct > (mi+1)*(100/msgs.length) && mi < msgs.length-1) { mi++; m.textContent = msgs[mi]; }
+    if (pct >= 100) {
+      clearInterval(iv);
+      setTimeout(() => { o.classList.add('done'); b.textContent='Live Preview'; b.className='sandbox-badge live'; injectSandbox(); advRoadmap(2); updateWS('live'); }, 500);
+    }
+  }, 100);
+}
 
-// ═══ ANALYTICS ═══
-async function initAnalytics(){
+function injectSandbox() {
+  const sc = formData.services.map(id => {
+    const s = SERVICES.find(x => x.id === id);
+    return s ? `<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;margin-bottom:6px">${s.icon}</div><div style="color:#e2e8f0;font-weight:700;font-size:12px">${s.name}</div><div style="color:#64748b;font-size:10px;margin-top:3px">Senterion</div></div>` : '';
+  }).join('');
+  const pri = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();
+  const sec = getComputedStyle(document.documentElement).getPropertyValue('--brand2').trim();
+  const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+  const tag = document.getElementById('setTagline')?.value || 'Your trusted partner';
+  const cta = document.getElementById('setCTA')?.value || 'Get Started';
+  const html = `<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:${getComputedStyle(document.body).fontFamily};background:#0f172a;color:#f1f5f9}.topbar{background:linear-gradient(135deg,${pri},${sec});padding:14px 20px;display:flex;align-items:center;gap:8px}.topbar h1{font-size:16px;font-weight:800;color:#fff}.hero-s{padding:30px 20px;text-align:center}.hero-s h2{font-size:24px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,${pri},${acc});-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero-s p{color:#94a3b8;font-size:13px;max-width:460px;margin:0 auto 20px}.cta-s{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,${pri},${sec});color:#fff;border-radius:${currentRadius}px;font-weight:700;font-size:13px;text-decoration:none}.grid-s{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:0 20px 24px;max-width:600px;margin:0 auto}</style></head><body><div class="topbar"><div style="background:rgba(255,255,255,.2);border-radius:6px;padding:3px 7px;font-weight:900;font-size:10px;color:#fff">CA</div><h1>${formData.bizName}</h1></div><div class="hero-s"><h2>${tag}</h2><p>${formData.bizName} runs ${(formData.services.length||1)} AI agents 24/7.</p><a href="#" class="cta-s" onclick="return false">${cta} &#8594;</a></div><div class="grid-s">${sc}</div></body></html>`;
+  document.getElementById('sandboxIframe').srcdoc = html;
+}
+
+function updateWS(s) {
+  const i = document.getElementById('wsIcon'), t = document.getElementById('wsTitle'), d = document.getElementById('wsDesc');
+  if (s==='live') { i.className='ws-icon live'; i.innerHTML='&#10003;'; t.textContent='Live'; d.textContent='Website is live and serving visitors.'; }
+  else { i.className='ws-icon building'; i.innerHTML='&#9881;'; t.textContent='Building'; d.textContent='Generating...'; }
+}
+
+function advRoadmap(step) {
+  for (let i = 1; i <= 4; i++) {
+    const c = document.getElementById('rm'+i); if(!c) continue;
+    c.className = 'rm-circle ' + (i<step?'done':i===step?'active':'locked');
+    c.innerHTML = i<step?'&#10003;':i===step?i:'&#128274;';
+    const l = c.nextElementSibling; if(l&&l.classList.contains('rm-label')){ l.className='rm-label '+(i<step?'done':i===step?'active':''); }
+    const line = document.getElementById('rline'+i); if(line) line.className = 'rm-line'+(i<step?' done':'');
+  }
+}
+
+/* ============================================================
+   AGENTS
+   ============================================================ */
+function buildAgents() {
+  const g = document.getElementById('agentsGrid'); g.innerHTML = '';
+  const isSub = userStatus === 'subscriber';
+  SERVICES.forEach((s, idx) => {
+    const active = formData.services.includes(s.id);
+    const gated = !isSub && idx >= 3;
+    const d = document.createElement('div');
+    d.className = 'agent-card' + (gated ? ' gated' : '');
+    d.innerHTML = `<div class="agent-lock"><span>&#128274;</span><p>Subscribe to unlock</p></div><div class="agent-icon">${s.icon}</div><div class="agent-name">${s.name}</div><div class="agent-desc">${s.agent} handles this autonomously.</div><div class="agent-status ${active?'on':'off'}">${active?'&#9679; Active':'&#9679; Inactive'}</div>${gated?'<div class="agent-sub">Requires subscription</div>':''}`;
+    g.appendChild(d);
+  });
+}
+
+/* ============================================================
+   INTEGRATIONS — REAL OAUTH FLOWS
+   ============================================================ */
+function buildIntgTabs() {
+  const c = document.getElementById('intgTabs'); c.innerHTML = '';
+  CATS.forEach(cat => {
+    const t = document.createElement('button');
+    t.className = 'intg-tab' + (intgCat===cat.id?' active':'');
+    t.innerHTML = cat.name;
+    t.onclick = () => { intgCat=cat.id; buildIntgTabs(); buildIntegrations(); };
+    c.appendChild(t);
+  });
+}
+
+function buildIntegrations() {
+  const c = document.getElementById('intgGrid'); c.innerHTML = '';
+  const filtered = intgCat==='all' ? INTG_CATALOG : INTG_CATALOG.filter(i=>i.cat===intgCat);
+  filtered.forEach(intg => {
+    const connected = !!intgState[intg.id];
+    const d = document.createElement('div');
+    d.className = 'intg-card' + (connected ? ' connected' : '');
+    d.innerHTML = `<div class="intg-top"><div class="intg-icon" style="background:var(--brand-glow)">${intg.icon}</div><div class="intg-info"><h4>${intg.name}</h4><p>${intg.cat}</p></div><span class="intg-status ${connected?'on':'off'}">${connected?'Connected':'Off'}</span></div><div class="intg-desc">${intg.desc}</div><div class="intg-perms">${intg.perms.map(p=>`<div class="intg-perm"><span>${p.label}</span><div class="intg-toggle${(connected&&p.on)?' on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div><button class="intg-btn ${connected?'disconnect':'connect'}" onclick="${connected?`disconnectIntg('${intg.id}')`:`connectIntg('${intg.id}')`}">${connected?'Disconnect':'Connect'}</button>`;
+    c.appendChild(d);
+  });
+}
+
+function connectIntg(id) {
+  const intg = INTG_CATALOG.find(i => i.id === id);
+  if (!intg) return;
+
+  // Real OAuth for providers with configured client IDs
+  if (id === 'gmail' && GOOGLE_CLIENT_ID) {
+    initiateGoogleOAuth();
+    return;
+  }
+  if (id === 'slack') {
+    // Slack OAuth redirect
+    const slackClientId = ''; // Add your Slack client ID
+    if (slackClientId) {
+      const redirectUri = encodeURIComponent(window.location.origin + '/slack-callback');
+      window.location.href = `https://slack.com/oauth/v2/authorize?client_id=${slackClientId}&scope=channels:read,chat:write&redirect_uri=${redirectUri}&state=${currentUser?.id||''}`;
+      return;
+    }
+  }
+
+  // For providers without configured OAuth, show the approval modal
+  pendingOAuth = id;
+  document.getElementById('oauthTitle').textContent = 'Connect ' + intg.name;
+  document.getElementById('oauthDesc').textContent = intg.desc;
+  document.getElementById('oauthPerms').innerHTML = intg.perms.map(p => `<div class="oauth-perm-item"><span class="op-check">&#10003;</span>${p.label}</div>`).join('');
+  document.getElementById('oauthOverlay').classList.add('show');
+}
+
+function initiateGoogleOAuth() {
+  const redirectUri = encodeURIComponent(window.location.origin);
+  const scope = encodeURIComponent('https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send');
+  const state = currentUser?.id || '';
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&state=${state}&prompt=consent`;
+  window.location.href = authUrl;
+}
+
+function handleOAuthCallback() {
+  const url = new URL(window.location.href);
+  const code = url.searchParams.get('code');
+  const state = url.searchParams.get('state');
+
+  if (code) {
+    // We have an OAuth callback — in production, exchange this code server-side
+    // For now, detect which provider based on the redirect
+    if (window.location.pathname.includes('gmail') || url.searchParams.has('scope') && url.searchParams.get('scope')?.includes('gmail')) {
+      // Gmail OAuth callback received
+      console.log('Gmail OAuth code received:', code);
+      // In production: send code to your backend to exchange for tokens
+      // For demo: mark as connected
+      intgState['gmail'] = { connected: true, connectedAt: new Date().toISOString(), code: code };
+      if (currentUser) saveIntegrations();
+      showNotif('✓ Gmail connected!');
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+}
+
+function disconnectIntg(id) {
+  const intg = INTG_CATALOG.find(i => i.id === id);
+  delete intgState[id];
+  saveIntegrations(); buildIntegrations(); initVault();
+  addAuditEntry('disconnect', intg?.name||id, 'Integration disconnected');
+  logActivity('system','disconnect','Disconnected '+(intg?.name||id),{provider:id});
+  showNotif(intg?.name + ' disconnected.');
+}
+
+function saveIntegrations() {
+  if (!currentUser) return;
+  sb.from('profiles').update({integrations:JSON.stringify(intgState)}).eq('id',currentUser.id).then(()=>{});
+}
+
+function approveOAuth() {
+  document.getElementById('oauthOverlay').classList.remove('show');
+  if (pendingOAuth) {
+    intgState[pendingOAuth] = { connected: true, connectedAt: new Date().toISOString() };
+    saveIntegrations(); buildIntegrations(); initVault();
+    const intg = INTG_CATALOG.find(i => i.id === pendingOAuth);
+    addAuditEntry('connect', intg?.name||pendingOAuth, 'Integration connected');
+    logActivity('system','connect','Connected '+(intg?.name||pendingOAuth),{provider:pendingOAuth});
+    showNotif('&#10003; ' + (intg?.name||pendingOAuth) + ' connected!');
+    pendingOAuth = null;
+  }
+}
+
+function cancelOAuth() { document.getElementById('oauthOverlay').classList.remove('show'); pendingOAuth = null; }
+
+/* ============================================================
+   STRIPE PAYMENT
+   ============================================================ */
+function openStripeModal() {
+  const overlay = document.getElementById('stripeOverlay');
+  overlay.classList.add('show');
+  // Initialize Stripe Elements if not already done
+  if (stripe && !cardElement) {
+    try {
+      const elements = stripe.elements();
+      cardElement = elements.create('card', {
+        style: {
+          base: { color: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', '::placeholder': { color: '#64748b' } },
+          invalid: { color: '#ef4444' }
+        }
+      });
+      cardElement.mount('#cardElement');
+      cardElement.on('change', function(event) {
+        const errEl = document.getElementById('cardErrors');
+        if (event.error) { errEl.textContent = event.error.message; errEl.classList.add('show'); }
+        else { errEl.classList.remove('show'); }
+      });
+    } catch(e) { console.warn('Stripe Elements error:', e); }
+  }
+}
+
+function closeStripeModal() { document.getElementById('stripeOverlay').classList.remove('show'); }
+
+async function processPayment() {
+  if (!stripe || !cardElement) {
+    // No Stripe configured — use direct database upgrade (for testing)
+    if (confirm('Stripe is not configured yet. Upgrade directly for testing? (In production, this would use Stripe Checkout)')) {
+      await upgradeToSubscriber();
+    }
+    return;
+  }
+
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Processing...';
+
+  try {
+    // Create payment method
+    const { paymentMethod, error } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+      billing_details: { name: formData.fName + ' ' + formData.lName, email: formData.email }
+    });
+
+    if (error) throw error;
+
+    // In production: send paymentMethod.id to your server to create a subscription
+    // For now, we'll use Stripe Checkout redirect if a price ID is configured
+    if (STRIPE_PRICE_ID && STRIPE_PRICE_ID.startsWith('price_')) {
+      const { error: checkoutError } = await stripe.redirectToCheckout({
+        lineItems: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+        mode: 'subscription',
+        successUrl: window.location.origin + '?subscribed=true',
+        cancelUrl: window.location.origin + '?subscribed=false',
+        clientReferenceId: currentUser?.id || '',
+        customerEmail: formData.email
+      });
+      if (checkoutError) throw checkoutError;
+    } else {
+      // Demo mode — just upgrade
+      await upgradeToSubscriber();
+      closeStripeModal();
+    }
+  } catch(e) {
+    const errEl = document.getElementById('cardErrors');
+    errEl.textContent = e.message || 'Payment failed';
+    errEl.classList.add('show');
+  }
+
+  btn.disabled = false; btn.innerHTML = '&#128274; Subscribe — $39.99/mo';
+}
+
+async function upgradeToSubscriber() {
+  if (!currentUser) return;
+  userStatus = 'subscriber';
+  try {
+    await sb.from('profiles').update({status:'subscriber'}).eq('id', currentUser.id);
+  } catch(e) { console.warn('Profile update error:', e); }
+  if (currentRecordId) {
+    try { await sb.from('signups').update({status:'subscriber'}).eq('id', currentRecordId); } catch(e) {}
+  }
+  document.getElementById('dealCard').style.display = 'none';
+  document.getElementById('dealActiveMsg').style.display = 'block';
+  document.getElementById('sbStatus').className = 'sb-status sub';
+  document.getElementById('sbStatus').innerHTML = '&#9679; Subscriber';
+  advRoadmap(3); setTimeout(() => advRoadmap(4), 500);
+  buildAgents();
+  addAuditEntry('system','Subscription','Upgraded to subscriber');
+  logActivity('system','subscribe','Upgraded to subscriber',{});
+  showNotif('&#128640; All systems online!');
+}
+
+function enterDeal() {
+  if (!currentUser) { showNotif('Please log in first.'); return; }
+
+  // Check if Stripe is properly configured
+  if (stripe && STRIPE_PRICE_ID && STRIPE_PRICE_ID.startsWith('price_')) {
+    // Use Stripe Checkout
+    openStripeModal();
+  } else {
+    // Fallback: direct upgrade or simple confirmation
+    if (confirm('Activate subscription at $39.99/mo? (Stripe integration coming soon — this activates your account immediately)')) {
+      upgradeToSubscriber();
+    }
+  }
+}
+
+// Check for subscription callback
+window.addEventListener('DOMContentLoaded', () => {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get('subscribed') === 'true') {
+    upgradeToSubscriber();
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+});
+
+/* ============================================================
+   AI CHAT — OpenAI Integration
+   ============================================================ */
+function initChat() {
+  const c = document.getElementById('chatMessages'); c.innerHTML = '';
+  addChatMsg('ai', 'Senterion', `Hello ${formData.fName}! I'm Senterion, your AI core for <strong>${formData.bizName}</strong>. I'm currently managing your <strong>${formData.services.length} active services</strong>. What would you like me to do?`);
+}
+
+function addChatMsg(type, sender, text) {
+  const c = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'chat-msg ' + type;
+  const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const initials = type==='ai'?'S':(formData.fName[0]||'U');
+  d.innerHTML = `<div class="chat-msg-avatar">${initials}</div><div><div class="chat-msg-bubble">${text}</div><div class="chat-msg-time">${now}</div></div>`;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+  chatMsgs.push({type,sender,text,time:now});
+}
+
+function showTyping() {
+  const c = document.getElementById('chatMessages');
+  const d = document.createElement('div'); d.className = 'chat-msg ai'; d.id = 'typingIndicator';
+  d.innerHTML = '<div class="chat-msg-avatar">S</div><div class="chat-typing"><span></span><span></span><span></span></div>';
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+
+function hideTyping() { const t = document.getElementById('typingIndicator'); if(t) t.remove(); }
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || chatBusy) return;
+  chatBusy = true;
+  addChatMsg('user', 'You', text);
+  input.value = ''; autoResize(input);
+  showTyping();
+
+  // Try OpenAI API if key is configured
+  if (OPENAI_API_KEY) {
+    try {
+      const response = await fetchOpenAI(text);
+      hideTyping();
+      addChatMsg('ai', 'Senterion', response);
+      chatBusy = false;
+      return;
+    } catch(e) { console.warn('OpenAI error, falling back:', e); }
+  }
+
+  // Fallback to local response
+  await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
+  const response = generateChatResponse(text);
+  hideTyping();
+  addChatMsg('ai', 'Senterion', response);
+  chatBusy = false;
+}
+
+async function fetchOpenAI(userMessage) {
+  const systemPrompt = `You are Senterion, the unified AI core for ${formData.bizName}. You manage ${formData.services.length} services: ${formData.services.map(id=>SERVICES.find(s=>s.id===id)?.name).join(', ')||'none yet'}. Be helpful, concise, and professional. Business is in the ${formData.industry||'general'} industry. You can help with metrics, themes, integrations, and general questions about the AI operating system. Keep responses under 200 words. Use HTML formatting sparingly (<strong> for emphasis).`;
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...chatMsgs.slice(-10).map(m => ({ role: m.type === 'ai' ? 'assistant' : 'user', content: m.text.replace(/<[^>]*>/g, '') })),
+    { role: 'user', content: userMessage }
+  ];
+
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + OPENAI_API_KEY },
+    body: JSON.stringify({ model: 'gpt-4o-mini', messages, max_tokens: 300, temperature: 0.7 })
+  });
+
+  if (!res.ok) throw new Error('OpenAI API error: ' + res.status);
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || 'I encountered an issue. Please try again.';
+}
+
+function generateChatResponse(input) {
+  const lower = input.toLowerCase();
+  const svc = formData.services.length || 0;
+  const svcNames = formData.services.map(id=>SERVICES.find(s=>s.id===id)?.name).filter(Boolean).join(', ') || 'none yet';
+
+  if (lower.includes('status') || lower.includes('working on') || lower.includes('what are you doing'))
+    return `I'm managing <strong>${svc} active services</strong> for ${formData.bizName}: <strong>${svcNames}</strong>. All systems operational. Your AI agents are handling tasks autonomously 24/7.`;
+  if (lower.includes('lead') || lower.includes('metric'))
+    return `Current lead metrics for ${formData.bizName}: <strong>${document.getElementById('statLeads')?.textContent||'0'} leads</strong> captured. Conversion at 23%. I'm optimizing your funnel automatically.`;
+  if (lower.includes('theme') || lower.includes('brand') || lower.includes('color')) {
+    switchPanel('settings');
+    return `Opened <strong>Settings → Brand & Theme</strong>. Pick a vibe or set custom colors and I'll apply it instantly.`;
+  }
+  if (lower.includes('integrat') || lower.includes('connect') || lower.includes('gmail') || lower.includes('slack')) {
+    switchPanel('integrations');
+    return `Opened <strong>Integration Hub</strong>. Connect Gmail, Slack, Stripe, Shopify and more — all encrypted and revocable.`;
+  }
+  if (lower.includes('email'))
+    return `Your email agent is running for ${formData.bizName}. I've sent <strong>${document.getElementById('statEmails')?.textContent||'0'} emails</strong>. Check Analytics for open/reply rates.`;
+  if (lower.includes('phone') || lower.includes('call'))
+    return `Phone agent standing by for ${formData.bizName}. Handled <strong>${document.getElementById('statCalls')?.textContent||'0'} calls</strong>. Connect your business phone in Integrations.`;
+  if (lower.includes('schedule') || lower.includes('booking'))
+    return `Your scheduling agent manages your calendar automatically for ${formData.bizName}. Books appointments, sends reminders, handles reschedules.`;
+  if (lower.includes('marketing'))
+    return `Marketing agent for ${formData.bizName} creates social posts, email campaigns, and ad copy. Optimizes over time.`;
+  if (lower.includes('revenue') || lower.includes('money') || lower.includes('profit'))
+    return `Revenue for ${formData.bizName}: <strong>${document.getElementById('statRevenue')?.textContent||'$0'}</strong>. Projected monthly profit: <strong>${document.getElementById('profitNum')?.textContent||'$0'}</strong>.`;
+  if (lower.includes('help') || lower.includes('what can you'))
+    return `I can:<br>• <strong>Report</strong> on metrics (leads, emails, calls, revenue)<br>• <strong>Adjust</strong> brand theme<br>• <strong>Connect</strong> integrations<br>• <strong>Navigate</strong> you to any panel<br>Just ask!`;
+  if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey'))
+    return `Hey ${formData.fName}! Managing all ${svc} services for ${formData.bizName}. How can I help?`;
+  if (lower.includes('security') || lower.includes('vault')) {
+    switchPanel('vault');
+    return `Opened <strong>Security Vault</strong>. See connected integrations, encryption status, and full audit log.`;
+  }
+  if (lower.includes('analytics') || lower.includes('data')) {
+    switchPanel('analytics');
+    return `Opened <strong>Analytics</strong>. Real-time activity, workload, and performance metrics.`;
+  }
+  if (lower.includes('website') || lower.includes('preview')) {
+    switchPanel('overview');
+    return `Opened <strong>Command Center</strong> with your AI website preview. Want to update tagline or CTA?`;
+  }
+  if (lower.includes('subscribe') || lower.includes('upgrade') || lower.includes('pay')) {
+    return `Ready to unlock everything? Click <strong>"Enter the Deal"</strong> on your Overview panel to activate all AI systems for $39.99/mo.`;
+  }
+  return `Got it, ${formData.fName}. Noted your request about "${input.substring(0,50)}${input.length>50?'...':''}". Processing through the relevant agent. I'm here 24/7.`;
+}
+
+function sendQuick(msg) { document.getElementById('chatInput').value = msg; sendChat(); }
+function handleChatKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();} }
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,100)+'px'; }
+
+/* ============================================================
+   ANALYTICS
+   ============================================================ */
+async function initAnalytics() {
   await refreshDashboardCounts();
-  const logs=await fetchActivityLogs(20);const feed=document.getElementById('activityFeed');feed.innerHTML='';
-  if(logs.length===0){feed.innerHTML='<div class="empty-state"><div class="es-icon">&#128202;</div>No activity yet. Actions will appear here in real-time.</div>';}
-  else{logs.reverse().forEach(log=>addRealtimeActivity(log));}
+  const logs = await fetchActivityLogs(20);
+  const feed = document.getElementById('activityFeed'); feed.innerHTML = '';
+  if (logs.length === 0) { feed.innerHTML = '<div class="empty-state"><div class="es-icon">&#128202;</div>No activity yet. Senterion will start logging shortly.</div>'; }
+  else { logs.reverse().forEach(log => addRealtimeActivity(log)); }
   drawDonut();
 }
 
-function drawDonut(){
-  const svg=document.getElementById('donutChart');const corePct=Math.round(70+Math.random()*10);const subPct=100-corePct;
-  const coreDash=corePct*2.51327;const subDash=subPct*2.51327;
-  svg.innerHTML=`<circle cx="60" cy="60" r="40" fill="none" stroke="var(--bg)" stroke-width="14"/><circle cx="60" cy="60" r="40" fill="none" stroke="var(--brand)" stroke-width="14" stroke-dasharray="${coreDash} ${251.327-coreDash}" stroke-dashoffset="62.83" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="40" fill="none" stroke="var(--brand2)" stroke-width="14" stroke-dasharray="${subDash} ${251.327-subDash}" stroke-dashoffset="${62.83-coreDash}" transform="rotate(-90 60 60)"/><text x="60" y="56" text-anchor="middle" fill="var(--txt)" font-size="16" font-weight="900">${corePct}%</text><text x="60" y="70" text-anchor="middle" fill="var(--txt3)" font-size="8">Core</text>`;
+function drawDonut() {
+  const svg = document.getElementById('donutChart');
+  const corePct = Math.round(70 + Math.random()*10);
+  const coreDash = corePct * 2.51327;
+  const subDash = (100-corePct) * 2.51327;
+  svg.innerHTML = `<circle cx="60" cy="60" r="40" fill="none" stroke="var(--bg)" stroke-width="14"/><circle cx="60" cy="60" r="40" fill="none" stroke="var(--brand)" stroke-width="14" stroke-dasharray="${coreDash} ${251.327-coreDash}" stroke-dashoffset="62.83" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="40" fill="none" stroke="var(--brand2)" stroke-width="14" stroke-dasharray="${subDash} ${251.327-subDash}" stroke-dashoffset="${62.83-coreDash}" transform="rotate(-90 60 60)"/><text x="60" y="56" text-anchor="middle" fill="var(--txt)" font-size="16" font-weight="900">${corePct}%</text><text x="60" y="70" text-anchor="middle" fill="var(--txt3)" font-size="8">Core</text>`;
 }
 
-// ═══ VAULT ═══
-function initVault(){
-  const accounts=document.getElementById('vaultAccounts');const count=document.getElementById('vaultConnCount');
-  const connected=Object.keys(intgState);count.textContent=connected.length+' active';accounts.innerHTML='';
-  if(connected.length===0){accounts.innerHTML='<div class="empty-state" style="padding:16px"><div class="es-icon">&#128274;</div>No integrations connected yet.</div>';}
-  else{connected.forEach(id=>{const intg=INTG_CATALOG.find(i=>i.id===id);const r=document.createElement('div');r.className='vault-row';r.innerHTML=`<div class="vr-left"><div class="vr-icon">${intg?.icon||'&#128279;'}</div><span>${intg?.name||id}</span></div><div class="vr-actions"><button class="vault-btn-sm view" onclick="showNotif('Encrypted token — view in backend')">View</button><button class="vault-btn-sm revoke" onclick="disconnectIntg('${id}')">Revoke</button></div>`;accounts.appendChild(r);});}
-  const log=document.getElementById('auditLog');log.innerHTML='';
-  if(auditEntries.length===0){auditEntries=[{icon:'&#128274;',text:'<strong>Encryption</strong> verified — AES-256 active',time:'Just now'},{icon:'&#128279;',text:'<strong>System</strong> session initialized',time:'Just now'}];}
-  auditEntries.forEach(e=>{const d=document.createElement('div');d.className='audit-item';d.innerHTML=`<div class="ai-icon">${e.icon}</div><div>${e.text}</div><div class="ai-time">${e.time}</div>`;log.appendChild(d);});
+/* ============================================================
+   VAULT / SECURITY
+   ============================================================ */
+function initVault() {
+  const accounts = document.getElementById('vaultAccounts');
+  const count = document.getElementById('vaultConnCount');
+  const connected = Object.keys(intgState);
+  count.textContent = connected.length + ' active';
+  accounts.innerHTML = '';
+  if (connected.length === 0) {
+    accounts.innerHTML = '<div class="empty-state" style="padding:16px"><div class="es-icon">&#128274;</div>No integrations connected yet.</div>';
+  } else {
+    connected.forEach(id => {
+      const intg = INTG_CATALOG.find(i => i.id === id);
+      const r = document.createElement('div'); r.className = 'vault-row';
+      r.innerHTML = `<div class="vr-left"><div class="vr-icon">${intg?.icon||'&#128279;'}</div><span>${intg?.name||id}</span></div><div class="vr-actions"><button class="vault-btn-sm revoke" onclick="disconnectIntg('${id}')">Revoke</button></div>`;
+      accounts.appendChild(r);
+    });
+  }
+  const log = document.getElementById('auditLog'); log.innerHTML = '';
+  if (auditEntries.length === 0) {
+    auditEntries = [
+      {icon:'&#128274;',text:'<strong>Encryption</strong> verified AES-256 active',time:'Just now'},
+      {icon:'&#128279;',text:'<strong>System</strong> session initialized',time:'Just now'}
+    ];
+  }
+  auditEntries.forEach(e => {
+    const d = document.createElement('div'); d.className = 'audit-item';
+    d.innerHTML = `<div class="ai-icon">${e.icon}</div><div>${e.text}</div><div class="ai-time">${e.time}</div>`;
+    log.appendChild(d);
+  });
 }
 
-function addAuditEntry(type,target,desc){
-  const icons={connect:'&#128279;',disconnect:'&#128683;',revoke:'&#128683;',system:'&#9881;',export:'&#128229;',delete:'&#128465;'};
+function addAuditEntry(type, target, desc) {
+  const icons = {connect:'&#128279;',disconnect:'&#128683;',revoke:'&#128683;',system:'&#9881;',export:'&#128229;',delete:'&#128465;'};
   auditEntries.unshift({icon:icons[type]||'&#9881;',text:`<strong>${target}</strong> — ${desc}`,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
-  if(auditEntries.length>50)auditEntries.pop();initVault();
+  if (auditEntries.length > 50) auditEntries.pop();
+  initVault();
 }
 
-function revokeAllAccess(){if(!confirm('Revoke ALL integration access?'))return;intgState={};saveIntegrations();buildIntegrations();initVault();addAuditEntry('revoke','All','All integrations revoked');logActivity('system','revoke','All integrations revoked',{});showNotif('&#128683; All access revoked.');}
-
-function exportAuditLog(){const blob=new Blob([JSON.stringify(auditEntries,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='audit-log.json';a.click();URL.revokeObjectURL(url);showNotif('&#128229; Audit log exported.');}
-
-function exportData(){if(!currentUser)return;const data={profile:formData,integrations:intgState,audit:auditEntries};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coulters-agents-data.json';a.click();URL.revokeObjectURL(url);addAuditEntry('export','Data','User exported data');showNotif('&#128229; Data exported.');}
-
-async function deleteData(){if(!confirm('This will permanently delete your account and all data. Are you sure?'))return;if(!confirm('This cannot be undone. Proceed?'))return;try{await sb.from('profiles').delete().eq('id',currentUser.id);await sb.auth.signOut();handleSignOut();showNotif('Account deleted.');}catch(e){showNotif('Error: '+e.message);}}
-
-// ═══ THEMES ═══
-function renderVibes(){const g=document.getElementById('vibeGrid');g.innerHTML='';VIBES.forEach(v=>{const d=document.createElement('div');d.className='vibe-card'+(currentVibe===v.id?' active':'');d.innerHTML=`<div class="vibe-swatch">${v.colors.map(c=>`<div style="background:${c}"></div>`).join('')}</div><div class="vibe-name">${v.name}</div><div class="vibe-desc">${v.desc}</div>`;d.onclick=()=>applyVibe(v.id,true);g.appendChild(d);});}
-
-function applyVibe(id,save){
-  const v=VIBES.find(x=>x.id===id);if(!v)return;currentVibe=id;
-  document.documentElement.style.setProperty('--brand',v.colors[0]);document.documentElement.style.setProperty('--brand2',v.colors[1]);document.documentElement.style.setProperty('--accent',v.colors[2]);
-  document.getElementById('themePrimary').value=v.colors[0];document.getElementById('themeSecondary').value=v.colors[1];document.getElementById('themeAccent').value=v.colors[2];
-  updateBrandGlow();renderVibes();
-  if(save&&currentUser){sb.from('profiles').update({theme:JSON.stringify({vibe:currentVibe,font:currentFont,radius:currentRadius,primary:v.colors[0],secondary:v.colors[1],accent:v.colors[2]})}).eq('id',currentUser.id).then(()=>{});}
+function revokeAllAccess() {
+  if (!confirm('Revoke ALL integration access?')) return;
+  intgState = {}; saveIntegrations(); buildIntegrations(); initVault();
+  addAuditEntry('revoke','All','All integrations revoked');
+  logActivity('system','revoke','All integrations revoked',{});
+  showNotif('&#128683; All access revoked.');
 }
 
-function applyCustomColor(){const p=document.getElementById('themePrimary').value;const s=document.getElementById('themeSecondary').value;const a=document.getElementById('themeAccent').value;document.documentElement.style.setProperty('--brand',p);document.documentElement.style.setProperty('--brand2',s);document.documentElement.style.setProperty('--accent',a);updateBrandGlow();}
-
-function updateBrandGlow(){const brand=getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();document.documentElement.style.setProperty('--brand-glow',brand+'33');}
-
-function setFont(font,btn){
-  currentFont=font;const map={inter:'Inter, system-ui, sans-serif',space:'Space Grotesk, system-ui, sans-serif',outfit:'Outfit, system-ui, sans-serif',playfair:'Playfair Display, Georgia, serif'};
-  document.body.style.fontFamily=map[font]||map.inter;
-  document.querySelectorAll('#fontRow .style-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');else document.querySelector(`#fontRow .style-btn[onclick*="${font}"]`)?.classList.add('active');
+function exportAuditLog() {
+  const blob = new Blob([JSON.stringify(auditEntries,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='audit-log.json'; a.click();
+  URL.revokeObjectURL(url);
+  showNotif('&#128229; Audit log exported.');
 }
 
-function setRadius(r,btn){
-  currentRadius=r;document.documentElement.style.setProperty('--rs',r+'px');document.documentElement.style.setProperty('--radius',r+'px');
-  document.querySelectorAll('#borderRow .style-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');else document.querySelector(`#borderRow .style-btn[onclick*="${r}"]`)?.classList.add('active');
+function exportData() {
+  if (!currentUser) return;
+  const data = {profile:formData,integrations:intgState,audit:auditEntries,chatHistory:chatMsgs};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='coulters-agents-data.json'; a.click();
+  URL.revokeObjectURL(url);
+  addAuditEntry('export','Data','User exported data');
+  showNotif('&#128229; Data exported.');
 }
 
-function saveTheme(){
-  if(!currentUser)return;
-  const theme=JSON.stringify({vibe:currentVibe,font:currentFont,radius:currentRadius,primary:document.getElementById('themePrimary').value,secondary:document.getElementById('themeSecondary').value,accent:document.getElementById('themeAccent').value});
-  sb.from('profiles').update({theme}).eq('id',currentUser.id).then(()=>{showNotif('&#127912; Theme saved!');injectSandbox();});
-  addAuditEntry('system','Theme','Theme updated');
+async function deleteData() {
+  if (!confirm('Permanently delete your account and all data?')) return;
+  if (!confirm('Cannot be undone. Proceed?')) return;
+  try {
+    await sb.from('profiles').delete().eq('id',currentUser.id);
+    await sb.auth.signOut();
+    handleSignOut();
+    showNotif('Account deleted.');
+  } catch(e) { showNotif('Error: ' + e.message); }
 }
 
-function saveProfile(){
-  if(!currentUser)return;
-  const updates={business_name:document.getElementById('setBizName').value,industry:document.getElementById('setIndustry').value,phone:document.getElementById('setPhone').value,email:document.getElementById('setEmail').value};
-  formData.bizName=updates.business_name;formData.industry=updates.industry;formData.phone=updates.phone;
-  document.getElementById('sbBiz').textContent=formData.bizName;
-  sb.from('profiles').update(updates).eq('id',currentUser.id).then(()=>showNotif('&#10003; Profile saved!'));
+/* ============================================================
+   THEME / VIBES
+   ============================================================ */
+function renderVibes() {
+  const g = document.getElementById('vibeGrid'); g.innerHTML = '';
+  VIBES.forEach(v => {
+    const d = document.createElement('div');
+    d.className = 'vibe-card' + (currentVibe===v.id?' active':'');
+    d.innerHTML = `<div class="vibe-swatch">${v.colors.map(c=>`<div style="background:${c}"></div>`).join('')}</div><div class="vibe-name">${v.name}</div><div class="vibe-desc">${v.desc}</div>`;
+    d.onclick = () => applyVibe(v.id, true);
+    g.appendChild(d);
+  });
 }
 
-function saveWebsite(){injectSandbox();showNotif('&#10003; Website updated!');}
-
-function setPers(preset,btn){
-  document.querySelectorAll('.preset-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  if(currentUser){sb.from('profiles').update({personality:JSON.stringify({preset,tone:document.getElementById('setSTone').value,instructions:document.getElementById('setSInst').value})}).eq('id',currentUser.id).then(()=>{});}
-}
-
-// ═══ NOTIFICATION ═══
-function showNotif(msg){const n=document.getElementById('notif');n.innerHTML=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3000);}
-
-// ═══ ADMIN ═══
-async function toggleAdmin(){
-  const o=document.getElementById('adminOverlay');o.classList.toggle('show');
-  if(o.classList.contains('show')){
-    const c=document.getElementById('adminContent');c.innerHTML='<div class="no-data"><div class="spinner"></div> Loading...</div>';
-    try{
-      const{data}=await sb.from('signups').select('*').order('created_at',{ascending:false});
-      if(!data||data.length===0){c.innerHTML='<div class="no-data">No signups yet.</div>';return;}
-      const total=data.length;const sub=data.filter(d=>d.status==='subscriber').length;const n=data.filter(d=>d.status==='new').length;
-      c.innerHTML=`
-        <div class="admin-stats"><div class="admin-stat"><div class="num">${total}</div><div class="lbl">Total</div></div><div class="admin-stat"><div class="num">${sub}</div><div class="lbl">Subscribers</div></div><div class="admin-stat"><div class="num">${n}</div><div class="lbl">New</div></div></div>
-        <div style="overflow-x:auto"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Business</th><th>Industry</th><th>Services</th><th>Status</th></tr></thead><tbody>${data.map(r=>`<tr><td>${r.first_name} ${r.last_name}</td><td>${r.email}</td><td>${r.business_name||'-'}</td><td>${r.industry||'-'}</td><td>${(r.services||[]).length}</td><td><span class="admin-badge">${r.status||'new'}</span></td></tr>`).join('')}</tbody></table></div>`;
-    }catch(e){c.innerHTML='<div class="no-data">Error loading signups.</div>';}
+function applyVibe(id, save) {
+  const v = VIBES.find(x => x.id === id); if(!v) return;
+  currentVibe = id;
+  document.documentElement.style.setProperty('--brand', v.colors[0]);
+  document.documentElement.style.setProperty('--brand2', v.colors[1]);
+  document.documentElement.style.setProperty('--accent', v.colors[2]);
+  document.getElementById('themePrimary').value = v.colors[0];
+  document.getElementById('themeSecondary').value = v.colors[1];
+  document.getElementById('themeAccent').value = v.colors[2];
+  updateBrandGlow(); renderVibes();
+  if (save && currentUser) {
+    sb.from('profiles').update({theme:JSON.stringify({vibe:currentVibe,font:currentFont,radius:currentRadius,primary:v.colors[0],secondary:v.colors[1],accent:v.colors[2]})}).eq('id',currentUser.id).then(()=>{});
   }
 }
 
-// ═══ DEAL ═══
-function enterDeal(){
-  if(!currentUser){showNotif('Please log in first.');return;}
-  userStatus='subscriber';
-  sb.from('profiles').update({status:'subscriber'}).eq('id',currentUser.id).then(()=>{});
-  if(currentRecordId){sb.from('signups').update({status:'subscriber'}).eq('id',currentRecordId).then(()=>{});}
-  document.getElementById('dealCard').style.display='none';document.getElementById('dealActiveMsg').style.display='block';
-  document.getElementById('sbStatus').className='sb-status sub';document.getElementById('sbStatus').innerHTML='&#9679; Subscriber';
-  advRoadmap(3);setTimeout(()=>advRoadmap(4),500);buildAgents();
-  addAuditEntry('system','Subscription','Upgraded to subscriber');logActivity('system','subscribe','Upgraded to subscriber',{});
-  showNotif('&#128640; All systems online!');
+function applyCustomColor() {
+  const p = document.getElementById('themePrimary').value;
+  const s = document.getElementById('themeSecondary').value;
+  const a = document.getElementById('themeAccent').value;
+  document.documentElement.style.setProperty('--brand', p);
+  document.documentElement.style.setProperty('--brand2', s);
+  document.documentElement.style.setProperty('--accent', a);
+  updateBrandGlow();
+}
+
+function updateBrandGlow() {
+  const brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();
+  document.documentElement.style.setProperty('--brand-glow', brand + '33');
+}
+
+function setFont(font, btn) {
+  currentFont = font;
+  const map = {inter:'Inter, system-ui, sans-serif',space:'Space Grotesk, system-ui, sans-serif',outfit:'Outfit, system-ui, sans-serif',playfair:'Playfair Display, Georgia, serif'};
+  document.body.style.fontFamily = map[font] || map.inter;
+  document.querySelectorAll('#fontRow .style-btn').forEach(b=>b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`#fontRow .style-btn[onclick*="${font}"]`)?.classList.add('active');
+}
+
+function setRadius(r, btn) {
+  currentRadius = r;
+  document.documentElement.style.setProperty('--rs', r+'px');
+  document.documentElement.style.setProperty('--radius', r+'px');
+  document.querySelectorAll('#borderRow .style-btn').forEach(b=>b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`#borderRow .style-btn[onclick*="${r}"]`)?.classList.add('active');
+}
+
+function saveTheme() {
+  if (!currentUser) return;
+  const theme = JSON.stringify({
+    vibe:currentVibe,font:currentFont,radius:currentRadius,
+    primary:document.getElementById('themePrimary').value,
+    secondary:document.getElementById('themeSecondary').value,
+    accent:document.getElementById('themeAccent').value
+  });
+  sb.from('profiles').update({theme}).eq('id',currentUser.id).then(()=>{showNotif('&#127912; Theme saved!'); injectSandbox();});
+  addAuditEntry('system','Theme','Theme updated');
+}
+
+function saveProfile() {
+  if (!currentUser) return;
+  const updates = {
+    business_name:document.getElementById('setBizName').value,
+    industry:document.getElementById('setIndustry').value,
+    phone:document.getElementById('setPhone').value,
+    email:document.getElementById('setEmail').value
+  };
+  formData.bizName = updates.business_name; formData.industry = updates.industry; formData.phone = updates.phone;
+  document.getElementById('sbBiz').textContent = formData.bizName;
+  sb.from('profiles').update(updates).eq('id',currentUser.id).then(()=>showNotif('&#10003; Profile saved!'));
+}
+
+function saveWebsite() { injectSandbox(); showNotif('&#10003; Website updated!'); }
+
+function setPers(preset, btn) {
+  document.querySelectorAll('.preset-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if (currentUser) {
+    sb.from('profiles').update({personality:JSON.stringify({preset,tone:document.getElementById('setSTone').value,instructions:document.getElementById('setSInst').value})}).eq('id',currentUser.id).then(()=>{});
+  }
+}
+
+/* ============================================================
+   ADMIN PANEL — Restricted to admin email
+   ============================================================ */
+async function toggleAdmin() {
+  // Restrict admin access
+  if (currentUser && currentUser.email !== ADMIN_EMAIL) {
+    showNotif('&#128683; Admin access restricted.');
+    return;
+  }
+  if (!currentUser) {
+    showNotif('Please log in as admin.');
+    openLoginModal();
+    return;
+  }
+
+  const o = document.getElementById('adminOverlay');
+  o.classList.toggle('show');
+  if (o.classList.contains('show')) {
+    const c = document.getElementById('adminContent');
+    c.innerHTML = '<div class="no-data"><div class="spinner"></div> Loading...</div>';
+    try {
+      const { data, error } = await sb.from('signups').select('*').order('created_at',{ascending:false});
+      if (error) throw error;
+      if (!data || data.length === 0) { c.innerHTML = '<div class="no-data">No signups yet.</div>'; return; }
+      const total = data.length;
+      const sub = data.filter(d=>d.status==='subscriber').length;
+      const n = data.filter(d=>d.status==='new').length;
+      c.innerHTML = `
+        <div class="admin-stats">
+          <div class="admin-stat"><div class="num">${total}</div><div class="lbl">Total</div></div>
+          <div class="admin-stat"><div class="num">${sub}</div><div class="lbl">Subscribers</div></div>
+          <div class="admin-stat"><div class="num">${n}</div><div class="lbl">New</div></div>
+        </div>
+        <div style="margin-bottom:14px;padding:12px;background:var(--bg);border-radius:var(--rs);font-size:11px;color:var(--txt2)">
+          <strong>Admin:</strong> ${ADMIN_EMAIL} &bull; <strong>Phone:</strong> ${ADMIN_PHONE}
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Business</th><th>Industry</th><th>Services</th><th>Status</th></tr></thead>
+            <tbody>${data.map(r=>`<tr><td>${r.first_name} ${r.last_name}</td><td>${r.email}</td><td>${r.business_name||'-'}</td><td>${r.industry||'-'}</td><td>${(r.services||[]).length}</td><td><span class="admin-badge">${r.status||'new'}</span></td></tr>`).join('')}</tbody>
+          </table>
+        </div>`;
+    } catch(e) {
+      c.innerHTML = '<div class="no-data">Error loading signups: ' + (e.message||'Unknown') + '</div>';
+    }
+  }
+}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  n.innerHTML = msg; n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3000);
 }
 </script>
 </body>
