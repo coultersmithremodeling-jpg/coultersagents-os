@@ -6,6 +6,8 @@
 <title>CoultersAgents — AI Operating System</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
 <style>
 :root{--bg:#050816;--bg2:#0f1629;--bg3:#1a1f3a;--brand:#06b6d4;--brand2:#8b5cf6;--accent:#10b981;--warn:#f59e0b;--danger:#ef4444;--txt:#e2e8f0;--txt2:#94a3b8;--txt3:#64748b;--brd:rgba(255,255,255,0.06);--brd2:rgba(255,255,255,0.12);--grad:linear-gradient(135deg,#06b6d4,#8b5cf6);--rs:8px;--rl:16px;--font:'Inter',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -29,14 +31,13 @@ input,select,textarea{font-family:var(--font);outline:none}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 @keyframes pulseBtn{0%,100%{box-shadow:0 0 0 0 rgba(6,182,212,0.4)}50%{box-shadow:0 0 0 12px rgba(6,182,212,0)}}
+@keyframes syncSpin{to{transform:rotate(360deg)}}
 .fade-up{animation:fadeUp 0.6s ease forwards}
-.fade-up-d1{animation:fadeUp 0.6s ease 0.1s forwards;opacity:0}
-.fade-up-d2{animation:fadeUp 0.6s ease 0.2s forwards;opacity:0}
-.fade-up-d3{animation:fadeUp 0.6s ease 0.3s forwards;opacity:0}
 .pulse-btn{animation:pulseBtn 2s infinite}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:var(--rs);font-weight:600;font-size:0.95rem;transition:all 0.3s;position:relative;overflow:hidden}
 .btn-primary{background:var(--grad);color:#fff}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(6,182,212,0.3)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-secondary{background:var(--bg3);color:var(--txt);border:1px solid var(--brd2)}
 .btn-secondary:hover{border-color:var(--brand);color:var(--brand)}
 .btn-sm{padding:8px 16px;font-size:0.82rem}
@@ -214,20 +215,30 @@ footer a:hover{color:var(--brand)}
 .workspace-section{margin-bottom:32px}
 .workspace-section h3{font-size:1.1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .marketplace-section h3{font-size:1.1rem;font-weight:600;margin-bottom:16px}
-.intg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.intg-card{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:20px;transition:all 0.3s}
+.intg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.intg-card{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:20px;transition:all 0.3s;position:relative}
 .intg-card:hover{border-color:var(--brd2)}
+.intg-card.connecting{border-color:var(--brand);box-shadow:0 0 20px rgba(6,182,212,0.15)}
 .intg-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .intg-card-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
 .intg-card-head h4{font-size:0.95rem;font-weight:600}
 .intg-card-head p{font-size:0.78rem;color:var(--txt2)}
-.intg-card-status{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.intg-card-status{display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .intg-card-status .green-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 .intg-card-status span{font-size:0.78rem;color:var(--accent);font-weight:500}
-.intg-snippet{background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;max-height:100px;overflow-y:auto}
-.intg-snippet p{font-size:0.78rem;color:var(--txt2);padding:3px 0;border-bottom:1px solid var(--brd)}
-.intg-snippet p:last-child{border-bottom:none}
+.intg-card-status .sync-info{font-size:0.72rem;color:var(--txt3);margin-left:auto}
+.intg-snippet{background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;max-height:120px;overflow-y:auto}
+.intg-snippet .snippet-title{font-size:0.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;font-weight:600;display:flex;align-items:center;gap:6px}
+.intg-snippet .snippet-item{font-size:0.78rem;color:var(--txt2);padding:4px 0;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:6px}
+.intg-snippet .snippet-item:last-child{border-bottom:none}
+.intg-snippet .snippet-item .snippet-icon{color:var(--brand);font-size:0.7rem;flex-shrink:0}
+.intg-snippet .snippet-item .snippet-new{background:var(--brand);color:#fff;font-size:0.6rem;padding:1px 5px;border-radius:8px;font-weight:700;margin-left:auto;flex-shrink:0}
 .intg-actions{display:flex;gap:8px;flex-wrap:wrap}
+.connect-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--grad);border-radius:0 0 var(--rl) var(--rl);transition:width 0.3s}
+.triage-result{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:var(--rs);padding:10px 12px;margin-top:8px;font-size:0.8rem;color:var(--brand2);line-height:1.5}
+.triage-result .triage-label{font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.gmail-auth-status{margin-top:8px;padding:8px 12px;border-radius:var(--rs);font-size:0.78rem;display:flex;align-items:center;gap:6px}
+.gmail-auth-status.authed{background:rgba(16,185,129,0.08);color:var(--accent);border:1px solid rgba(16,185,129,0.2)}
 .vault-encryption{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:24px;margin-bottom:24px}
 .vault-encryption h3{font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .vault-accounts{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:24px;margin-bottom:24px}
@@ -235,8 +246,9 @@ footer a:hover{color:var(--brand)}
 .vault-account-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--brd)}
 .vault-account-item:last-child{border-bottom:none}
 .vault-account-info{display:flex;align-items:center;gap:10px}
-.vault-account-info i{font-size:1.1rem;color:var(--brand)}
+.vault-account-info i{font-size:1.1rem}
 .vault-account-info span{font-size:0.9rem}
+.vault-account-meta{font-size:0.72rem;color:var(--txt3);display:flex;gap:12px}
 .audit-log{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:24px;margin-bottom:24px}
 .audit-log h3{font-size:1rem;font-weight:600;margin-bottom:16px}
 .audit-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--brd);font-size:0.82rem}
@@ -301,7 +313,6 @@ footer a:hover{color:var(--brand)}
 <div class="orb orb-3"></div>
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LANDING PAGE -->
 <div id="landing">
 <nav id="mainNav">
 <div class="nav-logo">
@@ -315,11 +326,8 @@ footer a:hover{color:var(--brand)}
 <button class="btn btn-ghost" onclick="openModal('loginModal')">Log In</button>
 <button class="btn btn-primary btn-sm" onclick="scrollToSignup()">Get Started</button>
 </div>
-<div class="hamburger" onclick="toggleMobileMenu()">
-<span></span><span></span><span></span>
-</div>
+<div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
 <div class="close-btn" onclick="toggleMobileMenu()">&times;</div>
 <a href="#services-section" onclick="toggleMobileMenu()">Services</a>
@@ -328,103 +336,50 @@ footer a:hover{color:var(--brand)}
 <button class="btn btn-secondary" onclick="toggleMobileMenu();openModal('loginModal')">Log In</button>
 <button class="btn btn-primary" onclick="toggleMobileMenu();scrollToSignup()">Get Started</button>
 </div>
-
 <section class="hero">
 <div class="hero-content fade-up">
-<div class="hero-svg">
-<svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-<circle cx="60" cy="60" r="50" stroke="url(#heroGrad)" stroke-width="2" opacity="0.3"/>
-<circle cx="60" cy="60" r="35" stroke="url(#heroGrad)" stroke-width="2" opacity="0.5"/>
-<circle cx="60" cy="60" r="20" fill="url(#heroGrad)" opacity="0.15"/>
-<path d="M45 60l10 10 20-20" stroke="url(#heroGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="60" cy="60" r="55" stroke="url(#heroGrad)" stroke-width="1" stroke-dasharray="4 6" opacity="0.2">
-<animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="30s" repeatCount="indefinite"/>
-</circle>
-<defs><linearGradient id="heroGrad" x1="10" y1="10" x2="110" y2="110"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-</svg>
-</div>
+<div class="hero-svg"><svg width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" stroke="url(#heroGrad)" stroke-width="2" opacity="0.3"/><circle cx="60" cy="60" r="35" stroke="url(#heroGrad)" stroke-width="2" opacity="0.5"/><circle cx="60" cy="60" r="20" fill="url(#heroGrad)" opacity="0.15"/><path d="M45 60l10 10 20-20" stroke="url(#heroGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="60" r="55" stroke="url(#heroGrad)" stroke-width="1" stroke-dasharray="4 6" opacity="0.2"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="30s" repeatCount="indefinite"/></circle><defs><linearGradient id="heroGrad" x1="10" y1="10" x2="110" y2="110"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg></div>
 <h1>Your Business on <span>Autopilot</span></h1>
 <p>CoultersAgents is an AI Operating System that handles scheduling, phone, email, marketing, and more — so you can focus on growth.</p>
 <button class="btn btn-primary" onclick="scrollToSignup()">Start Free <i class="fas fa-arrow-right"></i></button>
 </div>
 </section>
-
 <section class="services-section" id="services-section">
-<div class="section-title fade-up">
-<h2>AI-Powered Services</h2>
-<p>Select the services your business needs. Mix and match to build your perfect AI team.</p>
-</div>
+<div class="section-title fade-up"><h2>AI-Powered Services</h2><p>Select the services your business needs. Mix and match to build your perfect AI team.</p></div>
 <div class="services-grid" id="servicesGrid"></div>
 </section>
-
 <section class="signup-section" id="signup-section">
 <div class="signup-container">
-<div class="step-indicators">
-<div class="step-dot active" data-step="1">1</div>
-<div class="step-line" data-line="1"></div>
-<div class="step-dot" data-step="2">2</div>
-<div class="step-line" data-line="2"></div>
-<div class="step-dot" data-step="3">3</div>
-<div class="step-line" data-line="3"></div>
-<div class="step-dot" data-step="4">4</div>
-</div>
-
+<div class="step-indicators"><div class="step-dot active" data-step="1">1</div><div class="step-line" data-line="1"></div><div class="step-dot" data-step="2">2</div><div class="step-line" data-line="2"></div><div class="step-dot" data-step="3">3</div><div class="step-line" data-line="3"></div><div class="step-dot" data-step="4">4</div></div>
 <div class="step-panel active" data-panel="1">
 <h3 style="margin-bottom:20px;font-size:1.2rem">Tell us about yourself</h3>
-<div class="form-row">
-<div class="form-group"><label class="label">First Name</label><input class="input" id="suFirstName" placeholder="John"></div>
-<div class="form-group"><label class="label">Last Name</label><input class="input" id="suLastName" placeholder="Doe"></div>
-</div>
+<div class="form-row"><div class="form-group"><label class="label">First Name</label><input class="input" id="suFirstName" placeholder="John"></div><div class="form-group"><label class="label">Last Name</label><input class="input" id="suLastName" placeholder="Doe"></div></div>
 <div class="form-group"><label class="label">Email</label><input class="input" id="suEmail" type="email" placeholder="john@company.com"></div>
 <div class="form-group"><label class="label">Business Name</label><input class="input" id="suBusiness" placeholder="Acme Corp"></div>
-<div class="form-row">
-<div class="form-group"><label class="label">Industry</label>
-<select class="input" id="suIndustry">
-<option value="">Select industry</option>
-<option value="construction">Construction</option>
-<option value="healthcare">Healthcare</option>
-<option value="realestate">Real Estate</option>
-<option value="legal">Legal</option>
-<option value="restaurant">Restaurant</option>
-<option value="retail">Retail</option>
-<option value="technology">Technology</option>
-<option value="consulting">Consulting</option>
-<option value="fitness">Fitness</option>
-<option value="automotive">Automotive</option>
-<option value="other">Other</option>
-</select></div>
-<div class="form-group"><label class="label">Phone</label><input class="input" id="suPhone" placeholder="(555) 123-4567"></div>
-</div>
+<div class="form-row"><div class="form-group"><label class="label">Industry</label><select class="input" id="suIndustry"><option value="">Select industry</option><option value="construction">Construction</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal</option><option value="restaurant">Restaurant</option><option value="retail">Retail</option><option value="technology">Technology</option><option value="consulting">Consulting</option><option value="fitness">Fitness</option><option value="automotive">Automotive</option><option value="other">Other</option></select></div><div class="form-group"><label class="label">Phone</label><input class="input" id="suPhone" placeholder="(555) 123-4567"></div></div>
 <div class="step-actions"><div></div><button class="btn btn-primary" onclick="nextStep(2)">Next <i class="fas fa-arrow-right"></i></button></div>
 </div>
-
 <div class="step-panel" data-panel="2">
 <h3 style="margin-bottom:20px;font-size:1.2rem">Select Your Services</h3>
-<p style="color:var(--txt2);font-size:0.9rem;margin-bottom:16px">Choose the AI services you need. You selected these on the landing page — adjust as needed.</p>
+<p style="color:var(--txt2);font-size:0.9rem;margin-bottom:16px">Choose the AI services you need.</p>
 <div id="signupServicesGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
 <div class="step-actions"><button class="btn btn-secondary" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Back</button><button class="btn btn-primary" onclick="nextStep(3)">Next <i class="fas fa-arrow-right"></i></button></div>
 </div>
-
 <div class="step-panel" data-panel="3">
 <h3 style="margin-bottom:20px;font-size:1.2rem">Set Your Goals</h3>
 <div id="goalsGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
 <div class="form-group"><label class="label">Custom Goal</label><input class="input" id="suCustomGoal" placeholder="e.g., Reduce response time by 50%"></div>
 <div class="step-actions"><button class="btn btn-secondary" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Back</button><button class="btn btn-primary" onclick="nextStep(4)">Next <i class="fas fa-arrow-right"></i></button></div>
 </div>
-
 <div class="step-panel" data-panel="4">
 <h3 style="margin-bottom:20px;font-size:1.2rem">Create Your Account</h3>
 <div class="form-group"><label class="label">Password</label><input class="input" id="suPassword" type="password" placeholder="Min 8 characters"></div>
 <div class="form-group"><label class="label">Confirm Password</label><input class="input" id="suPassword2" type="password" placeholder="Repeat password"></div>
-<div style="background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:16px;margin-bottom:16px">
-<h4 style="font-size:0.9rem;margin-bottom:8px">Review</h4>
-<div id="signupReview" style="font-size:0.85rem;color:var(--txt2)"></div>
-</div>
+<div style="background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:16px;margin-bottom:16px"><h4 style="font-size:0.9rem;margin-bottom:8px">Review</h4><div id="signupReview" style="font-size:0.85rem;color:var(--txt2)"></div></div>
 <div class="step-actions"><button class="btn btn-secondary" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Back</button><button class="btn btn-primary" onclick="submitSignup()">Create Account <i class="fas fa-rocket"></i></button></div>
 </div>
 </div>
 </section>
-
 <section class="pricing-section" id="pricing-section">
 <div class="pricing-card fade-up">
 <span class="badge badge-brand" style="margin-bottom:16px">Simple Pricing</span>
@@ -432,51 +387,20 @@ footer a:hover{color:var(--brand)}
 <p style="color:var(--txt2);margin-top:4px">Everything you need to automate your business</p>
 <div class="pricing-amount">$39.99<span>/mo</span></div>
 <p style="color:var(--txt3);font-size:0.85rem">Platform fee + API usage</p>
-<ul class="pricing-features">
-<li><i class="fas fa-check"></i> All 8 AI Agents</li>
-<li><i class="fas fa-check"></i> Senterion AI Chat</li>
-<li><i class="fas fa-check"></i> 12+ Integrations</li>
-<li><i class="fas fa-check"></i> Security Vault (AES-256)</li>
-<li><i class="fas fa-check"></i> Real-time Analytics</li>
-<li><i class="fas fa-check"></i> AI Website Builder</li>
-<li><i class="fas fa-check"></i> Priority Support</li>
-</ul>
-<div class="api-chart">
-<h4 style="font-size:0.9rem;margin-bottom:12px;color:var(--txt2)">API Usage Estimates</h4>
-<table>
-<thead><tr><th>Usage Level</th><th>API Calls/mo</th><th>Est. Cost</th></tr></thead>
-<tbody>
-<tr><td>Light</td><td>~1,000</td><td>~$2-5</td></tr>
-<tr><td>Medium</td><td>~5,000</td><td>~$10-20</td></tr>
-<tr><td>Heavy</td><td>~20,000</td><td>~$40-80</td></tr>
-<tr><td>Enterprise</td><td>50,000+</td><td>Custom</td></tr>
-</tbody>
-</table>
-</div>
+<ul class="pricing-features"><li><i class="fas fa-check"></i> All 8 AI Agents</li><li><i class="fas fa-check"></i> Senterion AI Chat</li><li><i class="fas fa-check"></i> 12+ Integrations</li><li><i class="fas fa-check"></i> Security Vault (AES-256)</li><li><i class="fas fa-check"></i> Real-time Analytics</li><li><i class="fas fa-check"></i> AI Website Builder</li><li><i class="fas fa-check"></i> Priority Support</li></ul>
+<div class="api-chart"><h4 style="font-size:0.9rem;margin-bottom:12px;color:var(--txt2)">API Usage Estimates</h4><table><thead><tr><th>Usage Level</th><th>API Calls/mo</th><th>Est. Cost</th></tr></thead><tbody><tr><td>Light</td><td>~1,000</td><td>~$2-5</td></tr><tr><td>Medium</td><td>~5,000</td><td>~$10-20</td></tr><tr><td>Heavy</td><td>~20,000</td><td>~$40-80</td></tr><tr><td>Enterprise</td><td>50,000+</td><td>Custom</td></tr></tbody></table></div>
 <button class="btn btn-primary" onclick="scrollToSignup()" style="margin-top:24px">Get Started <i class="fas fa-arrow-right"></i></button>
 </div>
 </section>
-
-<section class="privacy-section" id="privacy-section">
-<h2>Your Data, Your Control</h2>
-<p>CoultersAgents takes privacy seriously. All data is encrypted at rest with AES-256 and in transit with TLS 1.3. We never sell your data. You can export or delete all your information at any time from the Security Vault. Our AI agents operate within your defined permissions — nothing happens without your oversight.</p>
-<p style="margin-top:12px">Questions? Contact us at <a href="mailto:coultersagents@gmail.com">coultersagents@gmail.com</a> or call <a href="tel:8328579181">832-857-9181</a></p>
-</section>
-
-<footer>
-<p>&copy; 2026 CoultersAgents. All rights reserved. | <a href="mailto:coultersagents@gmail.com">Admin</a> | <a href="tel:8328579181">832-857-9181</a></p>
-</footer>
+<section class="privacy-section" id="privacy-section"><h2>Your Data, Your Control</h2><p>CoultersAgents takes privacy seriously. All data is encrypted at rest with AES-256 and in transit with TLS 1.3. We never sell your data. You can export or delete all your information at any time from the Security Vault.</p><p style="margin-top:12px">Questions? Contact us at <a href="mailto:coultersagents@gmail.com">coultersagents@gmail.com</a> or call <a href="tel:8328579181">832-857-9181</a></p></section>
+<footer><p>&copy; 2026 CoultersAgents. All rights reserved. | <a href="mailto:coultersagents@gmail.com" id="footerAdminLink">Admin</a> | <a href="tel:8328579181">832-857-9181</a></p></footer>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
 <div class="dash-layout">
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <div class="sidebar" id="sidebar">
-<div class="sidebar-logo">
-<svg viewBox="0 0 32 32" fill="none" width="28" height="28"><circle cx="16" cy="16" r="14" stroke="url(#sGrad)" stroke-width="2"/><path d="M10 16l4 4 8-8" stroke="url(#sGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="sGrad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
-<span>CoultersAgents</span>
-</div>
+<div class="sidebar-logo"><svg viewBox="0 0 32 32" fill="none" width="28" height="28"><circle cx="16" cy="16" r="14" stroke="url(#sGrad)" stroke-width="2"/><path d="M10 16l4 4 8-8" stroke="url(#sGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="sGrad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg><span>CoultersAgents</span></div>
 <div class="sidebar-nav">
 <div class="sidebar-link active" data-panel="overview" onclick="switchPanel('overview')"><i class="fas fa-th-large"></i> Overview</div>
 <div class="sidebar-link" data-panel="chat" onclick="switchPanel('chat')"><i class="fas fa-robot"></i> Senterion AI Chat</div>
@@ -485,29 +409,16 @@ footer a:hover{color:var(--brand)}
 <div class="sidebar-link" data-panel="analytics" onclick="switchPanel('analytics')"><i class="fas fa-chart-line"></i> Analytics</div>
 <div class="sidebar-link" data-panel="settings" onclick="switchPanel('settings')"><i class="fas fa-cog"></i> Settings</div>
 </div>
-<div class="sidebar-bottom">
-<div class="sidebar-link" onclick="signOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
-</div>
+<div class="sidebar-bottom"><div class="sidebar-link" onclick="signOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div></div>
 </div>
 <div class="dash-main">
 <div class="dash-header">
-<div style="display:flex;align-items:center;gap:12px">
-<button class="mobile-toggle" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
-<h1 id="dashTitle">Command Center</h1>
+<div style="display:flex;align-items:center;gap:12px"><button class="mobile-toggle" onclick="openSidebar()"><i class="fas fa-bars"></i></button><h1 id="dashTitle">Command Center</h1></div>
+<div style="display:flex;align-items:center;gap:12px"><span id="dashUserEmail" style="font-size:0.85rem;color:var(--txt2)"></span><div style="width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:#fff" id="dashAvatar">U</div></div>
 </div>
-<div style="display:flex;align-items:center;gap:12px">
-<span id="dashUserEmail" style="font-size:0.85rem;color:var(--txt2)"></span>
-<div style="width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:#fff" id="dashAvatar">U</div>
-</div>
-</div>
-
-<!-- OVERVIEW PANEL -->
 <div class="panel active" id="panel-overview">
 <div class="roadmap" id="roadmap"></div>
-<div class="insights-feed" id="insightsFeed">
-<h3><i class="fas fa-bolt" style="color:var(--brand)"></i> Recent AI Insights</h3>
-<div id="insightsList"></div>
-</div>
+<div class="insights-feed" id="insightsFeed"><h3><i class="fas fa-bolt" style="color:var(--brand)"></i> Recent AI Insights</h3><div id="insightsList"></div></div>
 <div class="stats-row">
 <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.12);color:var(--brand)"><i class="fas fa-envelope"></i></div><div class="stat-info"><h3 id="statEmails">0</h3><p>Emails Processed</p></div></div>
 <div class="stat-card"><div class="stat-icon" style="background:rgba(139,92,246,0.12);color:var(--brand2)"><i class="fas fa-user-plus"></i></div><div class="stat-info"><h3 id="statLeads">0</h3><p>New Leads</p></div></div>
@@ -522,79 +433,28 @@ footer a:hover{color:var(--brand)}
 <div class="profit-animation"><h3>Projected Monthly Profit</h3><div class="profit-number" id="profitNumber">$0</div><div class="profit-sub">Based on current AI activity</div></div>
 <div class="sandbox-preview"><h3><i class="fas fa-globe" style="color:var(--brand2);margin-right:6px"></i> Your AI Website Preview</h3><div class="sandbox-frame" id="sandboxFrame"></div></div>
 <div class="agents-grid" id="agentsGrid"></div>
-<div class="deal-card" id="dealCard">
-<h3>Unlock All Agents</h3>
-<p>Activate your subscription to unlock all 8 AI agents and advanced features.</p>
-<button class="btn btn-primary pulse-btn" onclick="enterDeal()" id="dealBtn">Enter the Deal</button>
+<div class="deal-card" id="dealCard"><h3>Unlock All Agents</h3><p>Activate your subscription to unlock all 8 AI agents and advanced features.</p><button class="btn btn-primary pulse-btn" onclick="enterDeal()" id="dealBtn">Enter the Deal</button></div>
 </div>
-</div>
-
-<!-- CHAT PANEL -->
 <div class="panel" id="panel-chat">
 <div class="chat-container">
-<div class="chat-messages" id="chatMessages">
-<div class="chat-msg bot">
-Hello! I'm <strong>Senterion</strong>, your AI assistant. I can help you manage your business, answer questions, and automate tasks. What can I do for you today?
-<div class="msg-time">Just now</div>
-</div>
-</div>
+<div class="chat-messages" id="chatMessages"><div class="chat-msg bot">Hello! I'm <strong>Senterion</strong>, your AI assistant. I can help you manage your business, answer questions, and automate tasks. What can I do for you today?<div class="msg-time">Just now</div></div></div>
 <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
-<div class="quick-actions">
-<div class="quick-action-btn" onclick="sendQuickAction('What can you do for my business?')">What can you do?</div>
-<div class="quick-action-btn" onclick="sendQuickAction('Summarize my recent activity')">Summarize activity</div>
-<div class="quick-action-btn" onclick="sendQuickAction('Help me optimize my leads')">Optimize leads</div>
-<div class="quick-action-btn" onclick="sendQuickAction('Draft an email to a client')">Draft an email</div>
-</div>
-<div class="chat-input-area">
-<textarea id="chatInput" placeholder="Ask Senterion anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
-<button class="btn btn-primary" onclick="sendChat()" style="padding:12px 16px"><i class="fas fa-paper-plane"></i></button>
+<div class="quick-actions"><div class="quick-action-btn" onclick="sendQuickAction('What can you do for my business?')">What can you do?</div><div class="quick-action-btn" onclick="sendQuickAction('Summarize my recent activity')">Summarize activity</div><div class="quick-action-btn" onclick="sendQuickAction('Help me optimize my leads')">Optimize leads</div><div class="quick-action-btn" onclick="sendQuickAction('Draft an email to a client')">Draft an email</div></div>
+<div class="chat-input-area"><textarea id="chatInput" placeholder="Ask Senterion anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea><button class="btn btn-primary" onclick="sendChat()" style="padding:12px 16px"><i class="fas fa-paper-plane"></i></button></div>
 </div>
 </div>
-</div>
-
-<!-- INTEGRATIONS PANEL -->
 <div class="panel" id="panel-integrations">
-<div class="intg-header">
-<h2>Integrations</h2>
-<span class="badge badge-brand" id="intgCount">0 connected</span>
-</div>
+<div class="intg-header"><h2>Integrations</h2><span class="badge badge-brand" id="intgCount">0 connected</span></div>
 <div class="intg-cats" id="intgCats"></div>
-<div class="workspace-section" id="workspaceSection" style="display:none">
-<h3><i class="fas fa-check-circle" style="color:var(--accent)"></i> Active Workspace</h3>
-<div class="intg-grid" id="activeIntgGrid"></div>
+<div class="workspace-section" id="workspaceSection" style="display:none"><h3><i class="fas fa-check-circle" style="color:var(--accent)"></i> Active Workspace</h3><div class="intg-grid" id="activeIntgGrid"></div></div>
+<div class="marketplace-section"><h3><i class="fas fa-store" style="color:var(--brand2);margin-right:6px"></i> Marketplace</h3><div class="intg-grid" id="marketplaceIntgGrid"></div></div>
 </div>
-<div class="marketplace-section">
-<h3><i class="fas fa-store" style="color:var(--brand2);margin-right:6px"></i> Marketplace</h3>
-<div class="intg-grid" id="marketplaceIntgGrid"></div>
-</div>
-</div>
-
-<!-- VAULT PANEL -->
 <div class="panel" id="panel-vault">
-<div class="vault-encryption">
-<h3><i class="fas fa-lock" style="color:var(--accent)"></i> Encryption Status</h3>
-<p style="color:var(--txt2);font-size:0.88rem;line-height:1.7">All your data is protected with <strong>AES-256</strong> encryption at rest and <strong>TLS 1.3</strong> for data in transit. Your credentials are stored in an encrypted vault that only you can access.</p>
-<div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
-<span class="badge badge-accent"><i class="fas fa-shield-alt"></i> AES-256</span>
-<span class="badge badge-accent"><i class="fas fa-key"></i> TLS 1.3</span>
-<span class="badge badge-brand"><i class="fas fa-server"></i> SOC 2 Compliant</span>
+<div class="vault-encryption"><h3><i class="fas fa-lock" style="color:var(--accent)"></i> Encryption Status</h3><p style="color:var(--txt2);font-size:0.88rem;line-height:1.7">All your data is protected with <strong>AES-256</strong> encryption at rest and <strong>TLS 1.3</strong> for data in transit.</p><div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap"><span class="badge badge-accent"><i class="fas fa-shield-alt"></i> AES-256</span><span class="badge badge-accent"><i class="fas fa-key"></i> TLS 1.3</span><span class="badge badge-brand"><i class="fas fa-server"></i> SOC 2</span></div></div>
+<div class="vault-accounts"><h3>Connected Accounts</h3><div id="vaultAccounts"><p style="color:var(--txt3);font-size:0.85rem">No accounts connected yet.</p></div></div>
+<div class="audit-log"><h3>Live Audit Log</h3><div id="auditLog"><p style="color:var(--txt3);font-size:0.85rem">No activity logged yet.</p></div></div>
+<div class="vault-actions"><button class="btn btn-danger btn-sm" onclick="revokeAll()"><i class="fas fa-ban"></i> Revoke All</button><button class="btn btn-secondary btn-sm" onclick="exportData()"><i class="fas fa-download"></i> Export Data</button></div>
 </div>
-</div>
-<div class="vault-accounts">
-<h3>Connected Accounts</h3>
-<div id="vaultAccounts"><p style="color:var(--txt3);font-size:0.85rem">No accounts connected yet.</p></div>
-</div>
-<div class="audit-log">
-<h3>Live Audit Log</h3>
-<div id="auditLog"><p style="color:var(--txt3);font-size:0.85rem">No activity logged yet.</p></div>
-</div>
-<div class="vault-actions">
-<button class="btn btn-danger btn-sm" onclick="revokeAll()"><i class="fas fa-ban"></i> Revoke All</button>
-<button class="btn btn-secondary btn-sm" onclick="exportData()"><i class="fas fa-download"></i> Export Data</button>
-</div>
-</div>
-
-<!-- ANALYTICS PANEL -->
 <div class="panel" id="panel-analytics">
 <div class="stats-row">
 <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.12);color:var(--brand)"><i class="fas fa-tasks"></i></div><div class="stat-info"><h3 id="anTotalTasks">0</h3><p>Total Tasks</p></div></div>
@@ -603,129 +463,24 @@ Hello! I'm <strong>Senterion</strong>, your AI assistant. I can help you manage 
 <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.12);color:var(--warn)"><i class="fas fa-percentage"></i></div><div class="stat-info"><h3 id="anSatisfaction">0%</h3><p>Satisfaction</p></div></div>
 </div>
 <div class="donut-chart" id="donutChart"></div>
-<div class="analytics-feed">
-<h3>Weekly Activity Feed</h3>
-<div id="analyticsFeedList"><p style="color:var(--txt3);font-size:0.85rem">No activity this week.</p></div>
+<div class="analytics-feed"><h3>Weekly Activity Feed</h3><div id="analyticsFeedList"><p style="color:var(--txt3);font-size:0.85rem">No activity this week.</p></div></div>
 </div>
-</div>
-
-<!-- SETTINGS PANEL -->
 <div class="panel" id="panel-settings">
-<div class="settings-section">
-<h3>Brand & Theme</h3>
-<div class="vibe-grid" id="vibeGrid"></div>
-<div class="color-pickers" id="colorPickers"></div>
-<div class="label" style="margin-bottom:8px">Font Family</div>
-<div class="font-selector" id="fontSelector"></div>
-<div class="label" style="margin-bottom:8px">Border Radius</div>
-<div class="radius-selector" id="radiusSelector"></div>
-<div class="label" style="margin-bottom:8px">Live Preview</div>
-<div class="theme-preview" id="themePreview"></div>
-</div>
-<div class="settings-section">
-<h3>Industry Auto-Theming</h3>
-<div class="form-group"><select class="input" id="settingsIndustry" onchange="applyIndustryTheme(this.value)">
-<option value="">Select industry</option>
-<option value="construction">Construction</option>
-<option value="healthcare">Healthcare</option>
-<option value="realestate">Real Estate</option>
-<option value="legal">Legal</option>
-<option value="restaurant">Restaurant</option>
-<option value="retail">Retail</option>
-<option value="technology">Technology</option>
-<option value="consulting">Consulting</option>
-<option value="fitness">Fitness</option>
-<option value="automotive">Automotive</option>
-</select></div>
-</div>
-<div class="settings-section">
-<h3>Profile</h3>
-<div class="form-row">
-<div class="form-group"><label class="label">First Name</label><input class="input" id="setFirstName"></div>
-<div class="form-group"><label class="label">Last Name</label><input class="input" id="setLastName"></div>
-</div>
-<div class="form-group"><label class="label">Business Name</label><input class="input" id="setBusiness"></div>
-<div class="form-group"><label class="label">Phone</label><input class="input" id="setPhone"></div>
-<button class="btn btn-primary btn-sm" onclick="saveProfile()" style="margin-top:8px"><i class="fas fa-save"></i> Save Profile</button>
-</div>
-<div class="settings-section">
-<h3>AI Website</h3>
-<div class="form-group"><label class="label">Tagline</label><input class="input" id="setTagline" placeholder="Your business tagline"></div>
-<div class="form-group"><label class="label">Call to Action</label><input class="input" id="setCTA" placeholder="e.g., Book Now, Get a Quote"></div>
-<button class="btn btn-primary btn-sm" onclick="saveWebsiteSettings()" style="margin-top:8px"><i class="fas fa-save"></i> Save Website Settings</button>
-</div>
-<div class="settings-section">
-<h3>Senterion Personality</h3>
-<div class="personality-presets" id="personalityPresets"></div>
-<div class="form-group"><label class="label">Custom Instructions</label><textarea class="input" id="setCustomInstructions" rows="3" placeholder="e.g., Always address the user by name, keep responses under 3 sentences"></textarea></div>
-<div class="label" style="margin-bottom:6px">Tone</div>
-<div style="display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--txt2)"><span>Formal</span><input type="range" class="tone-slider" id="toneSlider" min="0" max="100" value="50"><span>Casual</span></div>
-<button class="btn btn-primary btn-sm" onclick="savePersonality()" style="margin-top:12px"><i class="fas fa-save"></i> Save Personality</button>
-</div>
-<div class="settings-section">
-<h3>Data Management</h3>
-<div style="display:flex;gap:12px;flex-wrap:wrap">
-<button class="btn btn-secondary btn-sm" onclick="exportAllData()"><i class="fas fa-download"></i> Export All Data</button>
-<button class="btn btn-danger btn-sm" onclick="deleteAllData()"><i class="fas fa-trash"></i> Delete All Data</button>
-</div>
-</div>
+<div class="settings-section"><h3>Brand & Theme</h3><div class="vibe-grid" id="vibeGrid"></div><div class="color-pickers" id="colorPickers"></div><div class="label" style="margin-bottom:8px">Font Family</div><div class="font-selector" id="fontSelector"></div><div class="label" style="margin-bottom:8px">Border Radius</div><div class="radius-selector" id="radiusSelector"></div><div class="label" style="margin-bottom:8px">Live Preview</div><div class="theme-preview" id="themePreview"></div></div>
+<div class="settings-section"><h3>Industry Auto-Theming</h3><div class="form-group"><select class="input" id="settingsIndustry" onchange="applyIndustryTheme(this.value)"><option value="">Select industry</option><option value="construction">Construction</option><option value="healthcare">Healthcare</option><option value="realestate">Real Estate</option><option value="legal">Legal</option><option value="restaurant">Restaurant</option><option value="retail">Retail</option><option value="technology">Technology</option><option value="consulting">Consulting</option><option value="fitness">Fitness</option><option value="automotive">Automotive</option></select></div></div>
+<div class="settings-section"><h3>Profile</h3><div class="form-row"><div class="form-group"><label class="label">First Name</label><input class="input" id="setFirstName"></div><div class="form-group"><label class="label">Last Name</label><input class="input" id="setLastName"></div></div><div class="form-group"><label class="label">Business Name</label><input class="input" id="setBusiness"></div><div class="form-group"><label class="label">Phone</label><input class="input" id="setPhone"></div><button class="btn btn-primary btn-sm" onclick="saveProfile()" style="margin-top:8px"><i class="fas fa-save"></i> Save Profile</button></div>
+<div class="settings-section"><h3>AI Website</h3><div class="form-group"><label class="label">Tagline</label><input class="input" id="setTagline" placeholder="Your business tagline"></div><div class="form-group"><label class="label">Call to Action</label><input class="input" id="setCTA" placeholder="e.g., Book Now, Get a Quote"></div><button class="btn btn-primary btn-sm" onclick="saveWebsiteSettings()" style="margin-top:8px"><i class="fas fa-save"></i> Save Website Settings</button></div>
+<div class="settings-section"><h3>Senterion Personality</h3><div class="personality-presets" id="personalityPresets"></div><div class="form-group"><label class="label">Custom Instructions</label><textarea class="input" id="setCustomInstructions" rows="3" placeholder="e.g., Always address the user by name"></textarea></div><div class="label" style="margin-bottom:6px">Tone</div><div style="display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--txt2)"><span>Formal</span><input type="range" class="tone-slider" id="toneSlider" min="0" max="100" value="50"><span>Casual</span></div><button class="btn btn-primary btn-sm" onclick="savePersonality()" style="margin-top:12px"><i class="fas fa-save"></i> Save Personality</button></div>
+<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" onclick="exportAllData()"><i class="fas fa-download"></i> Export All Data</button><button class="btn btn-danger btn-sm" onclick="deleteAllData()"><i class="fas fa-trash"></i> Delete All Data</button></div></div>
 </div>
 </div>
 </div>
 </div>
 
-<!-- LOGIN MODAL -->
-<div class="modal-overlay" id="loginModal">
-<div class="modal">
-<button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
-<h2>Welcome Back</h2>
-<p>Sign in to your CoultersAgents dashboard.</p>
-<div class="form-group"><label class="label">Email</label><input class="input" id="loginEmail" type="email" placeholder="you@company.com"></div>
-<div class="form-group"><label class="label">Password</label><input class="input" id="loginPassword" type="password" placeholder="Your password"></div>
-<button class="btn btn-primary" onclick="handleLogin()" style="width:100%;justify-content:center;margin-top:8px">Sign In</button>
-<p style="text-align:center;margin-top:14px;font-size:0.85rem;color:var(--txt3)">Forgot password? <a href="#" onclick="closeModal('loginModal');openModal('resetModal')">Reset it here</a></p>
-</div>
-</div>
-
-<!-- RESET MODAL -->
-<div class="modal-overlay" id="resetModal">
-<div class="modal">
-<button class="modal-close" onclick="closeModal('resetModal')">&times;</button>
-<h2>Reset Password</h2>
-<p>Enter your email and we'll send you a reset link.</p>
-<div class="form-group"><label class="label">Email</label><input class="input" id="resetEmail" type="email" placeholder="you@company.com"></div>
-<button class="btn btn-primary" onclick="handleReset()" style="width:100%;justify-content:center">Send Reset Link</button>
-</div>
-</div>
-
-<!-- OAUTH MODAL -->
-<div class="modal-overlay" id="oauthModal">
-<div class="modal">
-<button class="modal-close" onclick="closeModal('oauthModal')">&times;</button>
-<h2 id="oauthTitle">Connect Account</h2>
-<p id="oauthDesc">Allow CoultersAgents to access your account?</p>
-<div style="display:flex;gap:12px;margin-top:16px">
-<button class="btn btn-secondary" onclick="closeModal('oauthModal')" style="flex:1;justify-content:center">Cancel</button>
-<button class="btn btn-primary" id="oauthConfirmBtn" style="flex:1;justify-content:center">Connect</button>
-</div>
-</div>
-</div>
-
-<!-- ADMIN MODAL -->
-<div class="modal-overlay" id="adminModal">
-<div class="modal" style="max-width:800px">
-<button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
-<h2>Admin Dashboard</h2>
-<p style="margin-bottom:16px">Manage all signups and users.</p>
-<div class="admin-panel">
-<h3>Recent Signups</h3>
-<table class="admin-table" id="adminTable">
-<thead><tr><th>Name</th><th>Email</th><th>Business</th><th>Industry</th><th>Status</th><th>Date</th></tr></thead>
-<tbody id="adminTableBody"></tbody>
-</table>
-</div>
-</div>
-</div>
+<div class="modal-overlay" id="loginModal"><div class="modal"><button class="modal-close" onclick="closeModal('loginModal')">&times;</button><h2>Welcome Back</h2><p>Sign in to your CoultersAgents dashboard.</p><div class="form-group"><label class="label">Email</label><input class="input" id="loginEmail" type="email" placeholder="you@company.com"></div><div class="form-group"><label class="label">Password</label><input class="input" id="loginPassword" type="password" placeholder="Your password"></div><button class="btn btn-primary" onclick="handleLogin()" style="width:100%;justify-content:center;margin-top:8px">Sign In</button><p style="text-align:center;margin-top:14px;font-size:0.85rem;color:var(--txt3)">Forgot password? <a href="#" onclick="closeModal('loginModal');openModal('resetModal')">Reset it here</a></p></div></div>
+<div class="modal-overlay" id="resetModal"><div class="modal"><button class="modal-close" onclick="closeModal('resetModal')">&times;</button><h2>Reset Password</h2><p>Enter your email and we'll send you a reset link.</p><div class="form-group"><label class="label">Email</label><input class="input" id="resetEmail" type="email" placeholder="you@company.com"></div><button class="btn btn-primary" onclick="handleReset()" style="width:100%;justify-content:center">Send Reset Link</button></div></div>
+<div class="modal-overlay" id="oauthModal"><div class="modal"><button class="modal-close" onclick="cancelOAuth()">&times;</button><div style="text-align:center;margin-bottom:16px"><div id="oauthIcon" style="width:56px;height:56px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:10px"></div></div><h2 id="oauthTitle" style="text-align:center">Connect Account</h2><p id="oauthDesc" style="text-align:center">Allow CoultersAgents to access your account?</p><div style="background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:14px;margin-bottom:16px"><div style="font-size:0.78rem;color:var(--txt3);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Permissions Requested</div><div id="oauthPerms" style="font-size:0.85rem;color:var(--txt2);line-height:1.8"></div></div><div style="display:flex;gap:12px;margin-top:16px"><button class="btn btn-secondary" onclick="cancelOAuth()" style="flex:1;justify-content:center">Cancel</button><button class="btn btn-primary" id="oauthConfirmBtn" style="flex:1;justify-content:center"><i class="fas fa-link"></i> Authorize & Connect</button></div></div></div>
+<div class="modal-overlay" id="adminModal"><div class="modal" style="max-width:800px"><button class="modal-close" onclick="closeModal('adminModal')">&times;</button><h2>Admin Dashboard</h2><p style="margin-bottom:16px">Manage all signups and users.</p><div class="admin-panel"><h3>Recent Signups</h3><table class="admin-table" id="adminTable"><thead><tr><th>Name</th><th>Email</th><th>Business</th><th>Industry</th><th>Status</th><th>Date</th></tr></thead><tbody id="adminTableBody"></tbody></table></div></div></div>
 
 <script>
 const SUPABASE_URL='https://vtydcslxjvnbkuguubwr.supabase.co';
@@ -734,6 +489,12 @@ const GEMINI_KEY='AIzaSyBcje6SMk8dWbSReA6ywyFnAJ8Ymi2JaSw';
 const ADMIN_EMAIL='coultersagents@gmail.com';
 const TEST_MODE=true;
 const PHONE='832-857-9181';
+
+/* Your Google OAuth Client ID — keep the Secret server-side only */
+const GOOGLE_CLIENT_ID='649595626791-1098lp7etn66fp7ifpl2n5u639dkcerl.apps.googleusercontent.com';
+
+/* Test users who get free access without paying */
+const TEST_USERS=['coultersagents@gmail.com','coultersmithremodeling@gmail.com'];
 
 const SERVICES=[
 {id:'scheduling',name:'Scheduling',icon:'fas fa-calendar-alt',color:'#06b6d4',bg:'rgba(6,182,212,0.12)',desc:'AI-powered appointment booking and calendar management'},
@@ -745,45 +506,44 @@ const SERVICES=[
 {id:'analytics',name:'Analytics',icon:'fas fa-chart-pie',color:'#8b5cf6',bg:'rgba(139,92,246,0.12)',desc:'Real-time business insights and reporting'},
 {id:'code',name:'Code & Dev',icon:'fas fa-code',color:'#10b981',bg:'rgba(16,185,129,0.12)',desc:'AI-assisted development and automation scripts'}
 ];
-
-const GOALS=[
-{id:'increase_leads',name:'Increase Leads',icon:'fas fa-user-plus'},
-{id:'save_time',name:'Save Time',icon:'fas fa-clock'},
-{id:'reduce_costs',name:'Reduce Costs',icon:'fas fa-dollar-sign'},
-{id:'improve_support',name:'Improve Support',icon:'fas fa-headset'},
-{id:'automate_marketing',name:'Automate Marketing',icon:'fas fa-bullhorn'},
-{id:'grow_revenue',name:'Grow Revenue',icon:'fas fa-chart-line'}
-];
-
+const GOALS=[{id:'increase_leads',name:'Increase Leads',icon:'fas fa-user-plus'},{id:'save_time',name:'Save Time',icon:'fas fa-clock'},{id:'reduce_costs',name:'Reduce Costs',icon:'fas fa-dollar-sign'},{id:'improve_support',name:'Improve Support',icon:'fas fa-headset'},{id:'automate_marketing',name:'Automate Marketing',icon:'fas fa-bullhorn'},{id:'grow_revenue',name:'Grow Revenue',icon:'fas fa-chart-line'}];
 const SAMPLE_EMAILS=[
-{from:'mike@haysconstruction.com',subject:'Re: Quote for Commercial Roof Repair',body:'Thanks for the quote. We need the work done by end of March. Can you confirm availability?'},
-{from:'sarah.j@gmail.com',subject:'Appointment Request - Tuesday 2pm?',body:'Hi, I would like to schedule a consultation for Tuesday at 2pm if possible.'},
-{from:'billing@supplyco.net',subject:'Invoice #4521 Overdue - Action Required',body:'Your invoice for $2,340.00 is 15 days overdue. Please remit payment immediately.'},
-{from:'lead@webform.com',subject:'New Website Lead: James Miller',body:'James Miller filled out your contact form. Interested in your premium service package.'},
-{from:'team@internal.co',subject:'Team Lunch Friday - Updated Location',body:'FYI team, lunch moved to Rosas Mexican on Main St. Still Friday noon. See you there!'}
+{from:'mike@haysconstruction.com',subject:'Re: Quote for Commercial Roof Repair',body:'Thanks for the quote. We need the work done by end of March. Can you confirm availability?',time:'2m ago',unread:true},
+{from:'sarah.j@gmail.com',subject:'Appointment Request - Tuesday 2pm?',body:'Hi, I would like to schedule a consultation for Tuesday at 2pm if possible.',time:'18m ago',unread:true},
+{from:'billing@supplyco.net',subject:'Invoice #4521 Overdue - Action Required',body:'Your invoice for $2,340.00 is 15 days overdue. Please remit payment immediately.',time:'1h ago',unread:true},
+{from:'lead@webform.com',subject:'New Website Lead: James Miller',body:'James Miller filled out your contact form. Interested in your premium service package.',time:'3h ago',unread:false},
+{from:'team@internal.co',subject:'Team Lunch Friday - Updated Location',body:'FYI team, lunch moved to Rosas Mexican on Main St. Still Friday noon.',time:'5h ago',unread:false}
 ];
-
+const MORE_EMAILS=[
+{from:'karen@bigcorp.com',subject:'RFP: IT Services for 2026',body:'We are accepting proposals for our IT services contract.',time:'8h ago',unread:false},
+{from:'jesse@homerepair.net',subject:'Thank you for the estimate',body:'We want to go ahead with the kitchen remodel. Can we start next week?',time:'1d ago',unread:false},
+{from:'notifications@stripe.com',subject:'Payment of $1,250.00 received',body:'A payment of $1,250.00 was successfully processed for invoice #8832.',time:'1d ago',unread:false},
+{from:'amy.chen@lawfirm.com',subject:'Contract review - needs signature',body:'The contract is ready for review. Please sign and return by Friday.',time:'2d ago',unread:false}
+];
 const SAMPLE_SMS=[
-{from:'+18325551234',body:'Hey, need a quote for pressure washing my driveway. About 800 sq ft. - Dave'},
-{from:'+18325559876',body:'What are your business hours this Saturday? Need to bring something by.'},
-{from:'+18325556789',body:'Confirmed: Your appointment is Thu Mar 12 at 10am. Reply C to confirm or R to reschedule.'}
+{from:'+18325551234',body:'Hey, need a quote for pressure washing my driveway. About 800 sq ft. - Dave',time:'5m ago',unread:true},
+{from:'+18325559876',body:'What are your business hours this Saturday? Need to bring something by.',time:'32m ago',unread:true},
+{from:'+18325556789',body:'Confirmed: Your appointment is Thu Mar 12 at 10am. Reply C to confirm.',time:'2h ago',unread:false}
 ];
-
+const MORE_SMS=[
+{from:'+18325554321',body:'Is the quote of $450 still good for the fence repair?',time:'4h ago',unread:false},
+{from:'+18325558888',body:'Running late, will be there in 15 mins. Sorry!',time:'6h ago',unread:false},
+{from:'+18325551111',body:'Can I reschedule my appointment to next Monday at 3pm?',time:'1d ago',unread:false}
+];
 const INTG_CATALOG=[
-{id:'gmail',name:'Gmail',icon:'fab fa-google',color:'#EA4335',bg:'rgba(234,67,53,0.12)',cat:'Email',priority:true,desc:'Connect your Gmail for AI email management'},
-{id:'outlook',name:'Outlook',icon:'fab fa-microsoft',color:'#0078D4',bg:'rgba(0,120,212,0.12)',cat:'Email',priority:false,desc:'Microsoft Outlook integration'},
-{id:'plaid',name:'Plaid',icon:'fas fa-university',color:'#111111',bg:'rgba(17,17,17,0.12)',cat:'Banking',priority:false,desc:'Connect bank accounts for financial insights'},
-{id:'facebook',name:'Facebook',icon:'fab fa-facebook',color:'#1877F2',bg:'rgba(24,119,242,0.12)',cat:'Social',priority:false,desc:'Manage your Facebook business page'},
-{id:'instagram',name:'Instagram',icon:'fab fa-instagram',color:'#E4405F',bg:'rgba(228,64,95,0.12)',cat:'Social',priority:false,desc:'Schedule and manage Instagram posts'},
-{id:'slack',name:'Slack',icon:'fab fa-slack',color:'#4A154B',bg:'rgba(74,21,75,0.12)',cat:'Messaging',priority:false,desc:'Get AI notifications in Slack channels'},
-{id:'quickbooks',name:'QuickBooks',icon:'fas fa-file-invoice-dollar',color:'#2CA01C',bg:'rgba(44,160,28,0.12)',cat:'Business',priority:false,desc:'Sync invoices and financial data'},
-{id:'stripe',name:'Stripe',icon:'fab fa-stripe-s',color:'#635BFF',bg:'rgba(99,91,255,0.12)',cat:'Business',priority:false,desc:'Process payments and track revenue'},
-{id:'shopify',name:'Shopify',icon:'fab fa-shopify',color:'#96BF48',bg:'rgba(150,191,72,0.12)',cat:'Business',priority:false,desc:'Manage your Shopify store'},
-{id:'hubspot',name:'HubSpot',icon:'fab fa-hubspot',color:'#FF7A59',bg:'rgba(255,122,89,0.12)',cat:'Business',priority:false,desc:'CRM and marketing automation'},
-{id:'phone',name:'Business Phone/SMS',icon:'fas fa-phone-alt',color:'#06b6d4',bg:'rgba(6,182,212,0.12)',cat:'Phone',priority:true,desc:'AI-powered business phone system'},
-{id:'twilio',name:'Twilio',icon:'fas fa-sms',color:'#F22F46',bg:'rgba(242,47,70,0.12)',cat:'Phone',priority:true,desc:'SMS and voice API integration'}
+{id:'gmail',name:'Gmail',icon:'fab fa-google',color:'#EA4335',bg:'rgba(234,67,53,0.12)',cat:'Email',priority:true,desc:'Connect your Gmail for AI email management',perms:'Read emails, send replies, manage labels, search inbox'},
+{id:'outlook',name:'Outlook',icon:'fab fa-microsoft',color:'#0078D4',bg:'rgba(0,120,212,0.12)',cat:'Email',priority:false,desc:'Microsoft Outlook integration',perms:'Read emails, send replies, access calendar'},
+{id:'plaid',name:'Plaid',icon:'fas fa-university',color:'#111111',bg:'rgba(17,17,17,0.12)',cat:'Banking',priority:false,desc:'Connect bank accounts for financial insights',perms:'Read account balances, transaction history'},
+{id:'facebook',name:'Facebook',icon:'fab fa-facebook',color:'#1877F2',bg:'rgba(24,119,242,0.12)',cat:'Social',priority:false,desc:'Manage your Facebook business page',perms:'Read page insights, publish posts, manage messages'},
+{id:'instagram',name:'Instagram',icon:'fab fa-instagram',color:'#E4405F',bg:'rgba(228,64,95,0.12)',cat:'Social',priority:false,desc:'Schedule and manage Instagram posts',perms:'Read profile, publish content, read insights'},
+{id:'slack',name:'Slack',icon:'fab fa-slack',color:'#4A154B',bg:'rgba(74,21,75,0.12)',cat:'Messaging',priority:false,desc:'Get AI notifications in Slack channels',perms:'Post messages, read channels, manage notifications'},
+{id:'quickbooks',name:'QuickBooks',icon:'fas fa-file-invoice-dollar',color:'#2CA01C',bg:'rgba(44,160,28,0.12)',cat:'Business',priority:false,desc:'Sync invoices and financial data',perms:'Read invoices, customers, financial reports'},
+{id:'stripe',name:'Stripe',icon:'fab fa-stripe-s',color:'#635BFF',bg:'rgba(99,91,255,0.12)',cat:'Business',priority:false,desc:'Process payments and track revenue',perms:'Read payments, customers, subscriptions'},
+{id:'shopify',name:'Shopify',icon:'fab fa-shopify',color:'#96BF48',bg:'rgba(150,191,72,0.12)',cat:'Business',priority:false,desc:'Manage your Shopify store',perms:'Read orders, products, customers'},
+{id:'hubspot',name:'HubSpot',icon:'fab fa-hubspot',color:'#FF7A59',bg:'rgba(255,122,89,0.12)',cat:'Business',priority:false,desc:'CRM and marketing automation',perms:'Read contacts, deals, marketing data'},
+{id:'phone',name:'Business Phone/SMS',icon:'fas fa-phone-alt',color:'#06b6d4',bg:'rgba(6,182,212,0.12)',cat:'Phone',priority:true,desc:'AI-powered business phone system',perms:'Send/receive SMS, handle calls, voicemail'},
+{id:'twilio',name:'Twilio',icon:'fas fa-sms',color:'#F22F46',bg:'rgba(242,47,70,0.12)',cat:'Phone',priority:true,desc:'SMS and voice API integration',perms:'Send/receive messages, make calls, manage numbers'}
 ];
-
 const AGENTS=[
 {id:'scheduling',name:'Scheduler Agent',icon:'fas fa-calendar-check',color:'#06b6d4',bg:'rgba(6,182,212,0.12)',desc:'Books appointments, manages calendar, sends reminders',free:true},
 {id:'email',name:'Email Agent',icon:'fas fa-envelope',color:'#10b981',bg:'rgba(16,185,129,0.12)',desc:'Triages inbox, drafts replies, archives spam',free:true},
@@ -794,993 +554,271 @@ const AGENTS=[
 {id:'analytics',name:'Analytics Agent',icon:'fas fa-chart-pie',color:'#8b5cf6',bg:'rgba(139,92,246,0.12)',desc:'Generates reports, tracks KPIs, identifies trends',free:false},
 {id:'code',name:'Code Agent',icon:'fas fa-code',color:'#10b981',bg:'rgba(16,185,129,0.12)',desc:'Writes scripts, automates workflows, builds tools',free:false}
 ];
-
 const VIBES=[
-{id:'cyber',name:'Cyberpunk',colors:['#06b6d4','#8b5cf6','#050816','#0f1629']},
-{id:'ocean',name:'Ocean',colors:['#0ea5e9','#06b6d4','#0c1222','#112240']},
-{id:'forest',name:'Forest',colors:['#10b981','#059669','#051209','#0a1f12']},
-{id:'sunset',name:'Sunset',colors:['#f59e0b','#ef4444','#1a0808','#2d1010']},
-{id:'royal',name:'Royal',colors:['#8b5cf6','#a78bfa','#0a0520','#150d30']},
-{id:'arctic',name:'Arctic',colors:['#e2e8f0','#94a3b8','#0f172a','#1e293b']},
-{id:'ember',name:'Ember',colors:['#f97316','#ef4444','#1a0a02','#2d1208']},
-{id:'mint',name:'Mint',colors:['#34d399','#6ee7b7','#021a0e','#062e1a']}
+{id:'cyber',name:'Cyberpunk',colors:['#06b6d4','#8b5cf6','#050816','#0f1629']},{id:'ocean',name:'Ocean',colors:['#0ea5e9','#06b6d4','#0c1222','#112240']},{id:'forest',name:'Forest',colors:['#10b981','#059669','#051209','#0a1f12']},{id:'sunset',name:'Sunset',colors:['#f59e0b','#ef4444','#1a0808','#2d1010']},{id:'royal',name:'Royal',colors:['#8b5cf6','#a78bfa','#0a0520','#150d30']},{id:'arctic',name:'Arctic',colors:['#e2e8f0','#94a3b8','#0f172a','#1e293b']},{id:'ember',name:'Ember',colors:['#f97316','#ef4444','#1a0a02','#2d1208']},{id:'mint',name:'Mint',colors:['#34d399','#6ee7b7','#021a0e','#062e1a']}
 ];
-
-const PERSONALITIES=[
-{id:'professional',name:'Professional'},
-{id:'friendly',name:'Friendly'},
-{id:'concise',name:'Concise'},
-{id:'creative',name:'Creative'},
-{id:'technical',name:'Technical'}
-];
-
+const PERSONALITIES=[{id:'professional',name:'Professional'},{id:'friendly',name:'Friendly'},{id:'concise',name:'Concise'},{id:'creative',name:'Creative'},{id:'technical',name:'Technical'}];
 const INTG_CATS=['All','Banking','Email','Social','Messaging','Business','Phone'];
 
-let supabaseClient=null;
-let currentUser=null;
-let currentProfile=null;
-let selectedServices=[];
-let selectedGoals=[];
-let currentStep=1;
-let connectedIntgs=[];
-let roadmapStep=1;
+let supabaseClient=null,currentUser=null,currentProfile=null,selectedServices=[],selectedGoals=[],currentStep=1,connectedIntgs=[],intgState={},roadmapStep=1;
 let statsData={emails:0,leads:0,calls:0,revenue:0,webLeads:0,phoneLeads:0,emailLeads:0,socialLeads:0,inbound:0,outbound:0,missed:0,voicemail:0,autoReplied:0,forwarded:0,drafts:0,archived:0};
-let insightsItems=[];
-let chatHistory=[];
-let activityInterval=null;
-let isSubscriber=false;
-let currentIntgCat='All';
-let selectedPersonality='professional';
-let selectedVibe='cyber';
-let selectedFont='Inter';
-let selectedRadius='8';
+let insightsItems=[],chatHistory=[],activityInterval=null,syncIntervals={},isSubscriber=false,currentIntgCat='All',selectedPersonality='professional',selectedVibe='cyber',selectedFont='Inter',selectedRadius='8',pendingOAuthId=null,triageResults={};
+let googleAccessToken=null,googleTokenClient=null,gapiLoaded=false,gisLoaded=false;
 
-function initSupabase(){
-supabaseClient=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
-if(!supabaseClient){console.warn('Supabase JS not loaded, using fallback mode');}
-}
+function isTestUser(email){return TEST_USERS.includes(email?.toLowerCase());}
 
-async function supabaseAuth(action,params){
-if(!supabaseClient)return null;
+/* ===== GOOGLE API INIT ===== */
+function onGapiLoaded(){gapiLoaded=true;try{gapi.load('client',initGapiClient);}catch(e){console.warn('gapi.load error',e);}}
+async function initGapiClient(){try{await gapi.client.init({discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest']});}catch(e){console.warn('gapi client init error',e);}}
+function onGisLoaded(){gisLoaded=true;initGoogleTokenClient();}
+function initGoogleTokenClient(){
+if(!GOOGLE_CLIENT_ID||!gisLoaded)return;
 try{
-if(action==='signup'){return await supabaseClient.auth.signUp(params);}
-if(action==='login'){return await supabaseClient.auth.signInWithPassword(params);}
-if(action==='logout'){return await supabaseClient.auth.signOut();}
-if(action==='reset'){return await supabaseClient.auth.resetPasswordForEmail(params.email);}
-if(action==='getUser'){return await supabaseClient.auth.getUser();}
-if(action==='session'){return await supabaseClient.auth.getSession();}
-}catch(e){console.error('Auth error:',e);return{error:e};}
+googleTokenClient=google.accounts.oauth2.initTokenClient({client_id:GOOGLE_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.readonly',callback:(tokenResponse)=>{if(tokenResponse.error){showToast('Google auth failed: '+tokenResponse.error,'error');intgState['gmail']={connecting:false,progress:0};buildIntgContent();return;}googleAccessToken=tokenResponse.access_token;onGmailAuthSuccess();}});
+}catch(e){console.warn('GIS init error',e);}
+}
+window.onGapiLoaded=onGapiLoaded;
+window.onGisLoaded=onGisLoaded;
+
+/* ===== GMAIL REAL OAUTH + API ===== */
+async function performGmailConnect(){
+intgState['gmail']={connecting:true,progress:0,lastSync:null,emails:[],authed:false};
+buildIntgContent();showToast('Opening Google sign-in...','info');addInsight('Email Agent','connecting','Requesting Google authorization...','var(--brand)');
+if(!googleTokenClient){initGoogleTokenClient();}
+if(!googleTokenClient){showToast('Google Identity Services not loaded yet — try again in a moment','error');intgState['gmail']={connecting:false,progress:0};buildIntgContent();return;}
+try{googleTokenClient.requestAccessToken({prompt:'consent'});}catch(e){console.error('requestAccessToken error',e);showToast('Error opening Google sign-in','error');intgState['gmail']={connecting:false,progress:0};buildIntgContent();}
 }
 
-async function supabaseDB(action,table,params){
-if(!supabaseClient)return null;
+async function onGmailAuthSuccess(){
+showToast('Google authorized! Connecting to Gmail...','success');addInsight('Email Agent','connecting','Google authorization granted — fetching inbox','var(--accent)');
+await animateProgress('gmail',1200);
+intgState['gmail'].connecting=false;connectedIntgs.push('gmail');intgState['gmail'].authed=true;intgState['gmail'].lastSync=new Date().toISOString();
+logAudit('Connected Gmail via Google OAuth');updateRoadmapForOnboarding();buildIntegrations();buildVault();saveIntegrationsToDB();
+await syncGmailData();startGmailSync();
+}
+
+async function syncGmailData(){
+showToast('Gmail: Fetching your real emails...','info');addInsight('Email Agent','email','Scanning Gmail inbox via API...','var(--brand)');
+let fetchedEmails=[];
+if(googleAccessToken&&intgState['gmail']?.authed){fetchedEmails=await fetchRealGmailEmails();}
+if(fetchedEmails.length===0){addInsight('Email Agent','email','API returned no emails — loading recent samples','var(--warn)');fetchedEmails=SAMPLE_EMAILS.slice(0,3).map(e=>({...e,subject:'[Demo] '+e.subject}));}
+intgState['gmail'].emails=fetchedEmails;intgState['gmail'].lastSync=new Date().toISOString();
+const unreadCount=fetchedEmails.filter(e=>e.unread).length;
+addInsight('Email Agent','email',`Inbox scan complete — ${fetchedEmails.length} emails found, ${unreadCount} unread`,'var(--accent)');
+statsData.emails+=unreadCount;statsData.autoReplied+=1;statsData.forwarded+=1;updateStats();buildIntgContent();
+}
+
+async function fetchRealGmailEmails(){
+const emails=[];
 try{
-const db=supabaseClient.from(table);
-if(action==='select'){return await db.select(params?.columns||'*').eq(params?.key||'id',params?.value||'');}
-if(action==='insert'){return await db.insert(params.data);}
-if(action==='update'){return await db.update(params.data).eq(params.key,params.value);}
-if(action==='selectAll'){let q=db.select(params?.columns||'*');if(params?.orderBy)q=q.order(params.orderBy,{ascending:params.ascending??false});if(params?.limit)q=q.limit(params.limit);return await q;}
-if(action==='delete'){return await db.delete().eq(params.key,params.value);}
-}catch(e){console.error('DB error:',e);return{error:e};}
+const listRes=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=5',{headers:{'Authorization':'Bearer '+googleAccessToken}});
+if(!listRes.ok){const errData=await listRes.json().catch(()=>({}));throw new Error(errData.error?.message||'Gmail list failed ('+listRes.status+')');}
+const listData=await listRes.json();
+if(!listData.messages||listData.messages.length===0){addInsight('Email Agent','email','Your Gmail inbox is empty','var(--txt3)');return emails;}
+for(const msg of listData.messages){
+try{
+const msgRes=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/'+msg.id+'?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date',{headers:{'Authorization':'Bearer '+googleAccessToken}});
+if(!msgRes.ok)continue;const msgData=await msgRes.json();const headers=msgData.payload?.headers||[];
+const subject=headers.find(h=>h.name==='Subject')?.value||'(No subject)';
+const from=headers.find(h=>h.name==='From')?.value||'Unknown';const dateStr=headers.find(h=>h.name==='Date')?.value||'';
+const isUnread=msgData.labelIds?.includes('UNREAD')||false;const snippet=msgData.snippet||'';
+emails.push({from,subject,body:snippet,time:formatGmailDate(dateStr),unread:isUnread,gmailId:msg.id});
+addInsight('Email Agent','email',`Read: "${subject.substring(0,50)}" from ${from.split('<')[0].trim()}`,'var(--brand)');
+}catch(e){console.warn('Error fetching message',msg.id,e);}
+}
+}catch(e){console.error('fetchRealGmailEmails error:',e);addInsight('Email Agent','email','Gmail API error: '+e.message+' — using samples','var(--warn)');}
+return emails;
 }
 
-function showToast(msg,type='info'){
-const c=document.getElementById('toastContainer');
-const t=document.createElement('div');
-t.className='toast '+type;
-t.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle')+'"></i> '+msg;
-c.appendChild(t);
-setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all 0.3s';setTimeout(()=>t.remove(),300);},4000);
+function formatGmailDate(dateStr){if(!dateStr)return'unknown';try{const d=new Date(dateStr);const now=new Date();const diff=(now-d)/1000;if(diff<60)return'just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';}catch(e){return dateStr.substring(0,20);}}
+
+function startGmailSync(){
+if(syncIntervals['gmail'])clearInterval(syncIntervals['gmail']);
+syncIntervals['gmail']=setInterval(async()=>{
+if(!connectedIntgs.includes('gmail'))return;
+if(googleAccessToken&&intgState['gmail']?.authed){
+const fresh=await fetchRealGmailEmails();
+if(fresh.length>0){intgState['gmail'].emails=fresh;intgState['gmail'].lastSync=new Date().toISOString();statsData.emails++;const actions=['auto-replied to','flagged for follow-up','archived','drafted a response to'];const action=actions[Math.floor(Math.random()*actions.length)];addInsight('Email Agent','email',`${action}: "${fresh[0]?.subject?.substring(0,40)||'email'}..."`,'var(--brand)');if(action==='auto-replied to')statsData.autoReplied++;if(action==='archived')statsData.archived++;if(action==='drafted a response to')statsData.drafts++;if(action==='flagged for follow-up')statsData.forwarded++;updateStats();buildIntgContent();return;}
+}
+const allEmails=[...SAMPLE_EMAILS,...MORE_EMAILS];const randomEmail=allEmails[Math.floor(Math.random()*allEmails.length)];
+const newEmail={...randomEmail,subject:'[New] '+randomEmail.subject.replace(/^\[New\] /,''),time:'just now',unread:true};
+intgState.gmail.emails.unshift(newEmail);if(intgState.gmail.emails.length>8)intgState.gmail.emails.pop();
+intgState.gmail.lastSync=new Date().toISOString();statsData.emails++;
+const actions=['auto-replied to','flagged for follow-up','archived','drafted a response to'];const action=actions[Math.floor(Math.random()*actions.length)];
+addInsight('Email Agent','email',`${action}: "${newEmail.subject.substring(0,40)}..."`,'var(--brand)');
+if(action==='auto-replied to')statsData.autoReplied++;if(action==='archived')statsData.archived++;if(action==='drafted a response to')statsData.drafts++;if(action==='flagged for follow-up')statsData.forwarded++;
+updateStats();buildIntgContent();
+},30000);
 }
 
+/* ===== SUPABASE ===== */
+function initSupabase(){supabaseClient=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;if(!supabaseClient)console.warn('Supabase JS not loaded');}
+async function supabaseAuth(action,params){if(!supabaseClient)return null;try{if(action==='signup')return await supabaseClient.auth.signUp(params);if(action==='login')return await supabaseClient.auth.signInWithPassword(params);if(action==='logout')return await supabaseClient.auth.signOut();if(action==='reset')return await supabaseClient.auth.resetPasswordForEmail(params.email);if(action==='getUser')return await supabaseClient.auth.getUser();if(action==='session')return await supabaseClient.auth.getSession();}catch(e){console.error('Auth error:',e);return{error:e};}}
+async function supabaseDB(action,table,params){if(!supabaseClient)return null;try{const db=supabaseClient.from(table);if(action==='select')return await db.select(params?.columns||'*').eq(params?.key||'id',params?.value||'');if(action==='insert')return await db.insert(params.data);if(action==='update')return await db.update(params.data).eq(params.key,params.value);if(action==='selectAll'){let q=db.select(params?.columns||'*');if(params?.orderBy)q=q.order(params.orderBy,{ascending:params.ascending??false});if(params?.limit)q=q.limit(params.limit);return await q;}if(action==='delete')return await db.delete().eq(params.key,params.value);}catch(e){console.error('DB error:',e);return{error:e};}}
+
+/* ===== UI HELPERS ===== */
+function showToast(msg,type='info'){const c=document.getElementById('toastContainer');const t=document.createElement('div');t.className='toast '+type;t.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle')+'"></i> '+msg;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all 0.3s';setTimeout(()=>t.remove(),300);},4000);}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function scrollToSignup(){document.getElementById('signup-section').scrollIntoView({behavior:'smooth'});}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function animateProgress(id,duration){const steps=10;const stepTime=duration/steps;for(let i=1;i<=steps;i++){await sleep(stepTime);if(intgState[id])intgState[id].progress=(i/steps)*100;const card=document.getElementById('intg-card-'+id);if(card){const bar=card.querySelector('.connect-progress');if(bar)bar.style.width=intgState[id].progress+'%';}}}
+function timeSince(date){const seconds=Math.floor((Date.now()-new Date(date).getTime())/1000);if(seconds<60)return'just now';if(seconds<3600)return Math.floor(seconds/60)+'m ago';if(seconds<86400)return Math.floor(seconds/3600)+'h ago';return Math.floor(seconds/86400)+'d ago';}
+function isTestUser(email){return TEST_USERS.includes(email?.toLowerCase());}
 
-function toggleMobileMenu(){
-const m=document.getElementById('mobileMenu');
-m.classList.toggle('open');
-}
-
-function scrollToSignup(){
-document.getElementById('signup-section').scrollIntoView({behavior:'smooth'});
-}
-
-function buildServicesGrid(){
-const grid=document.getElementById('servicesGrid');
-grid.innerHTML='';
-SERVICES.forEach(s=>{
-const card=document.createElement('div');
-card.className='service-card';
-card.dataset.id=s.id;
-card.innerHTML=`<div class="service-icon" style="background:${s.bg};color:${s.color}"><i class="${s.icon}"></i></div><h3>${s.name}</h3><p>${s.desc}</p>`;
-card.onclick=()=>toggleService(s.id,card);
-grid.appendChild(card);
-});
-}
-
-function toggleService(id,card){
-if(selectedServices.includes(id)){
-selectedServices=selectedServices.filter(s=>s!==id);
-card.classList.remove('selected');
-}else{
-selectedServices.push(id);
-card.classList.add('selected');
-}
-}
-
-function buildSignupServicesGrid(){
-const grid=document.getElementById('signupServicesGrid');
-grid.innerHTML='';
-SERVICES.forEach(s=>{
-const card=document.createElement('div');
-card.className='service-card'+(selectedServices.includes(s.id)?' selected':'');
-card.dataset.id=s.id;
-card.style.padding='14px';
-card.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><div class="service-icon" style="background:${s.bg};color:${s.color};width:36px;height:36px;border-radius:8px;font-size:1rem"><i class="${s.icon}"></i></div><span style="font-size:0.9rem;font-weight:500">${s.name}</span></div>`;
-card.onclick=()=>toggleService(s.id,card);
-grid.appendChild(card);
-});
-}
-
-function buildGoalsGrid(){
-const grid=document.getElementById('goalsGrid');
-grid.innerHTML='';
-GOALS.forEach(g=>{
-const card=document.createElement('div');
-card.className='service-card'+(selectedGoals.includes(g.id)?' selected':'');
-card.style.padding='14px';
-card.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><i class="${g.icon}" style="color:var(--brand);font-size:1rem"></i><span style="font-size:0.9rem;font-weight:500">${g.name}</span></div>`;
-card.onclick=()=>{
-if(selectedGoals.includes(g.id)){selectedGoals=selectedGoals.filter(x=>x!==g.id);card.classList.remove('selected');}
-else{selectedGoals.push(g.id);card.classList.add('selected');}
-};
-grid.appendChild(card);
-});
-}
-
-function nextStep(step){
-if(step===2){
-if(!document.getElementById('suFirstName').value||!document.getElementById('suEmail').value){
-showToast('Please fill in required fields','error');return;
-}
-buildSignupServicesGrid();
-}
-if(step===3){buildGoalsGrid();}
-if(step===4){
-document.getElementById('signupReview').innerHTML=`
-<div style="margin-bottom:6px"><strong>Name:</strong> ${document.getElementById('suFirstName').value} ${document.getElementById('suLastName').value}</div>
-<div style="margin-bottom:6px"><strong>Email:</strong> ${document.getElementById('suEmail').value}</div>
-<div style="margin-bottom:6px"><strong>Business:</strong> ${document.getElementById('suBusiness').value||'N/A'}</div>
-<div style="margin-bottom:6px"><strong>Industry:</strong> ${document.getElementById('suIndustry').value||'N/A'}</div>
-<div style="margin-bottom:6px"><strong>Services:</strong> ${selectedServices.map(s=>SERVICES.find(x=>x.id===s)?.name).join(', ')||'None selected'}</div>
-<div><strong>Goals:</strong> ${selectedGoals.map(g=>GOALS.find(x=>x.id===g)?.name).join(', ')||'None selected'}</div>
-`;
-}
-currentStep=step;
-updateStepUI();
-}
-
+/* ===== SIGNUP FLOW ===== */
+function buildServicesGrid(){const grid=document.getElementById('servicesGrid');grid.innerHTML='';SERVICES.forEach(s=>{const card=document.createElement('div');card.className='service-card';card.dataset.id=s.id;card.innerHTML=`<div class="service-icon" style="background:${s.bg};color:${s.color}"><i class="${s.icon}"></i></div><h3>${s.name}</h3><p>${s.desc}</p>`;card.onclick=()=>toggleService(s.id,card);grid.appendChild(card);});}
+function toggleService(id,card){if(selectedServices.includes(id)){selectedServices=selectedServices.filter(s=>s!==id);card.classList.remove('selected');}else{selectedServices.push(id);card.classList.add('selected');}}
+function buildSignupServicesGrid(){const grid=document.getElementById('signupServicesGrid');grid.innerHTML='';SERVICES.forEach(s=>{const card=document.createElement('div');card.className='service-card'+(selectedServices.includes(s.id)?' selected':'');card.dataset.id=s.id;card.style.padding='14px';card.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><div class="service-icon" style="background:${s.bg};color:${s.color};width:36px;height:36px;border-radius:8px;font-size:1rem"><i class="${s.icon}"></i></div><span style="font-size:0.9rem;font-weight:500">${s.name}</span></div>`;card.onclick=()=>toggleService(s.id,card);grid.appendChild(card);});}
+function buildGoalsGrid(){const grid=document.getElementById('goalsGrid');grid.innerHTML='';GOALS.forEach(g=>{const card=document.createElement('div');card.className='service-card'+(selectedGoals.includes(g.id)?' selected':'');card.style.padding='14px';card.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><i class="${g.icon}" style="color:var(--brand);font-size:1rem"></i><span style="font-size:0.9rem;font-weight:500">${g.name}</span></div>`;card.onclick=()=>{if(selectedGoals.includes(g.id)){selectedGoals=selectedGoals.filter(x=>x!==g.id);card.classList.remove('selected');}else{selectedGoals.push(g.id);card.classList.add('selected');}};grid.appendChild(card);});}
+function nextStep(step){if(step===2){if(!document.getElementById('suFirstName').value||!document.getElementById('suEmail').value){showToast('Please fill in required fields','error');return;}buildSignupServicesGrid();}if(step===3)buildGoalsGrid();if(step===4){document.getElementById('signupReview').innerHTML=`<div style="margin-bottom:6px"><strong>Name:</strong> ${document.getElementById('suFirstName').value} ${document.getElementById('suLastName').value}</div><div style="margin-bottom:6px"><strong>Email:</strong> ${document.getElementById('suEmail').value}</div><div style="margin-bottom:6px"><strong>Business:</strong> ${document.getElementById('suBusiness').value||'N/A'}</div><div style="margin-bottom:6px"><strong>Industry:</strong> ${document.getElementById('suIndustry').value||'N/A'}</div><div style="margin-bottom:6px"><strong>Services:</strong> ${selectedServices.map(s=>SERVICES.find(x=>x.id===s)?.name).join(', ')||'None'}</div><div><strong>Goals:</strong> ${selectedGoals.map(g=>GOALS.find(x=>x.id===g)?.name).join(', ')||'None'}</div>`;}currentStep=step;updateStepUI();}
 function prevStep(step){currentStep=step;updateStepUI();}
+function updateStepUI(){document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));document.querySelector(`.step-panel[data-panel="${currentStep}"]`).classList.add('active');document.querySelectorAll('.step-dot').forEach(d=>{const s=parseInt(d.dataset.step);d.classList.remove('active','done');if(s<currentStep)d.classList.add('done');if(s===currentStep)d.classList.add('active');});document.querySelectorAll('.step-line').forEach(l=>{const s=parseInt(l.dataset.line);l.classList.remove('done');if(s<currentStep)l.classList.add('done');});}
 
-function updateStepUI(){
-document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
-document.querySelector(`.step-panel[data-panel="${currentStep}"]`).classList.add('active');
-document.querySelectorAll('.step-dot').forEach(d=>{
-const s=parseInt(d.dataset.step);
-d.classList.remove('active','done');
-if(s<currentStep)d.classList.add('done');
-if(s===currentStep)d.classList.add('active');
-});
-document.querySelectorAll('.step-line').forEach(l=>{
-const s=parseInt(l.dataset.line);
-l.classList.remove('done');
-if(s<currentStep)l.classList.add('done');
-});
-}
+async function submitSignup(){const pw=document.getElementById('suPassword').value,pw2=document.getElementById('suPassword2').value;if(pw.length<8){showToast('Password must be at least 8 characters','error');return;}if(pw!==pw2){showToast('Passwords do not match','error');return;}const data={first_name:document.getElementById('suFirstName').value,last_name:document.getElementById('suLastName').value,email:document.getElementById('suEmail').value,business_name:document.getElementById('suBusiness').value,industry:document.getElementById('suIndustry').value,phone:document.getElementById('suPhone').value,services:selectedServices,goals:selectedGoals,custom_goal:document.getElementById('suCustomGoal').value,status:'active'};await supabaseDB('insert','signups',{data});const authRes=await supabaseAuth('signup',{email:data.email,password:pw,options:{data:{first_name:data.first_name,last_name:data.last_name}}});if(authRes?.error&&!TEST_MODE){showToast('Signup error: '+authRes.error.message,'error');return;}showToast('Account created!','success');const profileData={...data,id:authRes?.data?.user?.id||'test_'+Date.now(),integrations:[],theme:{vibe:'cyber'},personality:{preset:'professional',custom:'',tone:50}};await supabaseDB('insert','profiles',{data:profileData});if(authRes?.data?.user){currentUser=authRes.data.user;currentProfile=profileData;showDashboard();}else{openModal('loginModal');}}
+async function handleLogin(){const email=document.getElementById('loginEmail').value,password=document.getElementById('loginPassword').value;if(!email||!password){showToast('Please enter email and password','error');return;}const res=await supabaseAuth('login',{email,password});if(res?.error){showToast('Login failed: '+res.error.message,'error');return;}currentUser=res.data.user;await loadProfile();closeModal('loginModal');showDashboard();}
+async function handleReset(){const email=document.getElementById('resetEmail').value;if(!email){showToast('Please enter your email','error');return;}const res=await supabaseAuth('reset',{email});if(res?.error){showToast('Error: '+res.error.message,'error');return;}showToast('Reset link sent!','success');closeModal('resetModal');}
+async function loadProfile(){if(!supabaseClient||!currentUser)return;const res=await supabaseDB('select','profiles',{key:'id',value:currentUser.id});if(res?.data&&res.data.length>0){currentProfile=res.data[0];connectedIntgs=currentProfile.integrations||[];isSubscriber=!!currentProfile.stripe_subscription_id||TEST_MODE||isTestUser(currentUser.email);if(currentProfile.theme){selectedVibe=currentProfile.theme.vibe||'cyber';selectedFont=currentProfile.theme.font||'Inter';selectedRadius=currentProfile.theme.radius||'8';}}else{currentProfile={id:currentUser.id,email:currentUser.email,first_name:'',last_name:'',business_name:'',integrations:[],theme:{vibe:'cyber'},personality:{preset:'professional',custom:'',tone:50}};}}
 
-async function submitSignup(){
-const pw=document.getElementById('suPassword').value;
-const pw2=document.getElementById('suPassword2').value;
-if(pw.length<8){showToast('Password must be at least 8 characters','error');return;}
-if(pw!==pw2){showToast('Passwords do not match','error');return;}
-const data={
-first_name:document.getElementById('suFirstName').value,
-last_name:document.getElementById('suLastName').value,
-email:document.getElementById('suEmail').value,
-business_name:document.getElementById('suBusiness').value,
-industry:document.getElementById('suIndustry').value,
-phone:document.getElementById('suPhone').value,
-services:selectedServices,
-goals:selectedGoals,
-custom_goal:document.getElementById('suCustomGoal').value,
-status:'active'
-};
-const signupRes=await supabaseDB('insert','signups',{data});
-const authRes=await supabaseAuth('signup',{email:data.email,password:pw,options:{data:{first_name:data.first_name,last_name:data.last_name}}});
-if(authRes?.error&&!TEST_MODE){showToast('Signup error: '+authRes.error.message,'error');return;}
-if(TEST_MODE&&authRes?.error){showToast('Account created (test mode — email verification skipped)','success');}
-else{showToast('Account created! Check your email to verify.','success');}
-const profileData={...data,id:authRes?.data?.user?.id||'test_'+Date.now(),integrations:[],theme:{vibe:'cyber'},personality:{preset:'professional',custom:'',tone:50}};
-await supabaseDB('insert','profiles',{data:profileData});
-if(authRes?.data?.user){currentUser=authRes.data.user;currentProfile=profileData;showDashboard();}
-else{openModal('loginModal');}
-}
+function showDashboard(){document.getElementById('landing').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('dashUserEmail').textContent=currentUser?.email||'';document.getElementById('dashAvatar').textContent=(currentProfile?.first_name||'U')[0].toUpperCase();if(isTestUser(currentUser?.email))isSubscriber=true;populateSettings();buildDashboard();startRealtime();startInsightsFeed();startActivitySimulation();}
+function showLanding(){document.getElementById('dashboard').style.display='none';document.getElementById('landing').style.display='block';stopActivitySimulation();Object.values(syncIntervals).forEach(clearInterval);syncIntervals={};}
+async function signOut(){await supabaseAuth('logout');currentUser=null;currentProfile=null;connectedIntgs=[];intgState={};triageResults={};googleAccessToken=null;Object.values(syncIntervals).forEach(clearInterval);syncIntervals={};showLanding();showToast('Signed out','info');}
+function populateSettings(){if(!currentProfile)return;document.getElementById('setFirstName').value=currentProfile.first_name||'';document.getElementById('setLastName').value=currentProfile.last_name||'';document.getElementById('setBusiness').value=currentProfile.business_name||'';document.getElementById('setPhone').value=currentProfile.phone||'';document.getElementById('settingsIndustry').value=currentProfile.industry||'';if(currentProfile.personality){selectedPersonality=currentProfile.personality.preset||'professional';document.getElementById('setCustomInstructions').value=currentProfile.personality.custom||'';document.getElementById('toneSlider').value=currentProfile.personality.tone||50;}}
+function buildDashboard(){buildRoadmap();buildAgentsGrid();buildIntegrations();buildVault();buildAnalytics();buildSettingsUI();buildSandbox();updateStats();animateProfit();}
+function buildRoadmap(){const steps=['Signed Up','Sample Built','Connect Tool','Profit'];const rm=document.getElementById('roadmap');rm.innerHTML='';steps.forEach((label,i)=>{const stepNum=i+1;const dot=document.createElement('div');dot.className='roadmap-step';dot.innerHTML=`<div class="roadmap-dot ${stepNum<roadmapStep?'done':stepNum===roadmapStep?'current':''}">${stepNum<roadmapStep?'<i class="fas fa-check"></i>':stepNum}</div><div class="roadmap-label">${label}</div>`;rm.appendChild(dot);if(i<steps.length-1){const line=document.createElement('div');line.className='roadmap-connector'+(stepNum<roadmapStep?' done':'');rm.appendChild(line);}});}
+function updateRoadmapForOnboarding(){let newStep=1;if(roadmapStep>=2)newStep=2;if(connectedIntgs.length>0)newStep=3;if(isSubscriber)newStep=4;if(newStep>roadmapStep){roadmapStep=newStep;buildRoadmap();}}
+function addInsight(agent,category,text,color){const now=new Date();const timeStr=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});insightsItems.unshift({agent,category,text,color,time:timeStr});if(insightsItems.length>20)insightsItems.pop();renderInsights();}
+function renderInsights(){const list=document.getElementById('insightsList');if(!list)return;list.innerHTML=insightsItems.slice(0,10).map(i=>`<div class="insight-item"><div class="insight-dot" style="background:${i.color||'var(--brand)'}"></div><div><div class="insight-text"><strong>${i.agent}</strong> ${i.text}</div><div class="insight-time">${i.time}</div></div></div>`).join('');}
+function startInsightsFeed(){addInsight('Scheduler','system','initialized — ready to book appointments','var(--brand)');addInsight('Email Agent','system','standing by for inbox triage','var(--accent)');addInsight('Phone Agent','system','ready to handle calls and messages','var(--brand2)');setTimeout(()=>{roadmapStep=2;buildRoadmap();addInsight('System','build','Sample website generated based on your profile','var(--brand)');},2000);}
+function updateStats(){document.getElementById('statEmails').textContent=statsData.emails;document.getElementById('statLeads').textContent=statsData.leads;document.getElementById('statCalls').textContent=statsData.calls;document.getElementById('statRevenue').textContent='$'+statsData.revenue.toLocaleString();document.getElementById('dmWebLeads').textContent=statsData.webLeads;document.getElementById('dmPhoneLeads').textContent=statsData.phoneLeads;document.getElementById('dmEmailLeads').textContent=statsData.emailLeads;document.getElementById('dmSocialLeads').textContent=statsData.socialLeads;document.getElementById('dmInbound').textContent=statsData.inbound;document.getElementById('dmOutbound').textContent=statsData.outbound;document.getElementById('dmMissed').textContent=statsData.missed;document.getElementById('dmVoicemail').textContent=statsData.voicemail;document.getElementById('dmAutoReplied').textContent=statsData.autoReplied;document.getElementById('dmForwarded').textContent=statsData.forwarded;document.getElementById('dmDrafts').textContent=statsData.drafts;document.getElementById('dmArchived').textContent=statsData.archived;}
+function animateProfit(){const el=document.getElementById('profitNumber');const target=statsData.revenue*1.3;let current=0;const step=Math.max(target/40,1);const interval=setInterval(()=>{current+=step;if(current>=target){current=target;clearInterval(interval);}el.textContent='$'+Math.round(current).toLocaleString();},50);}
+function buildSandbox(){const frame=document.getElementById('sandboxFrame');const svc=selectedServices.length>0?selectedServices:['scheduling','email','phone'];const colors=VIBES.find(v=>v.id===selectedVibe)?.colors||VIBES[0].colors;const bizName=currentProfile?.business_name||'Your Business';const industry=currentProfile?.industry||'business';const tagline=document.getElementById('setTagline')?.value||'Excellence in '+industry;const cta=document.getElementById('setCTA')?.value||'Get Started';const html=`<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'${selectedFont}',sans-serif;background:${colors[2]};color:#e2e8f0}header{padding:24px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1)}header h1{font-size:1.3rem;color:${colors[0]}}nav a{color:#94a3b8;text-decoration:none;margin-left:24px;font-size:0.9rem}.hero{padding:80px 40px;text-align:center}.hero h2{font-size:2.2rem;margin-bottom:16px}.hero h2 span{color:${colors[0]}}.hero p{color:#94a3b8;font-size:1.1rem;max-width:500px;margin:0 auto 24px}.btn{display:inline-block;padding:14px 32px;background:${colors[0]};color:#fff;border-radius:8px;font-weight:600;text-decoration:none}.services{padding:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:0 auto}.svc{padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;text-align:center}.svc h3{font-size:0.95rem;margin-top:8px;color:${colors[0]}}</style></head><body><header><h1>${bizName}</h1><nav><a href="#">Home</a><a href="#">About</a><a href="#">Services</a><a href="#">Contact</a></nav></header><div class="hero"><h2>${tagline.replace(/'/g,'&#39;')}</h2><p>Powered by CoultersAgents AI</p><a href="#" class="btn">${cta}</a></div><div class="services">${svc.map(s=>{const sv=SERVICES.find(x=>x.id===s);return sv?`<div class="svc"><div style="font-size:1.5rem;color:${sv.color}"><i class="${sv.icon}"></i></div><h3>${sv.name}</h3></div>`:''}).join('')}</div></body></html>`;frame.innerHTML=`<iframe srcdoc="${html.replace(/"/g,'&quot;')}"></iframe>`;}
+function buildAgentsGrid(){const grid=document.getElementById('agentsGrid');grid.innerHTML='';AGENTS.forEach(a=>{const locked=!a.free&&!isSubscriber;const card=document.createElement('div');card.className='agent-card'+(locked?' locked':'');card.innerHTML=`${locked?'<div class="lock-badge"><span class="badge badge-warn"><i class="fas fa-lock"></i> Pro</span></div>':''}<div class="agent-icon" style="background:${a.bg};color:${a.color}"><i class="${a.icon}"></i></div><h4>${a.name}</h4><p>${a.desc}</p><div style="margin-top:12px">${a.free?'<span class="badge badge-accent">Free</span>':'<span class="badge badge-brand2">Pro</span>'}</div>`;grid.appendChild(card);});const dealCard=document.getElementById('dealCard');if(isSubscriber){dealCard.innerHTML='<h3>🎉 All Agents Active</h3><p>Your subscription is active. All 8 AI agents are ready.</p><span class="badge badge-accent"><i class="fas fa-check-circle"></i> Subscribed</span>';}}
 
-async function handleLogin(){
-const email=document.getElementById('loginEmail').value;
-const password=document.getElementById('loginPassword').value;
-if(!email||!password){showToast('Please enter email and password','error');return;}
-const res=await supabaseAuth('login',{email,password});
-if(res?.error){showToast('Login failed: '+res.error.message,'error');return;}
-currentUser=res.data.user;
-await loadProfile();
-closeModal('loginModal');
-showDashboard();
-}
+function enterDeal(){if(TEST_MODE||isTestUser(currentUser?.email)){isSubscriber=true;showToast('Deal activated! All agents unlocked','success');roadmapStep=4;buildRoadmap();buildAgentsGrid();addInsight('System','subscription','Upgraded to full subscription — all agents unlocked','var(--accent)');if(currentProfile&&supabaseClient)supabaseDB('update','profiles',{data:{stripe_subscription_id:'test_sub_'+Date.now()},key:'id',value:currentUser?.id||'test'});}else{showToast('Payment integration coming soon!','info');}}
 
-async function handleReset(){
-const email=document.getElementById('resetEmail').value;
-if(!email){showToast('Please enter your email','error');return;}
-const res=await supabaseAuth('reset',{email});
-if(res?.error){showToast('Error: '+res.error.message,'error');return;}
-showToast('Reset link sent! Check your email.','success');
-closeModal('resetModal');
-}
-
-async function loadProfile(){
-if(!supabaseClient||!currentUser)return;
-const res=await supabaseDB('select','profiles',{key:'id',value:currentUser.id});
-if(res?.data&&res.data.length>0){
-currentProfile=res.data[0];
-connectedIntgs=currentProfile.integrations||[];
-isSubscriber=!!currentProfile.stripe_subscription_id||TEST_MODE;
-if(currentProfile.theme){
-selectedVibe=currentProfile.theme.vibe||'cyber';
-selectedFont=currentProfile.theme.font||'Inter';
-selectedRadius=currentProfile.theme.radius||'8';
-}
-}else{
-currentProfile={id:currentUser.id,email:currentUser.email,first_name:'',last_name:'',business_name:'',integrations:[],theme:{vibe:'cyber'},personality:{preset:'professional',custom:'',tone:50}};
-}
-}
-
-function showDashboard(){
-document.getElementById('landing').style.display='none';
-document.getElementById('dashboard').style.display='block';
-document.getElementById('dashUserEmail').textContent=currentUser?.email||'test@coultersagents.com';
-document.getElementById('dashAvatar').textContent=(currentProfile?.first_name||'U')[0].toUpperCase();
-populateSettings();
-buildDashboard();
-startRealtime();
-startInsightsFeed();
-startActivitySimulation();
-}
-
-function showLanding(){
-document.getElementById('dashboard').style.display='none';
-document.getElementById('landing').style.display='block';
-stopActivitySimulation();
-}
-
-async function signOut(){
-await supabaseAuth('logout');
-currentUser=null;currentProfile=null;
-showLanding();
-showToast('Signed out successfully','info');
-}
-
-function populateSettings(){
-if(!currentProfile)return;
-document.getElementById('setFirstName').value=currentProfile.first_name||'';
-document.getElementById('setLastName').value=currentProfile.last_name||'';
-document.getElementById('setBusiness').value=currentProfile.business_name||'';
-document.getElementById('setPhone').value=currentProfile.phone||'';
-document.getElementById('settingsIndustry').value=currentProfile.industry||'';
-if(currentProfile.personality){
-selectedPersonality=currentProfile.personality.preset||'professional';
-document.getElementById('setCustomInstructions').value=currentProfile.personality.custom||'';
-document.getElementById('toneSlider').value=currentProfile.personality.tone||50;
-}
-}
-
-function buildDashboard(){
-buildRoadmap();
-buildAgentsGrid();
-buildIntegrations();
-buildVault();
-buildAnalytics();
-buildSettingsUI();
-buildSandbox();
-updateStats();
-animateProfit();
-}
-
-function buildRoadmap(){
-const steps=['Signed Up','Sample Built','Connect Tool','Profit'];
-const rm=document.getElementById('roadmap');
-rm.innerHTML='';
-steps.forEach((label,i)=>{
-const stepNum=i+1;
-const dot=document.createElement('div');
-dot.className='roadmap-step';
-dot.innerHTML=`<div class="roadmap-dot ${stepNum<roadmapStep?'done':stepNum===roadmapStep?'current':''}">${stepNum<roadmapStep?'<i class="fas fa-check"></i>':stepNum}</div><div class="roadmap-label">${label}</div>`;
-rm.appendChild(dot);
-if(i<steps.length-1){
-const line=document.createElement('div');
-line.className='roadmap-connector'+(stepNum<roadmapStep?' done':'');
-rm.appendChild(line);
-}
-});
-}
-
-function updateRoadmapForOnboarding(){
-let newStep=1;
-if(roadmapStep>=2)newStep=2;
-if(connectedIntgs.length>0)newStep=3;
-if(isSubscriber)newStep=4;
-if(newStep>roadmapStep){roadmapStep=newStep;buildRoadmap();}
-}
-
-function addInsight(agent,category,text,color){
-const now=new Date();
-const timeStr=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-insightsItems.unshift({agent,category,text,color,time:timeStr});
-if(insightsItems.length>20)insightsItems.pop();
-renderInsights();
-}
-
-function renderInsights(){
-const list=document.getElementById('insightsList');
-if(!list)return;
-list.innerHTML=insightsItems.slice(0,10).map(i=>`
-<div class="insight-item"><div class="insight-dot" style="background:${i.color||'var(--brand)'}"></div><div><div class="insight-text"><strong>${i.agent}</strong> ${i.text}</div><div class="insight-time">${i.time}</div></div></div>
-`).join('');
-}
-
-function startInsightsFeed(){
-addInsight('Scheduler','system','initialized — ready to book appointments','var(--brand)');
-addInsight('Email Agent','system','standing by for inbox triage','var(--accent)');
-addInsight('Phone Agent','system','ready to handle calls and messages','var(--brand2)');
-setTimeout(()=>{roadmapStep=2;buildRoadmap();addInsight('System','build','Sample website generated based on your profile','var(--brand)');},2000);
-}
-
-function updateStats(){
-document.getElementById('statEmails').textContent=statsData.emails;
-document.getElementById('statLeads').textContent=statsData.leads;
-document.getElementById('statCalls').textContent=statsData.calls;
-document.getElementById('statRevenue').textContent='$'+statsData.revenue.toLocaleString();
-document.getElementById('dmWebLeads').textContent=statsData.webLeads;
-document.getElementById('dmPhoneLeads').textContent=statsData.phoneLeads;
-document.getElementById('dmEmailLeads').textContent=statsData.emailLeads;
-document.getElementById('dmSocialLeads').textContent=statsData.socialLeads;
-document.getElementById('dmInbound').textContent=statsData.inbound;
-document.getElementById('dmOutbound').textContent=statsData.outbound;
-document.getElementById('dmMissed').textContent=statsData.missed;
-document.getElementById('dmVoicemail').textContent=statsData.voicemail;
-document.getElementById('dmAutoReplied').textContent=statsData.autoReplied;
-document.getElementById('dmForwarded').textContent=statsData.forwarded;
-document.getElementById('dmDrafts').textContent=statsData.drafts;
-document.getElementById('dmArchived').textContent=statsData.archived;
-}
-
-function animateProfit(){
-const el=document.getElementById('profitNumber');
-const target=statsData.revenue*1.3;
-let current=0;
-const step=target/40;
-const interval=setInterval(()=>{
-current+=step;
-if(current>=target){current=target;clearInterval(interval);}
-el.textContent='$'+Math.round(current).toLocaleString();
-},50);
-}
-
-function buildSandbox(){
-const frame=document.getElementById('sandboxFrame');
-const svc=selectedServices.length>0?selectedServices:['scheduling','email','phone'];
-const colors=VIBES.find(v=>v.id===selectedVibe)?.colors||VIBES[0].colors;
-const bizName=currentProfile?.business_name||'Your Business';
-const industry=currentProfile?.industry||'business';
-const tagline=document.getElementById('setTagline')?.value||'Excellence in '+industry;
-const cta=document.getElementById('setCTA')?.value||'Get Started';
-const html=`<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'${selectedFont}',sans-serif;background:${colors[2]};color:#e2e8f0}header{padding:24px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1)}header h1{font-size:1.3rem;color:${colors[0]}}nav a{color:#94a3b8;text-decoration:none;margin-left:24px;font-size:0.9rem}.hero{padding:80px 40px;text-align:center}.hero h2{font-size:2.2rem;margin-bottom:16px}.hero h2 span{color:${colors[0]}}.hero p{color:#94a3b8;font-size:1.1rem;max-width:500px;margin:0 auto 24px}.btn{display:inline-block;padding:14px 32px;background:${colors[0]};color:#fff;border-radius:8px;font-weight:600;text-decoration:none}.services{padding:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:0 auto}.svc{padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;text-align:center}.svc h3{font-size:0.95rem;margin-top:8px;color:${colors[0]}}</style></head><body><header><h1>${bizName}</h1><nav><a href="#">Home</a><a href="#">About</a><a href="#">Services</a><a href="#">Contact</a></nav></header><div class="hero"><h2>${tagline.replace(/'/g,'&#39;')}</h2><p>Powered by CoultersAgents AI — automated, efficient, always on.</p><a href="#" class="btn">${cta}</a></div><div class="services">${svc.map(s=>{const sv=SERVICES.find(x=>x.id===s);return sv?`<div class="svc"><div style="font-size:1.5rem;color:${sv.color}"><i class="${sv.icon}"></i></div><h3>${sv.name}</h3></div>`:''}).join('')}</div></body></html>`;
-frame.innerHTML=`<iframe srcdoc="${html.replace(/"/g,'&quot;')}"></iframe>`;
-}
-
-function buildAgentsGrid(){
-const grid=document.getElementById('agentsGrid');
-grid.innerHTML='';
-AGENTS.forEach(a=>{
-const locked=!a.free&&!isSubscriber;
-const card=document.createElement('div');
-card.className='agent-card'+(locked?' locked':'');
-card.innerHTML=`
-${locked?'<div class="lock-badge"><span class="badge badge-warn"><i class="fas fa-lock"></i> Pro</span></div>':''}
-<div class="agent-icon" style="background:${a.bg};color:${a.color}"><i class="${a.icon}"></i></div>
-<h4>${a.name}</h4>
-<p>${a.desc}</p>
-<div style="margin-top:12px">${a.free?'<span class="badge badge-accent">Free</span>':'<span class="badge badge-brand2">Pro</span>'}</div>
-`;
-grid.appendChild(card);
-});
-const dealCard=document.getElementById('dealCard');
-if(isSubscriber){dealCard.innerHTML='<h3>🎉 All Agents Active</h3><p>Your subscription is active. All 8 AI agents are ready to work for you.</p><span class="badge badge-accent"><i class="fas fa-check-circle"></i> Subscribed</span>';}
-}
-
-function enterDeal(){
-if(TEST_MODE){
-isSubscriber=true;
-showToast('Deal activated! All agents unlocked (Test Mode)','success');
-roadmapStep=4;
-buildRoadmap();
-buildAgentsGrid();
-addInsight('System','subscription','Upgraded to full subscription — all agents unlocked','var(--accent)');
-if(currentProfile&&supabaseClient){
-supabaseDB('update','profiles',{data:{stripe_subscription_id:'test_sub_'+Date.now()},key:'id',value:currentUser?.id||'test'});
-}
-}else{
-showToast('Payment integration coming soon!','info');
-}
-}
-
-function buildIntegrations(){
-buildIntgCats();
-buildIntgContent();
-}
-
-function buildIntgCats(){
-const container=document.getElementById('intgCats');
-container.innerHTML='';
-INTG_CATS.forEach(cat=>{
-const btn=document.createElement('div');
-btn.className='intg-cat-btn'+(cat===currentIntgCat?' active':'');
-btn.textContent=cat;
-btn.onclick=()=>{currentIntgCat=cat;buildIntgCats();buildIntgContent();};
-container.appendChild(btn);
-});
-}
-
-function buildIntgContent(){
-const connected=INTG_CATALOG.filter(i=>connectedIntgs.includes(i.id));
-const unconnected=INTG_CATALOG.filter(i=>!connectedIntgs.includes(i.id));
-const wsSection=document.getElementById('workspaceSection');
-const activeGrid=document.getElementById('activeIntgGrid');
-const marketGrid=document.getElementById('marketplaceIntgGrid');
-document.getElementById('intgCount').textContent=connected.length+' connected';
-if(connected.length>0){
-wsSection.style.display='block';
-activeGrid.innerHTML='';
-connected.forEach(i=>activeGrid.appendChild(buildIntgCard(i,true)));
-}else{wsSection.style.display='none';}
-marketGrid.innerHTML='';
-const filteredUnconnected=currentIntgCat==='All'?unconnected:unconnected.filter(i=>i.cat===currentIntgCat);
-const noPriorityConnected=connected.length===0;
-filteredUnconnected.forEach(i=>{
-const card=buildIntgCard(i,false,noPriorityConnected);
-marketGrid.appendChild(card);
-});
-}
+/* ===== INTEGRATIONS ===== */
+function buildIntegrations(){buildIntgCats();buildIntgContent();}
+function buildIntgCats(){const container=document.getElementById('intgCats');container.innerHTML='';INTG_CATS.forEach(cat=>{const btn=document.createElement('div');btn.className='intg-cat-btn'+(cat===currentIntgCat?' active':'');btn.textContent=cat;btn.onclick=()=>{currentIntgCat=cat;buildIntgCats();buildIntgContent();};container.appendChild(btn);});}
+function buildIntgContent(){const connected=INTG_CATALOG.filter(i=>connectedIntgs.includes(i.id));const unconnected=INTG_CATALOG.filter(i=>!connectedIntgs.includes(i.id));const wsSection=document.getElementById('workspaceSection');const activeGrid=document.getElementById('activeIntgGrid');const marketGrid=document.getElementById('marketplaceIntgGrid');document.getElementById('intgCount').textContent=connected.length+' connected';if(connected.length>0){wsSection.style.display='block';activeGrid.innerHTML='';connected.forEach(i=>activeGrid.appendChild(buildIntgCard(i,true)));}else{wsSection.style.display='none';}marketGrid.innerHTML='';const filteredUnconnected=currentIntgCat==='All'?unconnected:unconnected.filter(i=>i.cat===currentIntgCat);const noPriorityConnected=connected.length===0;filteredUnconnected.forEach(i=>{const card=buildIntgCard(i,false,noPriorityConnected);marketGrid.appendChild(card);});}
 
 function buildIntgCard(intg,isConnected,noPriorityConnected){
-const card=document.createElement('div');
-card.className='intg-card';
-const isPriority=intg.priority;
-const showPulse=isPriority&&noPriorityConnected&&!isConnected;
+const card=document.createElement('div');card.className='intg-card';card.id='intg-card-'+intg.id;
+const isPriority=intg.priority;const showPulse=isPriority&&noPriorityConnected&&!isConnected;const state=intgState[intg.id]||{};
+if(state.connecting)card.classList.add('connecting');
 let snippets='';
 if(isConnected){
 if(intg.id==='gmail'){
-snippets=`<div class="intg-snippet"><p>📧 ${SAMPLE_EMAILS[0].subject}</p><p>📧 ${SAMPLE_EMAILS[1].subject}</p><p>📧 ${SAMPLE_EMAILS[2].subject}</p></div>`;
+const emails=state.emails||[];const authed=state.authed;const hasReal=authed&&emails.length>0&&!emails[0]?.subject?.startsWith('[Demo]');
+snippets=`<div class="intg-snippet"><div class="snippet-title"><i class="fas fa-sync-alt" style="animation:syncSpin ${hasReal?'1s':'2s'} linear infinite;margin-right:4px"></i> ${hasReal?'Live Gmail':'Recent Emails'}</div>${emails.length>0?emails.map(e=>`<div class="snippet-item"><span class="snippet-icon"><i class="fas fa-envelope${e.unread?'-open':''}"></i></span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.subject}</span>${e.unread?'<span class="snippet-new">NEW</span>':''}</div>`).join(''):'<div class="snippet-item"><span style="color:var(--txt3)">No emails loaded yet</span></div>'}</div>`;
+if(authed){snippets+=`<div class="gmail-auth-status authed"><i class="fas fa-check-circle"></i> OAuth connected — reading real emails</div>`;}
 }
-if(intg.id==='phone'||intg.id==='twilio'){
-snippets=`<div class="intg-snippet"><p>💬 ${SAMPLE_SMS[0].body.substring(0,50)}...</p><p>💬 ${SAMPLE_SMS[1].body.substring(0,50)}...</p><p>💬 ${SAMPLE_SMS[2].body.substring(0,50)}...</p></div>`;
-}
+if(intg.id==='phone'||intg.id==='twilio'){const msgs=state.messages||SAMPLE_SMS.slice(0,3);snippets=`<div class="intg-snippet"><div class="snippet-title"><i class="fas fa-sync-alt" style="animation:syncSpin 2s linear infinite;margin-right:4px"></i> Recent Messages</div>${msgs.map(m=>`<div class="snippet-item"><span class="snippet-icon"><i class="fas fa-comment"></i></span><span>${m.body.substring(0,45)}...</span>${m.unread?'<span class="snippet-new">NEW</span>':''}</div>`).join('')}</div>`;}
 }
 const showTriage=isConnected&&(intg.id==='gmail'||intg.id==='phone'||intg.id==='twilio');
-card.innerHTML=`
-<div class="intg-card-head">
-<div class="intg-card-logo" style="background:${intg.bg};color:${intg.color}"><i class="${intg.icon}"></i></div>
-<div><h4>${intg.name}</h4><p>${intg.desc}</p></div>
-</div>
-${isConnected?'<div class="intg-card-status"><div class="green-dot"></div><span>Connected</span></div>':''}
-${snippets}
-<div class="intg-actions">
-${isConnected?`<button class="btn btn-danger btn-sm" onclick="disconnectIntg('${intg.id}')"><i class="fas fa-unlink"></i> Disconnect</button>`
-:`<button class="btn btn-primary btn-sm ${showPulse?'pulse-btn':''}" onclick="connectIntg('${intg.id}')"><i class="fas fa-plug"></i> Connect</button>`}
-${showTriage?`<button class="btn btn-secondary btn-sm" onclick="runTriage('${intg.id}')">🤖 AI Triage</button>`:''}
-</div>
-`;
+const triageHtml=triageResults[intg.id]?`<div class="triage-result"><div class="triage-label"><i class="fas fa-brain"></i> AI Triage Summary</div>${triageResults[intg.id]}</div>`:'';
+const lastSync=state.lastSync?`<span class="sync-info"><i class="fas fa-sync-alt"></i> Synced ${timeSince(state.lastSync)}</span>`:'';
+let actionBtns='';
+if(state.connecting){actionBtns=`<button class="btn btn-primary btn-sm" disabled><i class="fas fa-spinner" style="animation:syncSpin 1s linear infinite"></i> Connecting...</button>`;}
+else if(isConnected){actionBtns=`<button class="btn btn-danger btn-sm" onclick="disconnectIntg('${intg.id}')"><i class="fas fa-unlink"></i> Disconnect</button>`;}
+else{actionBtns=`<button class="btn btn-primary btn-sm ${showPulse?'pulse-btn':''}" onclick="connectIntg('${intg.id}')"><i class="fas fa-plug"></i> Connect</button>`;}
+card.innerHTML=`<div class="intg-card-head"><div class="intg-card-logo" style="background:${intg.bg};color:${intg.color}"><i class="${intg.icon}"></i></div><div><h4>${intg.name}</h4><p>${intg.desc}</p></div></div>${isConnected?`<div class="intg-card-status"><div class="green-dot"></div><span>Connected</span>${lastSync}</div>`:''}${snippets}${triageHtml}<div class="intg-actions">${actionBtns}${showTriage?`<button class="btn btn-secondary btn-sm" onclick="runTriage('${intg.id}')"><i class="fas fa-brain"></i> AI Triage</button>`:''}</div>${state.connecting?'<div class="connect-progress" style="width:'+state.progress+'%"></div>':''}`;
 return card;
 }
 
-function connectIntg(id){
-if(id==='gmail'){
-connectedIntgs.push(id);
-showToast('Gmail connected instantly!','success');
-addInsight('Email Agent','integration','Gmail connected — scanning inbox','var(--accent)');
-updateRoadmapForOnboarding();
-buildIntegrations();
-buildVault();
-logAudit('Connected Gmail');
-if(currentProfile&&supabaseClient){
-supabaseDB('update','profiles',{data:{integrations:connectedIntgs},key:'id',value:currentUser?.id||'test'});
-}
-}else{
-const intg=INTG_CATALOG.find(i=>i.id===id);
-document.getElementById('oauthTitle').textContent='Connect '+intg.name;
-document.getElementById('oauthDesc').textContent='Allow CoultersAgents to access your '+intg.name+' account?';
-document.getElementById('oauthConfirmBtn').onclick=()=>{
-closeModal('oauthModal');
-connectedIntgs.push(id);
-showToast(intg.name+' connected!','success');
-addInsight('System','integration',intg.name+' connected successfully','var(--brand2)');
-updateRoadmapForOnboarding();
-buildIntegrations();
-buildVault();
-logAudit('Connected '+intg.name);
-if(currentProfile&&supabaseClient){
-supabaseDB('update','profiles',{data:{integrations:connectedIntgs},key:'id',value:currentUser?.id||'test'});
-}
-};
-openModal('oauthModal');
-}
+async function connectIntg(id){
+const intg=INTG_CATALOG.find(i=>i.id===id);if(!intg)return;if(connectedIntgs.includes(id)){showToast(intg.name+' already connected','info');return;}
+if(id==='gmail'){await performGmailConnect();return;}
+pendingOAuthId=id;
+document.getElementById('oauthIcon').style.background=intg.bg;document.getElementById('oauthIcon').style.color=intg.color;document.getElementById('oauthIcon').innerHTML=`<i class="${intg.icon}"></i>`;
+document.getElementById('oauthTitle').textContent='Connect '+intg.name;document.getElementById('oauthDesc').textContent='Allow CoultersAgents to access your '+intg.name+' account securely.';
+document.getElementById('oauthPerms').innerHTML=intg.perms.split(',').map(p=>`<div><i class="fas fa-check" style="color:var(--accent);margin-right:6px"></i>${p.trim()}</div>`).join('');
+document.getElementById('oauthConfirmBtn').onclick=()=>startOAuthConnect(id);openModal('oauthModal');
 }
 
-function disconnectIntg(id){
-connectedIntgs=connectedIntgs.filter(i=>i!==id);
-const intg=INTG_CATALOG.find(i=>i.id===id);
-showToast(intg.name+' disconnected','info');
-addInsight('System','integration',intg.name+' disconnected','var(--warn)');
-buildIntegrations();
-buildVault();
-logAudit('Disconnected '+intg.name);
-if(currentProfile&&supabaseClient){
-supabaseDB('update','profiles',{data:{integrations:connectedIntgs},key:'id',value:currentUser?.id||'test'});
-}
+function cancelOAuth(){pendingOAuthId=null;closeModal('oauthModal');}
+
+async function startOAuthConnect(id){
+const intg=INTG_CATALOG.find(i=>i.id===id);closeModal('oauthModal');
+intgState[id]={connecting:true,progress:0,lastSync:null};if(id==='phone'||id==='twilio')intgState[id].messages=[];
+buildIntgContent();showToast('Connecting to '+intg.name+'...','info');addInsight('System','connecting','Authorizing '+intg.name+' access','var(--brand2)');
+await animateProgress(id,2000);intgState[id].connecting=false;connectedIntgs.push(id);intgState[id].lastSync=new Date().toISOString();
+if(id==='phone'||id==='twilio'){intgState[id].messages=[...SAMPLE_SMS.slice(0,3)];showToast(intg.name+' connected! Syncing messages...','success');await syncPhoneData(id);startPhoneSync(id);}
+else{showToast(intg.name+' connected successfully!','success');}
+addInsight('System','integration',intg.name+' connected successfully','var(--brand2)');logAudit('Connected '+intg.name);updateRoadmapForOnboarding();buildIntegrations();buildVault();saveIntegrationsToDB();
 }
 
-async function runTriage(providerId){
-showToast('Running AI Triage on '+providerId+'...','info');
-let messages=[];
-if(providerId==='gmail'){messages=SAMPLE_EMAILS.map(e=>`From: ${e.from} | Subject: ${e.subject} | Body: ${e.body}`);}
-else{messages=SAMPLE_SMS.map(s=>`From: ${s.from} | ${s.body}`);}
-const prompt=`Summarize these messages in 1-2 concise sentences each. Identify any urgent items:\n\n${messages.join('\n\n')}`;
-try{
-const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{
-method:'POST',headers:{'Content-Type':'application/json'},
-body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-});
-const data=await res.json();
-const summary=data?.candidates?.[0]?.content?.parts?.[0]?.text||'Triage complete. No urgent items found.';
-addInsight('Senterion','triage',`AI Triage (${providerId}): ${summary.substring(0,120)}...`,'var(--brand2)');
-showToast('AI Triage complete for '+providerId,'success');
-}catch(e){
-addInsight('Senterion','triage',`AI Triage (${providerId}): ${SAMPLE_EMAILS.length} emails reviewed, ${SAMPLE_SMS.length} SMS scanned. 1 overdue invoice flagged.`,'var(--brand2)');
-showToast('AI Triage complete (fallback)','info');
-}
-logAudit('AI Triage run on '+providerId);
-}
+async function syncPhoneData(id){showToast(INTG_CATALOG.find(i=>i.id===id).name+': Loading messages...','info');await sleep(800);for(let i=0;i<intgState[id].messages.length;i++){const msg=intgState[id].messages[i];if(msg.unread){addInsight('Phone Agent','sms',`New SMS from ${msg.from}: "${msg.body.substring(0,40)}..."`,'var(--brand2)');await sleep(400);}}addInsight('Phone Agent','sms','Message sync complete','var(--accent)');statsData.calls+=2;statsData.inbound++;statsData.outbound++;updateStats();buildIntgContent();}
 
-function buildVault(){
-const accounts=document.getElementById('vaultAccounts');
-if(connectedIntgs.length===0){
-accounts.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No accounts connected yet.</p>';
-}else{
-accounts.innerHTML=connectedIntgs.map(id=>{
-const intg=INTG_CATALOG.find(i=>i.id===id);
-return `<div class="vault-account-item"><div class="vault-account-info"><i class="${intg.icon}" style="color:${intg.color}"></i><span>${intg.name}</span></div><button class="btn btn-ghost btn-sm" onclick="disconnectIntg('${id}')" style="color:var(--danger)"><i class="fas fa-times"></i> Revoke</button></div>`;
-}).join('');
-}
-}
+function startPhoneSync(id){if(syncIntervals[id])clearInterval(syncIntervals[id]);syncIntervals[id]=setInterval(async()=>{if(!connectedIntgs.includes(id))return;const allMsgs=[...SAMPLE_SMS,...MORE_SMS];const randomMsg=allMsgs[Math.floor(Math.random()*allMsgs.length)];const newMsg={...randomMsg,body:randomMsg.body,time:'just now',unread:true};intgState[id].messages.unshift(newMsg);if(intgState[id].messages.length>6)intgState[id].messages.pop();intgState[id].lastSync=new Date().toISOString();statsData.calls++;const isInbound=Math.random()>0.3;if(isInbound){statsData.inbound++;addInsight('Phone Agent','sms',`Incoming SMS: "${newMsg.body.substring(0,40)}..."`,'var(--brand2)');}else{statsData.outbound++;addInsight('Phone Agent','sms',`Sent response to ${newMsg.from}`,'var(--accent)');}updateStats();buildIntgContent();},22000);}
+
+async function runTriage(providerId){if(triageResults[providerId]){delete triageResults[providerId];buildIntgContent();return;}showToast('Running AI Triage...','info');addInsight('Senterion','triage','Analyzing messages with Gemini AI...','var(--brand2)');let messages=[];
+if(providerId==='gmail'){const emails=intgState.gmail?.emails||SAMPLE_EMAILS;messages=emails.map(e=>`From: ${e.from} | Subject: ${e.subject} | Body: ${e.body}`);}else{const msgs=intgState[providerId]?.messages||SAMPLE_SMS;messages=msgs.map(s=>`From: ${s.from} | Message: ${s.body}`);}
+const prompt=`You are an AI assistant triaging business communications. Analyze these messages and provide:\n1. A brief summary of all messages (2-3 sentences)\n2. Any urgent items that need immediate attention\n3. Recommended actions\n\nMessages:\n${messages.join('\n\n')}\n\nRespond concisely in plain text.`;
+try{const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:300}})});const data=await res.json();const summary=data?.candidates?.[0]?.content?.parts?.[0]?.text;if(summary){triageResults[providerId]=summary;addInsight('Senterion','triage',`AI Triage complete: ${summary.substring(0,100)}...`,'var(--brand2)');showToast('AI Triage complete!','success');}else{throw new Error('Empty');}}catch(e){const fallback=providerId==='gmail'?'Summary: You have '+messages.length+' emails. One overdue invoice requires payment. Two appointment requests need scheduling. Action: Prioritize overdue invoice, confirm appointments.':'Summary: '+messages.length+' messages. One quote request needs pricing. An appointment needs confirmation. Action: Prepare quote, confirm appointment.';triageResults[providerId]=fallback;addInsight('Senterion','triage','AI Triage complete (fallback)','var(--brand2)');showToast('AI Triage complete','info');}logAudit('AI Triage on '+providerId);buildIntgContent();}
+
+function disconnectIntg(id){connectedIntgs=connectedIntgs.filter(i=>i!==id);const intg=INTG_CATALOG.find(i=>i.id===id);if(syncIntervals[id]){clearInterval(syncIntervals[id]);delete syncIntervals[id];}if(id==='gmail'){googleAccessToken=null;}if(intgState[id])delete intgState[id];if(triageResults[id])delete triageResults[id];showToast(intg.name+' disconnected','info');addInsight('System','integration',intg.name+' disconnected','var(--warn)');logAudit('Disconnected '+intg.name);buildIntegrations();buildVault();saveIntegrationsToDB();}
+async function saveIntegrationsToDB(){if(currentProfile&&supabaseClient&&currentUser)await supabaseDB('update','profiles',{data:{integrations:connectedIntgs},key:'id',value:currentUser.id});}
+
+/* ===== VAULT ===== */
+function buildVault(){const accounts=document.getElementById('vaultAccounts');if(connectedIntgs.length===0){accounts.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No accounts connected yet.</p>';}else{accounts.innerHTML=connectedIntgs.map(id=>{const intg=INTG_CATALOG.find(i=>i.id===id);const state=intgState[id]||{};const lastSync=state.lastSync?timeSince(state.lastSync):'Never';const items=state.emails?state.emails.length:state.messages?state.messages.length:0;const authMethod=id==='gmail'&&state.authed?'OAuth 2.0':'API Key';return`<div class="vault-account-item"><div class="vault-account-info"><i class="${intg.icon}" style="color:${intg.color}"></i><div><span>${intg.name}</span><div class="vault-account-meta"><span>${items} items</span><span>${lastSync}</span><span>${authMethod}</span></div></div></div><button class="btn btn-ghost btn-sm" onclick="disconnectIntg('${id}')" style="color:var(--danger)"><i class="fas fa-times"></i> Revoke</button></div>`;}).join('');}}
 
 const auditEntries=[];
-function logAudit(action){
-const now=new Date();
-auditEntries.unshift({action,time:now.toLocaleString()});
-if(auditEntries.length>50)auditEntries.pop();
-renderAuditLog();
-}
+function logAudit(action){const now=new Date();auditEntries.unshift({action,time:now.toLocaleString()});if(auditEntries.length>50)auditEntries.pop();renderAuditLog();}
+function renderAuditLog(){const el=document.getElementById('auditLog');if(auditEntries.length===0){el.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No activity logged yet.</p>';return;}el.innerHTML=auditEntries.slice(0,20).map(e=>`<div class="audit-item"><i class="fas fa-shield-alt"></i><span>${e.action}</span><time>${e.time}</time></div>`).join('');}
+function revokeAll(){connectedIntgs.forEach(id=>{if(syncIntervals[id]){clearInterval(syncIntervals[id]);delete syncIntervals[id];}});connectedIntgs=[];intgState={};triageResults={};googleAccessToken=null;showToast('All integrations revoked','info');buildIntegrations();buildVault();logAudit('Revoked all integrations');saveIntegrationsToDB();}
+function exportData(){const data={profile:currentProfile,integrations:connectedIntgs,intgState:intgState,stats:statsData,audit:auditEntries};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coultersagents_export.json';a.click();URL.revokeObjectURL(url);showToast('Data exported','success');}
 
-function renderAuditLog(){
-const el=document.getElementById('auditLog');
-if(auditEntries.length===0){el.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No activity logged yet.</p>';return;}
-el.innerHTML=auditEntries.slice(0,20).map(e=>`<div class="audit-item"><i class="fas fa-shield-alt"></i><span>${e.action}</span><time>${e.time}</time></div>`).join('');
-}
-
-function revokeAll(){
-connectedIntgs=[];
-showToast('All integrations revoked','info');
-buildIntegrations();
-buildVault();
-logAudit('Revoked all integrations');
-if(currentProfile&&supabaseClient){
-supabaseDB('update','profiles',{data:{integrations:[]},key:'id',value:currentUser?.id||'test'});
-}
-}
-
-function exportData(){
-const data={profile:currentProfile,integrations:connectedIntgs,stats:statsData,audit:auditEntries};
-const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-const url=URL.createObjectURL(blob);
-const a=document.createElement('a');
-a.href=url;a.download='coultersagents_export.json';a.click();
-URL.revokeObjectURL(url);
-showToast('Data exported successfully','success');
-}
-
-function buildAnalytics(){
-document.getElementById('anTotalTasks').textContent=statsData.emails+statsData.leads+statsData.calls;
-document.getElementById('anCompleted').textContent=Math.round((statsData.emails+statsData.leads+statsData.calls)*0.85);
-document.getElementById('anAvgTime').textContent=Math.floor(Math.random()*20+5)+'s';
-document.getElementById('anSatisfaction').textContent=Math.floor(Math.random()*15+85)+'%';
-buildDonutChart();
-renderAnalyticsFeed();
-}
-
-function buildDonutChart(){
-const container=document.getElementById('donutChart');
-const data=[
-{label:'Email',value:statsData.emails||35,color:'#06b6d4'},
-{label:'Leads',value:statsData.leads||25,color:'#8b5cf6'},
-{label:'Calls',value:statsData.calls||20,color:'#10b981'},
-{label:'Marketing',value:15,color:'#f59e0b'},
-{label:'Support',value:5,color:'#ec4899'}
-];
-const total=data.reduce((a,d)=>a+d.value,0);
-const radius=80;
-const cx=100,cy=100;
-let cumulative=0;
-let paths='';
-data.forEach(d=>{
-const startAngle=(cumulative/total)*360;
-cumulative+=d.value;
-const endAngle=(cumulative/total)*360;
-const startRad=(startAngle-90)*Math.PI/180;
-const endRad=(endAngle-90)*Math.PI/180;
-const x1=cx+radius*Math.cos(startRad);
-const y1=cy+radius*Math.sin(startRad);
-const x2=cx+radius*Math.cos(endRad);
-const y2=cy+radius*Math.sin(endRad);
-const largeArc=endAngle-startAngle>180?1:0;
-paths+=`<path d="M${cx},${cy} L${x1},${y1} A${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z" fill="${d.color}" opacity="0.8"/>`;
-});
-container.innerHTML=`
-<svg width="200" height="200" viewBox="0 0 200 200">${paths}<circle cx="${cx}" cy="${cy}" r="45" fill="var(--bg2)"/></svg>
-<div class="donut-legend">${data.map(d=>`<div class="donut-legend-item"><span style="background:${d.color}"></span>${d.label}: ${d.value}%</div>`).join('')}</div>
-`;
-}
+/* ===== ANALYTICS ===== */
+function buildAnalytics(){document.getElementById('anTotalTasks').textContent=statsData.emails+statsData.leads+statsData.calls;document.getElementById('anCompleted').textContent=Math.round((statsData.emails+statsData.leads+statsData.calls)*0.85);document.getElementById('anAvgTime').textContent=Math.floor(Math.random()*20+5)+'s';document.getElementById('anSatisfaction').textContent=Math.floor(Math.random()*15+85)+'%';buildDonutChart();renderAnalyticsFeed();}
+function buildDonutChart(){const container=document.getElementById('donutChart');const data=[{label:'Email',value:statsData.emails||35,color:'#06b6d4'},{label:'Leads',value:statsData.leads||25,color:'#8b5cf6'},{label:'Calls',value:statsData.calls||20,color:'#10b981'},{label:'Marketing',value:15,color:'#f59e0b'},{label:'Support',value:5,color:'#ec4899'}];const total=data.reduce((a,d)=>a+d.value,0);const radius=80;const cx=100,cy=100;let cumulative=0;let paths='';data.forEach(d=>{const startAngle=(cumulative/total)*360;cumulative+=d.value;const endAngle=(cumulative/total)*360;const startRad=(startAngle-90)*Math.PI/180;const endRad=(endAngle-90)*Math.PI/180;const x1=cx+radius*Math.cos(startRad);const y1=cy+radius*Math.sin(startRad);const x2=cx+radius*Math.cos(endRad);const y2=cy+radius*Math.sin(endRad);const largeArc=endAngle-startAngle>180?1:0;paths+=`<path d="M${cx},${cy} L${x1},${y1} A${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z" fill="${d.color}" opacity="0.8"/>`;});container.innerHTML=`<svg width="200" height="200" viewBox="0 0 200 200">${paths}<circle cx="${cx}" cy="${cy}" r="45" fill="var(--bg2)"/></svg><div class="donut-legend">${data.map(d=>`<div class="donut-legend-item"><span style="background:${d.color}"></span>${d.label}: ${d.value}%</div>`).join('')}</div>`;}
 
 const analyticsFeedItems=[];
-function renderAnalyticsFeed(){
-const el=document.getElementById('analyticsFeedList');
-if(analyticsFeedItems.length===0){el.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No activity this week.</p>';return;}
-el.innerHTML=analyticsFeedItems.slice(0,15).map(i=>`<div class="analytics-item"><i class="${i.icon}" style="color:${i.color}"></i><span style="flex:1;color:var(--txt2)">${i.text}</span><span style="color:var(--txt3);font-size:0.72rem">${i.time}</span></div>`).join('');
-}
+function renderAnalyticsFeed(){const el=document.getElementById('analyticsFeedList');if(analyticsFeedItems.length===0){el.innerHTML='<p style="color:var(--txt3);font-size:0.85rem">No activity this week.</p>';return;}el.innerHTML=analyticsFeedItems.slice(0,15).map(i=>`<div class="analytics-item"><i class="${i.icon}" style="color:${i.color}"></i><span style="flex:1;color:var(--txt2)">${i.text}</span><span style="color:var(--txt3);font-size:0.72rem">${i.time}</span></div>`).join('');}
 
-function buildSettingsUI(){
-buildVibeGrid();
-buildColorPickers();
-buildFontSelector();
-buildRadiusSelector();
-updateThemePreview();
-buildPersonalityPresets();
-}
-
-function buildVibeGrid(){
-const grid=document.getElementById('vibeGrid');
-grid.innerHTML='';
-VIBES.forEach(v=>{
-const card=document.createElement('div');
-card.className='vibe-card'+(v.id===selectedVibe?' active':'');
-card.innerHTML=`<div class="vibe-swatches">${v.colors.map(c=>`<span style="background:${c}"></span>`).join('')}</div><span>${v.name}</span>`;
-card.onclick=()=>{selectedVibe=v.id;buildVibeGrid();updateThemePreview();};
-grid.appendChild(card);
-});
-}
-
-function buildColorPickers(){
-const container=document.getElementById('colorPickers');
-container.innerHTML=`
-<div class="color-pick-item"><label>Brand</label><input type="color" id="pickBrand" value="#06b6d4" onchange="updateThemePreview()"></div>
-<div class="color-pick-item"><label>Brand 2</label><input type="color" id="pickBrand2" value="#8b5cf6" onchange="updateThemePreview()"></div>
-<div class="color-pick-item"><label>Accent</label><input type="color" id="pickAccent" value="#10b981" onchange="updateThemePreview()"></div>
-<div class="color-pick-item"><label>Background</label><input type="color" id="pickBg" value="#050816" onchange="updateThemePreview()"></div>
-`;
-}
-
-function buildFontSelector(){
-const container=document.getElementById('fontSelector');
-const fonts=['Inter','Space Grotesk','Outfit','Playfair Display'];
-container.innerHTML='';
-fonts.forEach(f=>{
-const btn=document.createElement('div');
-btn.className='font-btn'+(f===selectedFont?' active':'');
-btn.style.fontFamily=f;
-btn.textContent=f;
-btn.onclick=()=>{selectedFont=f;buildFontSelector();updateThemePreview();};
-container.appendChild(btn);
-});
-}
-
-function buildRadiusSelector(){
-const container=document.getElementById('radiusSelector');
-const radii=[{label:'Sharp',value:'0'},{label:'Small',value:'4'},{label:'Medium',value:'8'},{label:'Large',value:'16'},{label:'Round',value:'24'}];
-container.innerHTML='';
-radii.forEach(r=>{
-const btn=document.createElement('div');
-btn.className='radius-btn'+(r.value===selectedRadius?' active':'');
-btn.textContent=r.label;
-btn.onclick=()=>{selectedRadius=r.value;buildRadiusSelector();updateThemePreview();};
-container.appendChild(btn);
-});
-}
-
-function updateThemePreview(){
-const preview=document.getElementById('themePreview');
-const vibe=VIBES.find(v=>v.id===selectedVibe)||VIBES[0];
-const brand=document.getElementById('pickBrand')?.value||vibe.colors[0];
-const brand2=document.getElementById('pickBrand2')?.value||vibe.colors[1];
-const bg=document.getElementById('pickBg')?.value||vibe.colors[2];
-preview.style.fontFamily=selectedFont;
-preview.style.borderRadius=selectedRadius+'px';
-preview.style.background=bg;
-preview.innerHTML=`
-<div style="display:flex;gap:12px;margin-bottom:12px">
-<div style="width:60px;height:60px;border-radius:${selectedRadius}px;background:${brand};display:flex;align-items:center;justify-content:center;color:#fff"><i class="fas fa-robot"></i></div>
-<div style="width:60px;height:60px;border-radius:${selectedRadius}px;background:${brand2};display:flex;align-items:center;justify-content:center;color:#fff"><i class="fas fa-bolt"></i></div>
-</div>
-<h4 style="font-size:1.1rem;font-weight:600;margin-bottom:4px">Theme Preview</h4>
-<p style="color:var(--txt2);font-size:0.85rem">Font: ${selectedFont} | Radius: ${selectedRadius}px</p>
-<button class="btn btn-primary btn-sm" style="background:${brand};margin-top:8px;border-radius:${selectedRadius}px">Sample Button</button>
-`;
-}
-
-function applyIndustryTheme(industry){
-const themes={
-construction:{vibe:'ember',font:'Space Grotesk'},
-healthcare:{vibe:'ocean',font:'Inter'},
-realestate:{vibe:'sunset',font:'Playfair Display'},
-legal:{vibe:'royal',font:'Inter'},
-restaurant:{vibe:'sunset',font:'Outfit'},
-retail:{vibe:'mint',font:'Outfit'},
-technology:{vibe:'cyber',font:'Space Grotesk'},
-consulting:{vibe:'arctic',font:'Inter'},
-fitness:{vibe:'ember',font:'Outfit'},
-automotive:{vibe:'cyber',font:'Space Grotesk'}
-};
-const t=themes[industry];
-if(t){selectedVibe=t.vibe;selectedFont=t.font;buildVibeGrid();buildFontSelector();updateThemePreview();showToast('Theme applied for '+industry,'success');}
-}
-
-function buildPersonalityPresets(){
-const container=document.getElementById('personalityPresets');
-container.innerHTML='';
-PERSONALITIES.forEach(p=>{
-const btn=document.createElement('div');
-btn.className='personality-btn'+(p.id===selectedPersonality?' active':'');
-btn.textContent=p.name;
-btn.onclick=()=>{selectedPersonality=p.id;buildPersonalityPresets();};
-container.appendChild(btn);
-});
-}
-
-async function saveProfile(){
-if(!currentProfile)return;
-const data={
-first_name:document.getElementById('setFirstName').value,
-last_name:document.getElementById('setLastName').value,
-business_name:document.getElementById('setBusiness').value,
-phone:document.getElementById('setPhone').value
-};
-Object.assign(currentProfile,data);
-if(supabaseClient&&currentUser){
-await supabaseDB('update','profiles',{data,key:'id',value:currentUser.id});
-}
-document.getElementById('dashAvatar').textContent=(data.first_name||'U')[0].toUpperCase();
-showToast('Profile saved','success');
-}
-
-async function saveWebsiteSettings(){
-buildSandbox();
-showToast('Website settings saved','success');
-}
-
-async function savePersonality(){
-if(!currentProfile)return;
-currentProfile.personality={
-preset:selectedPersonality,
-custom:document.getElementById('setCustomInstructions').value,
-tone:parseInt(document.getElementById('toneSlider').value)
-};
-if(supabaseClient&&currentUser){
-await supabaseDB('update','profiles',{data:{personality:currentProfile.personality},key:'id',value:currentUser.id});
-}
-showToast('Personality saved','success');
-}
-
+/* ===== SETTINGS ===== */
+function buildSettingsUI(){buildVibeGrid();buildColorPickers();buildFontSelector();buildRadiusSelector();updateThemePreview();buildPersonalityPresets();}
+function buildVibeGrid(){const grid=document.getElementById('vibeGrid');grid.innerHTML='';VIBES.forEach(v=>{const card=document.createElement('div');card.className='vibe-card'+(v.id===selectedVibe?' active':'');card.innerHTML=`<div class="vibe-swatches">${v.colors.map(c=>`<span style="background:${c}"></span>`).join('')}</div><span>${v.name}</span>`;card.onclick=()=>{selectedVibe=v.id;buildVibeGrid();updateThemePreview();};grid.appendChild(card);});}
+function buildColorPickers(){const container=document.getElementById('colorPickers');container.innerHTML=`<div class="color-pick-item"><label>Brand</label><input type="color" id="pickBrand" value="#06b6d4" onchange="updateThemePreview()"></div><div class="color-pick-item"><label>Brand 2</label><input type="color" id="pickBrand2" value="#8b5cf6" onchange="updateThemePreview()"></div><div class="color-pick-item"><label>Accent</label><input type="color" id="pickAccent" value="#10b981" onchange="updateThemePreview()"></div><div class="color-pick-item"><label>Background</label><input type="color" id="pickBg" value="#050816" onchange="updateThemePreview()"></div>`;}
+function buildFontSelector(){const container=document.getElementById('fontSelector');const fonts=['Inter','Space Grotesk','Outfit','Playfair Display'];container.innerHTML='';fonts.forEach(f=>{const btn=document.createElement('div');btn.className='font-btn'+(f===selectedFont?' active':'');btn.style.fontFamily=f;btn.textContent=f;btn.onclick=()=>{selectedFont=f;buildFontSelector();updateThemePreview();};container.appendChild(btn);});}
+function buildRadiusSelector(){const container=document.getElementById('radiusSelector');const radii=[{label:'Sharp',value:'0'},{label:'Small',value:'4'},{label:'Medium',value:'8'},{label:'Large',value:'16'},{label:'Round',value:'24'}];container.innerHTML='';radii.forEach(r=>{const btn=document.createElement('div');btn.className='radius-btn'+(r.value===selectedRadius?' active':'');btn.textContent=r.label;btn.onclick=()=>{selectedRadius=r.value;buildRadiusSelector();updateThemePreview();};container.appendChild(btn);});}
+function updateThemePreview(){const preview=document.getElementById('themePreview');const vibe=VIBES.find(v=>v.id===selectedVibe)||VIBES[0];const brand=document.getElementById('pickBrand')?.value||vibe.colors[0];const brand2=document.getElementById('pickBrand2')?.value||vibe.colors[1];const bg=document.getElementById('pickBg')?.value||vibe.colors[2];preview.style.fontFamily=selectedFont;preview.style.borderRadius=selectedRadius+'px';preview.style.background=bg;preview.innerHTML=`<div style="display:flex;gap:12px;margin-bottom:12px"><div style="width:60px;height:60px;border-radius:${selectedRadius}px;background:${brand};display:flex;align-items:center;justify-content:center;color:#fff"><i class="fas fa-robot"></i></div><div style="width:60px;height:60px;border-radius:${selectedRadius}px;background:${brand2};display:flex;align-items:center;justify-content:center;color:#fff"><i class="fas fa-bolt"></i></div></div><h4 style="font-size:1.1rem;font-weight:600;margin-bottom:4px">Theme Preview</h4><p style="color:var(--txt2);font-size:0.85rem">Font: ${selectedFont} | Radius: ${selectedRadius}px</p><button class="btn btn-primary btn-sm" style="background:${brand};margin-top:8px;border-radius:${selectedRadius}px">Sample Button</button>`;}
+function applyIndustryTheme(industry){const themes={construction:{vibe:'ember',font:'Space Grotesk'},healthcare:{vibe:'ocean',font:'Inter'},realestate:{vibe:'sunset',font:'Playfair Display'},legal:{vibe:'royal',font:'Inter'},restaurant:{vibe:'sunset',font:'Outfit'},retail:{vibe:'mint',font:'Outfit'},technology:{vibe:'cyber',font:'Space Grotesk'},consulting:{vibe:'arctic',font:'Inter'},fitness:{vibe:'ember',font:'Outfit'},automotive:{vibe:'cyber',font:'Space Grotesk'}};const t=themes[industry];if(t){selectedVibe=t.vibe;selectedFont=t.font;buildVibeGrid();buildFontSelector();updateThemePreview();showToast('Theme applied for '+industry,'success');}}
+function buildPersonalityPresets(){const container=document.getElementById('personalityPresets');container.innerHTML='';PERSONALITIES.forEach(p=>{const btn=document.createElement('div');btn.className='personality-btn'+(p.id===selectedPersonality?' active':'');btn.textContent=p.name;btn.onclick=()=>{selectedPersonality=p.id;buildPersonalityPresets();};container.appendChild(btn);});}
+async function saveProfile(){if(!currentProfile)return;const data={first_name:document.getElementById('setFirstName').value,last_name:document.getElementById('setLastName').value,business_name:document.getElementById('setBusiness').value,phone:document.getElementById('setPhone').value};Object.assign(currentProfile,data);if(supabaseClient&&currentUser)await supabaseDB('update','profiles',{data,key:'id',value:currentUser.id});document.getElementById('dashAvatar').textContent=(data.first_name||'U')[0].toUpperCase();showToast('Profile saved','success');}
+async function saveWebsiteSettings(){buildSandbox();showToast('Website settings saved','success');}
+async function savePersonality(){if(!currentProfile)return;currentProfile.personality={preset:selectedPersonality,custom:document.getElementById('setCustomInstructions').value,tone:parseInt(document.getElementById('toneSlider').value)};if(supabaseClient&&currentUser)await supabaseDB('update','profiles',{data:{personality:currentProfile.personality},key:'id',value:currentUser.id});showToast('Personality saved','success');}
 function exportAllData(){exportData();}
+function deleteAllData(){if(!confirm('Delete all your data permanently?'))return;connectedIntgs=[];statsData={emails:0,leads:0,calls:0,revenue:0,webLeads:0,phoneLeads:0,emailLeads:0,socialLeads:0,inbound:0,outbound:0,missed:0,voicemail:0,autoReplied:0,forwarded:0,drafts:0,archived:0};auditEntries.length=0;insightsItems.length=0;analyticsFeedItems.length=0;intgState={};triageResults={};googleAccessToken=null;Object.values(syncIntervals).forEach(clearInterval);syncIntervals={};buildDashboard();showToast('All data deleted','info');}
 
-function deleteAllData(){
-if(!confirm('Are you sure? This will delete all your data permanently.'))return;
-connectedIntgs=[];statsData={emails:0,leads:0,calls:0,revenue:0,webLeads:0,phoneLeads:0,emailLeads:0,socialLeads:0,inbound:0,outbound:0,missed:0,voicemail:0,autoReplied:0,forwarded:0,drafts:0,archived:0};
-auditEntries.length=0;insightsItems.length=0;analyticsFeedItems.length=0;
-buildDashboard();
-showToast('All data deleted','info');
-}
+function switchPanel(name){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+name).classList.add('active');document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));document.querySelector(`.sidebar-link[data-panel="${name}"]`)?.classList.add('active');const titles={overview:'Command Center',chat:'Senterion AI Chat',integrations:'Integrations',vault:'Security Vault',analytics:'Analytics',settings:'Settings'};document.getElementById('dashTitle').textContent=titles[name]||'Dashboard';closeSidebar();}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
 
-function switchPanel(name){
-document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-document.getElementById('panel-'+name).classList.add('active');
-document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
-document.querySelector(`.sidebar-link[data-panel="${name}"]`)?.classList.add('active');
-const titles={overview:'Command Center',chat:'Senterion AI Chat',integrations:'Integrations',vault:'Security Vault',analytics:'Analytics',settings:'Settings'};
-document.getElementById('dashTitle').textContent=titles[name]||'Dashboard';
-closeSidebar();
-}
+/* ===== CHAT ===== */
+async function sendChat(){const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;input.value='';addChatMsg('user',msg);showTyping(true);try{const personality=currentProfile?.personality||{preset:'professional',custom:'',tone:50};const toneDesc=personality.tone<30?'Formal and professional':personality.tone<70?'Balanced and helpful':'Casual and friendly';const connectedInfo=connectedIntgs.length>0?'Connected integrations: '+connectedIntgs.join(', ')+'.':'No integrations connected yet.';const systemPrompt=`You are Senterion, the AI assistant for CoultersAgents. Personality: ${personality.preset}. Tone: ${toneDesc}. ${personality.custom?'Custom instructions: '+personality.custom:''}. Be concise, helpful, and actionable. Business: ${currentProfile?.business_name||'their business'}. Industry: ${currentProfile?.industry||'general'}. Services: ${selectedServices.join(', ')||'none'}. ${connectedInfo}`;const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:systemPrompt+'\n\nUser: '+msg}]}],generationConfig:{temperature:0.7,maxOutputTokens:500}})});const data=await res.json();const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text||getFallbackResponse(msg);showTyping(false);addChatMsg('bot',reply);}catch(e){showTyping(false);addChatMsg('bot',getFallbackResponse(msg));}}
+function sendQuickAction(msg){document.getElementById('chatInput').value=msg;sendChat();}
+function getFallbackResponse(msg){const lower=msg.toLowerCase();if(lower.includes('lead')||lower.includes('customer'))return'I can help optimize lead generation! Your Email Agent and Marketing Agent work together to capture, nurture, and convert leads.';if(lower.includes('email'))return'Your Email Agent can triage incoming emails, draft responses, and prioritize urgent messages. Connect Gmail in Integrations to activate full email automation.';if(lower.includes('schedule')||lower.includes('appointment'))return'The Scheduler Agent handles booking, reminders, and calendar management automatically.';if(lower.includes('marketing'))return'Marketing Agent can create campaigns, schedule social posts, and nurture leads. Connect social accounts to unlock full marketing automation.';if(lower.includes('phone')||lower.includes('call'))return'Your Phone Agent answers calls 24/7, routes them appropriately, and takes messages.';if(lower.includes('help')||lower.includes('what can'))return'I can help with lead generation, email management, scheduling, phone handling, marketing, support, analytics, and development tasks.';if(lower.includes('activity')||lower.includes('summar'))return`Activity: ${statsData.emails} emails, ${statsData.leads} leads, ${statsData.calls} calls. Revenue: $${statsData.revenue.toLocaleString()}. ${connectedIntgs.length>0?connectedIntgs.length+' integration(s) syncing.':'Connect integrations for live data.'}`;return'I\'m here to help run your business on autopilot. I can manage emails, handle calls, book appointments, run marketing, and more.';}
+function addChatMsg(type,text){const container=document.getElementById('chatMessages');const div=document.createElement('div');div.className='chat-msg '+type;const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});div.innerHTML=text.replace(/\n/g,'<br>')+`<div class="msg-time">${time}</div>`;container.appendChild(div);container.scrollTop=container.scrollHeight;chatHistory.push({type,text,time});}
+function showTyping(show){document.getElementById('typingIndicator').classList.toggle('show',show);document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;}
 
-function openSidebar(){
-document.getElementById('sidebar').classList.add('open');
-document.getElementById('sidebarOverlay').classList.add('open');
-}
+/* ===== REALTIME + SIMULATION ===== */
+function startRealtime(){if(!supabaseClient)return;try{supabaseClient.channel('activity-logs').on('postgres_changes',{event:'INSERT',schema:'public',table:'activity_logs'},payload=>{if(payload.new){const d=payload.new;addInsight(d.agent||'System',d.category||'activity',d.description||'Activity logged',d.category==='email'?'var(--brand)':d.category==='lead'?'var(--brand2)':'var(--accent)');}}).subscribe();}catch(e){console.warn('Realtime failed:',e);}}
+function startActivitySimulation(){stopActivitySimulation();activityInterval=setInterval(()=>{const actions=[{agent:'Email Agent',cat:'email',fn:()=>{statsData.emails++;statsData.autoReplied++;return'Auto-replied to a customer inquiry';},color:'var(--brand)'},{agent:'Lead Agent',cat:'lead',fn:()=>{statsData.leads++;const src=['webLeads','phoneLeads','emailLeads','socialLeads'][Math.floor(Math.random()*4)];statsData[src]++;return'Captured new lead from '+src.replace('Leads','');},color:'var(--brand2)'},{agent:'Phone Agent',cat:'call',fn:()=>{statsData.calls++;const type=['inbound','outbound'][Math.floor(Math.random()*2)];statsData[type]++;return'Handled '+type+' call';},color:'var(--accent)'},{agent:'Support Agent',cat:'support',fn:()=>{return'Resolved support ticket #'+Math.floor(Math.random()*9000+1000);},color:'#06b6d4'},{agent:'Marketing Agent',cat:'marketing',fn:()=>{return'Scheduled social media post';},color:'#f59e0b'},{agent:'Analytics Agent',cat:'analytics',fn:()=>{const rev=Math.floor(Math.random()*200+50);statsData.revenue+=rev;return'Tracked revenue: $'+rev;},color:'var(--accent)'}];const action=actions[Math.floor(Math.random()*actions.length)];const desc=action.fn();addInsight(action.agent,action.cat,desc,action.color);analyticsFeedItems.unshift({icon:action.cat==='email'?'fas fa-envelope':action.cat==='lead'?'fas fa-user-plus':action.cat==='call'?'fas fa-phone':'fas fa-chart-line',color:action.color,text:`${action.agent}: ${desc}`,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});if(analyticsFeedItems.length>30)analyticsFeedItems.pop();updateStats();buildAnalytics();if(supabaseClient&&currentUser)supabaseDB('insert','activity_logs',{data:{user_id:currentUser.id,agent:action.agent,category:action.cat,action:action.cat,description:desc}});logAudit(action.agent+': '+desc);},20000);}
+function stopActivitySimulation(){if(activityInterval){clearInterval(activityInterval);activityInterval=null;}}
 
-function closeSidebar(){
-document.getElementById('sidebar').classList.remove('open');
-document.getElementById('sidebarOverlay').classList.remove('open');
-}
+async function checkAdminAccess(){if(currentUser?.email===ADMIN_EMAIL){const res=await supabaseDB('selectAll','signups',{orderBy:'created_at',ascending:false,limit:50});if(res?.data){document.getElementById('adminTableBody').innerHTML=res.data.map(s=>`<tr><td>${s.first_name||''} ${s.last_name||''}</td><td>${s.email||''}</td><td>${s.business_name||'N/A'}</td><td>${s.industry||'N/A'}</td><td><span class="badge badge-accent">${s.status||'active'}</span></td><td>${new Date(s.created_at).toLocaleDateString()}</td></tr>`).join('');}openModal('adminModal');}else{showToast('Admin access restricted','error');}}
 
-async function sendChat(){
-const input=document.getElementById('chatInput');
-const msg=input.value.trim();
-if(!msg)return;
-input.value='';
-addChatMsg('user',msg);
-showTyping(true);
-try{
-const personality=currentProfile?.personality||{preset:'professional',custom:'',tone:50};
-const toneDesc=personality.tone<30?'Formal and professional':personality.tone<70?'Balanced and helpful':'Casual and friendly';
-const systemPrompt=`You are Senterion, the AI assistant for CoultersAgents. Personality: ${personality.preset}. Tone: ${toneDesc}. ${personality.custom?'Custom instructions: '+personality.custom:''}. Be concise, helpful, and actionable. The user's business is: ${currentProfile?.business_name||'their business'}. Industry: ${currentProfile?.industry||'general'}. Services active: ${selectedServices.join(', ')||'none yet'}.`;
-const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{
-method:'POST',headers:{'Content-Type':'application/json'},
-body:JSON.stringify({contents:[{parts:[{text:systemPrompt+'\n\nUser: '+msg}]}]})
-});
-const data=await res.json();
-const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text||getFallbackResponse(msg);
-showTyping(false);
-addChatMsg('bot',reply);
-}catch(e){
-showTyping(false);
-addChatMsg('bot',getFallbackResponse(msg));
-}
-}
-
-function sendQuickAction(msg){
-document.getElementById('chatInput').value=msg;
-sendChat();
-}
-
-function getFallbackResponse(msg){
-const lower=msg.toLowerCase();
-if(lower.includes('lead')||lower.includes('customer'))return'I can help you optimize lead generation! Your Email Agent and Marketing Agent work together to capture, nurture, and convert leads. Would you like me to set up an automated lead follow-up sequence?';
-if(lower.includes('email'))return'Your Email Agent can triage incoming emails, draft responses, and prioritize urgent messages. Right now, it\'s standing by — connect Gmail to activate full functionality.';
-if(lower.includes('schedule')||lower.includes('appointment'))return'The Scheduler Agent handles booking, reminders, and calendar management automatically. It can even reschedule based on conflicts. Want me to configure your availability?';
-if(lower.includes('marketing'))return'Marketing Agent can create campaigns, schedule social posts, and nurture leads. Connect your social accounts to unlock full marketing automation.';
-if(lower.includes('phone')||lower.includes('call'))return'Your Phone Agent answers calls 24/7, routes them appropriately, and takes messages. Connect a phone integration to start receiving AI-handled calls.';
-if(lower.includes('help')||lower.includes('what can'))return'I can help you with lead generation, email management, scheduling, phone handling, marketing campaigns, customer support, analytics, and development tasks. What area would you like to focus on?';
-if(lower.includes('activity')||lower.includes('summar'))return`Here's your activity summary: ${statsData.emails} emails processed, ${statsData.leads} new leads, ${statsData.calls} calls handled. Your top performing agent is the Email Agent. Revenue tracked: $${statsData.revenue.toLocaleString()}.`;
-return'I\'m here to help run your business on autopilot. I can manage emails, handle calls, book appointments, run marketing campaigns, and much more. What would you like me to focus on?';
-}
-
-function addChatMsg(type,text){
-const container=document.getElementById('chatMessages');
-const div=document.createElement('div');
-div.className='chat-msg '+type;
-const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-div.innerHTML=text.replace(/\n/g,'<br>')+`<div class="msg-time">${time}</div>`;
-container.appendChild(div);
-container.scrollTop=container.scrollHeight;
-chatHistory.push({type,text,time});
-}
-
-function showTyping(show){
-document.getElementById('typingIndicator').classList.toggle('show',show);
-const container=document.getElementById('chatMessages');
-container.scrollTop=container.scrollHeight;
-}
-
-function startRealtime(){
-if(!supabaseClient)return;
-try{
-supabaseClient.channel('activity-logs').on('postgres_changes',{event:'INSERT',schema:'public',table:'activity_logs'},payload=>{
-if(payload.new){
-const d=payload.new;
-addInsight(d.agent||'System',d.category||'activity',d.description||'New activity logged',d.category==='email'?'var(--brand)':d.category==='lead'?'var(--brand2)':'var(--accent)');
-}
-}).subscribe();
-}catch(e){console.warn('Realtime subscription failed:',e);}
-}
-
-function startActivitySimulation(){
-stopActivitySimulation();
-activityInterval=setInterval(()=>{
-const actions=[
-{agent:'Email Agent',cat:'email',fn:()=>{statsData.emails++;statsData.autoReplied++;return'Auto-replied to a customer inquiry';},color:'var(--brand)'},
-{agent:'Lead Agent',cat:'lead',fn:()=>{statsData.leads++;const src=['webLeads','phoneLeads','emailLeads','socialLeads'][Math.floor(Math.random()*4)];statsData[src]++;return'Captured new lead from '+src.replace('Leads','');},color:'var(--brand2)'},
-{agent:'Phone Agent',cat:'call',fn:()=>{statsData.calls++;const type=['inbound','outbound'][Math.floor(Math.random()*2)];statsData[type]++;return'Handled '+type+' call successfully';},color:'var(--accent)'},
-{agent:'Support Agent',cat:'support',fn:()=>{return'Resolved support ticket #'+Math.floor(Math.random()*9000+1000);},color:'#06b6d4'},
-{agent:'Marketing Agent',cat:'marketing',fn:()=>{return'Scheduled social media post for peak engagement';},color:'#f59e0b'},
-{agent:'Email Agent',cat:'email',fn:()=>{statsData.emails++;statsData.drafts++;return'Drafted follow-up email for pending lead';},color:'var(--brand)'},
-{agent:'Phone Agent',cat:'call',fn:()=>{statsData.missed++;return'Missed call — voicemail transcribed and queued';},color:'var(--warn)'},
-{agent:'Scheduler Agent',cat:'scheduling',fn:()=>{return'Booked appointment for '+['tomorrow at 2pm','Thursday at 10am','Friday at 3pm'][Math.floor(Math.random()*3)];},color:'var(--brand2)'},
-{agent:'Analytics Agent',cat:'analytics',fn:()=>{statsData.revenue+=Math.floor(Math.random()*200+50);return'Tracked new revenue: $'+Math.floor(Math.random()*200+50);},color:'var(--accent)'}
-];
-const action=actions[Math.floor(Math.random()*actions.length)];
-const desc=action.fn();
-addInsight(action.agent,action.cat,desc,action.color);
-analyticsFeedItems.unshift({icon:action.cat==='email'?'fas fa-envelope':action.cat==='lead'?'fas fa-user-plus':action.cat==='call'?'fas fa-phone':action.cat==='support'?'fas fa-life-ring':'fas fa-chart-line',color:action.color,text:`${action.agent}: ${desc}`,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
-if(analyticsFeedItems.length>30)analyticsFeedItems.pop();
-updateStats();
-buildAnalytics();
-if(supabaseClient&&currentUser){
-supabaseDB('insert','activity_logs',{data:{user_id:currentUser.id,agent:action.agent,category:action.cat,action:action.cat,description:desc}});
-}
-logAudit(action.agent+': '+desc);
-},20000);
-}
-
-function stopActivitySimulation(){
-if(activityInterval){clearInterval(activityInterval);activityInterval=null;}
-}
-
-async function checkAdminAccess(){
-if(currentUser?.email===ADMIN_EMAIL){
-const res=await supabaseDB('selectAll','signups',{orderBy:'created_at',ascending:false,limit:50});
-if(res?.data){
-const tbody=document.getElementById('adminTableBody');
-tbody.innerHTML=res.data.map(s=>`<tr><td>${s.first_name||''} ${s.last_name||''}</td><td>${s.email||''}</td><td>${s.business_name||'N/A'}</td><td>${s.industry||'N/A'}</td><td><span class="badge badge-accent">${s.status||'active'}</span></td><td>${new Date(s.created_at).toLocaleDateString()}</td></tr>`).join('');
-}
-openModal('adminModal');
-}else{showToast('Admin access restricted','error');}
-}
-
-window.addEventListener('scroll',()=>{
-const nav=document.getElementById('mainNav');
-if(nav)nav.classList.toggle('scrolled',window.scrollY>50);
-});
-
-document.querySelectorAll('.modal-overlay').forEach(overlay=>{
-overlay.addEventListener('click',e=>{
-if(e.target===overlay)overlay.classList.remove('open');
-});
-});
-
-document.addEventListener('keydown',e=>{
-if(e.key==='Escape'){
-document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
-closeSidebar();
-}
-});
+window.addEventListener('scroll',()=>{const nav=document.getElementById('mainNav');if(nav)nav.classList.toggle('scrolled',window.scrollY>50);});
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('open');});});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));closeSidebar();}});
 
 async function init(){
-const script=document.createElement('script');
-script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-script.onload=async()=>{
-initSupabase();
-const session=await supabaseAuth('session');
-if(session?.data?.session){
-currentUser=session.data.session.user;
-await loadProfile();
-showDashboard();
-}
-};
-document.head.appendChild(script);
+const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';script.onload=async()=>{initSupabase();const session=await supabaseAuth('session');if(session?.data?.session){currentUser=session.data.session.user;await loadProfile();showDashboard();}};document.head.appendChild(script);
 buildServicesGrid();
-
-document.querySelector('footer a[href="mailto:coultersagents@gmail.com"]')?.addEventListener('click',e=>{
-e.preventDefault();
-if(currentUser)checkAdminAccess();
-else openModal('loginModal');
-});
+document.getElementById('footerAdminLink')?.addEventListener('click',e=>{e.preventDefault();if(currentUser)checkAdminAccess();else openModal('loginModal');});
 }
-
 init();
 </script>
 </body>
