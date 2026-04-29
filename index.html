@@ -9,55 +9,56 @@
 <style>
 :root{--brand:#7c3aed;--brand2:#a78bfa;--bg:#0f0f1a;--bg2:#1a1a2e;--bg3:#25253e;--grad:linear-gradient(135deg,var(--brand),var(--brand2));--font:'Inter',sans-serif;--rs:12px;--rl:20px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidden;transition:background .4s}
+body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidden}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--brand);border-radius:3px}
-.btn-primary{background:var(--grad);color:#fff;padding:10px 24px;border-radius:var(--rs);border:none;font-weight:600;cursor:pointer;transition:all .3s;font-family:var(--font);font-size:14px}
+.btn-primary{background:var(--grad);color:#fff;padding:10px 24px;border-radius:var(--rs);border:none;font-weight:600;cursor:pointer;font-family:var(--font);font-size:14px;transition:all .3s}
 .btn-primary:hover{opacity:.9;transform:translateY(-1px)}.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-secondary{background:var(--bg3);color:#e2e8f0;padding:10px 24px;border-radius:var(--rs);border:1px solid rgba(255,255,255,.1);font-weight:500;cursor:pointer;transition:all .3s;font-family:var(--font);font-size:14px}
+.btn-secondary{background:var(--bg3);color:#e2e8f0;padding:10px 24px;border-radius:var(--rs);border:1px solid rgba(255,255,255,.1);font-weight:500;cursor:pointer;font-family:var(--font);font-size:14px}
 .btn-secondary:hover{border-color:var(--brand)}
 .btn-danger{background:rgba(239,68,68,.15);color:#ef4444;padding:10px 24px;border-radius:var(--rs);border:1px solid rgba(239,68,68,.3);font-weight:600;cursor:pointer;font-family:var(--font);font-size:14px}
 .card{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.06);padding:24px}
-.input-field{background:var(--bg);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:10px 14px;color:#e2e8f0;font-family:var(--font);font-size:14px;width:100%;outline:none;transition:border-color .3s}
+.input-field{background:var(--bg);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:10px 14px;color:#e2e8f0;font-family:var(--font);font-size:14px;width:100%;outline:none}
 .input-field:focus{border-color:var(--brand)}.input-field::placeholder{color:#64748b}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:9998;display:none;align-items:center;justify-content:center}
 .modal-overlay.active{display:flex}
-.modal-box{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.1);padding:32px;max-width:520px;width:90%;max-height:85vh;overflow-y:auto;position:relative}
-.sidebar-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:var(--rs);cursor:pointer;transition:all .2s;font-size:14px;color:#94a3b8}
+.modal-box{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.1);padding:32px;max-width:560px;width:90%;max-height:85vh;overflow-y:auto;position:relative}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:var(--rs);cursor:pointer;font-size:14px;color:#94a3b8;transition:all .2s}
 .sidebar-item:hover{background:var(--bg3);color:#e2e8f0}.sidebar-item.active{background:var(--bg3);color:var(--brand)}
 .toast-container{position:fixed;top:20px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{background:var(--bg3);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:12px 20px;font-size:13px;color:#e2e8f0;animation:slideIn .3s ease;min-width:250px;pointer-events:auto}
-.toast.success{border-left:3px solid #10b981}.toast.error{border-left:3px solid #ef4444}.toast.info{border-left:3px solid var(--brand)}
+.toast{background:var(--bg3);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:12px 20px;font-size:13px;color:#e2e8f0;animation:slideIn .3s;min-width:250px;pointer-events:auto}
+.toast.success{border-left:3px solid #10b981}.toast.error{border-left:3px solid #ef4444}.toast.info{border-left:3px solid var(--brand)}.toast.warn{border-left:3px solid #f59e0b}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .stat-card{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.06);padding:20px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
 .glow-dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 12px var(--brand)}
 #landing-page{min-height:100vh}#dashboard-page{display:none;min-height:100vh}
 .hero-section{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
-.nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,15,26,.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 32px}
+.hero-section::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(124,58,237,.12) 0%,transparent 60%);animation:float 8s ease-in-out infinite}
+.nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,15,26,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 32px}
 .service-card{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.06);padding:28px;transition:all .4s;cursor:pointer}
-.service-card:hover{border-color:var(--brand);transform:translateY(-4px)}
-.wizard-step{display:none;animation:fadeIn .4s ease}.wizard-step.active{display:block}
+.service-card:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
 .pricing-card{background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.06);padding:32px;text-align:center;position:relative}
 .pricing-card.featured{border-color:var(--brand);transform:scale(1.05)}
 .pricing-card.featured::before{content:'POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;padding:4px 16px;border-radius:20px;font-size:11px;font-weight:700}
 .dash-sidebar{width:260px;min-height:100vh;background:var(--bg2);border-right:1px solid rgba(255,255,255,.06);padding:20px 12px;position:fixed;left:0;top:0;z-index:50;overflow-y:auto}
 .dash-main{margin-left:260px;padding:24px 32px;min-height:100vh}
-.dash-panel{display:none;animation:fadeIn .3s ease}.dash-panel.active{display:block}
+.dash-panel{display:none;animation:fadeIn .3s}.dash-panel.active{display:block}
 .chat-container{display:flex;flex-direction:column;height:calc(100vh - 120px)}
 .chat-messages{flex:1;overflow-y:auto;padding:20px 0}
-.chat-bubble{max-width:75%;padding:12px 18px;border-radius:var(--rl);margin-bottom:12px;font-size:14px;line-height:1.6;animation:fadeIn .3s ease;word-wrap:break-word}
+.chat-bubble{max-width:75%;padding:12px 18px;border-radius:var(--rl);margin-bottom:12px;font-size:14px;line-height:1.6;animation:fadeIn .3s;word-wrap:break-word}
 .chat-bubble.user{background:var(--grad);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
 .chat-bubble.ai{background:var(--bg3);color:#e2e8f0;border-bottom-left-radius:4px}
-.intg-card{background:var(--bg3);border-radius:var(--rs);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.intg-card{background:var(--bg3);border-radius:var(--rs);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid transparent;transition:all .2s}
 .intg-card:hover{border-color:var(--brand)}.intg-card.connected{border-color:#10b981}
 .intg-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0}
 .vibe-card{border-radius:var(--rs);padding:12px;cursor:pointer;border:2px solid transparent;transition:all .3s;text-align:center}
 .vibe-card:hover{transform:translateY(-2px)}.vibe-card.active{border-color:var(--brand);box-shadow:0 0 20px rgba(124,58,237,.3)}
 .vibe-preview{width:100%;height:40px;border-radius:6px;margin-bottom:6px}
 .audit-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--rs);background:var(--bg);margin-bottom:8px;font-size:13px}
-.agent-card{background:var(--bg3);border-radius:var(--rs);padding:16px;text-align:center;transition:all .3s;border:1px solid transparent}
+.agent-card{background:var(--bg3);border-radius:var(--rs);padding:16px;text-align:center;border:1px solid transparent}
 .agent-card:hover{border-color:var(--brand)}
 .agent-avatar{width:48px;height:48px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .roadmap-item{position:relative;padding-left:32px;padding-bottom:24px;border-left:2px solid var(--bg3);margin-left:8px}
@@ -67,7 +68,7 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 .insight-item{padding:12px 16px;border-left:3px solid var(--brand);background:var(--bg3);border-radius:0 var(--rs) var(--rs) 0;margin-bottom:8px;font-size:13px}
 .email-item{padding:10px 12px;background:var(--bg);border-radius:var(--rs);margin-bottom:6px;cursor:pointer;border-left:3px solid transparent}
 .email-item:hover{border-left-color:var(--brand);background:var(--bg3)}
-.profit-bar{height:8px;border-radius:4px;background:var(--bg);overflow:hidden}.profit-bar-fill{height:100%;border-radius:4px;background:var(--grad);transition:width 1s ease}
+.profit-bar{height:8px;border-radius:4px;background:var(--bg);overflow:hidden}.profit-bar-fill{height:100%;border-radius:4px;background:var(--grad);transition:width 1s}
 .metric-detail{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metric-detail-item{padding:12px;background:var(--bg);border-radius:var(--rs);text-align:center}
 .category-header{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;margin:16px 0 8px;padding-left:4px}
 .profile-field{margin-bottom:16px}.profile-field label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
@@ -80,24 +81,28 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 .color-picker-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}.color-picker-row label{font-size:13px;color:#94a3b8;min-width:80px}
 .color-picker-row input[type="color"]{width:40px;height:32px;border:none;border-radius:6px;cursor:pointer;background:transparent}
 .font-option,.radius-option{padding:8px 16px;border-radius:var(--rs);cursor:pointer;border:1px solid rgba(255,255,255,.1);background:var(--bg);color:#94a3b8;font-size:13px;transition:all .2s}
-.font-option:hover,.radius-option:hover{border-color:var(--brand);color:#e2e8f0}
-.font-option.active,.radius-option.active{border-color:var(--brand);background:var(--bg3);color:var(--brand)}
-.db-indicator{padding:10px 16px;border-radius:var(--rs);font-size:12px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-weight:600}
-.db-indicator.ok{background:rgba(16,185,129,.12);color:#10b981;border:1px solid rgba(16,185,129,.25)}
-.db-indicator.err{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25)}
-.db-indicator.loading{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
-.auth-error{padding:10px 14px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:var(--rs);color:#ef4444;font-size:12px;margin-bottom:12px;display:none}
-.auth-success{padding:10px 14px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);border-radius:var(--rs);color:#10b981;font-size:12px;margin-bottom:12px;display:none}
+.font-option:hover,.radius-option:hover{border-color:var(--brand)}.font-option.active,.radius-option.active{border-color:var(--brand);background:var(--bg3);color:var(--brand)}
+.db-box{padding:14px;border-radius:var(--rs);margin-bottom:16px;font-size:12px;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.db-box.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#10b981}
+.db-box.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#ef4444}
+.db-box.loading{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#f59e0b}
+.db-box.demo{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);color:#06b6d4}
+.auth-msg{padding:12px 16px;border-radius:var(--rs);margin-bottom:12px;font-size:13px;display:none;line-height:1.5}
+.auth-msg.error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#ef4444}
+.auth-msg.success{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:#10b981}
+.website-frame{border-radius:var(--rs);overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#fff;height:260px}
+.website-frame iframe{width:100%;height:100%;border:none}
 </style>
 </head>
 <body>
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- ====== LANDING ====== -->
 <div id="landing-page">
 <nav class="nav-bar">
 <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
 <div style="display:flex;align-items:center;gap:8px;"><div style="width:32px;height:32px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;">CA</div><span style="font-weight:700;font-size:18px;color:#fff;">CoultersAgents</span></div>
-<div style="display:flex;align-items:center;gap:24px;">
+<div style="display:flex;align-items:center;gap:16px;">
 <a href="#features" style="color:#94a3b8;text-decoration:none;font-size:14px;">Features</a>
 <a href="#pricing" style="color:#94a3b8;text-decoration:none;font-size:14px;">Pricing</a>
 <button class="btn-primary" onclick="showAuthModal('login')">Log In</button>
@@ -111,13 +116,18 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div style="position:relative;z-index:1;">
 <div style="display:inline-flex;align-items:center;gap:8px;background:var(--bg2);padding:6px 16px;border-radius:20px;font-size:12px;color:var(--brand);margin-bottom:24px;border:1px solid rgba(124,58,237,.3);"><span class="glow-dot"></span> Public Beta</div>
 <h1 style="font-size:52px;font-weight:900;line-height:1.1;margin-bottom:20px;">Your AI<br><span style="color:var(--brand);">Operating System</span></h1>
-<p style="font-size:18px;color:#94a3b8;line-height:1.7;margin-bottom:36px;max-width:480px;">CoultersAgents unifies your tools, automates workflows, and deploys intelligent agents.</p>
+<p style="font-size:18px;color:#94a3b8;line-height:1.7;margin-bottom:36px;max-width:480px;">Unify your tools, automate workflows, and deploy intelligent agents — all from one dashboard.</p>
 <div style="display:flex;gap:12px;"><button class="btn-primary" style="padding:14px 32px;font-size:16px;" onclick="showAuthModal('signup')">Get Started Free</button><button class="btn-secondary" style="padding:14px 32px;font-size:16px;" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</button></div>
+<div style="display:flex;gap:32px;margin-top:40px;">
+<div><span style="font-size:28px;font-weight:800;color:#fff;">12+</span><br><span style="font-size:12px;color:#64748b;">Integrations</span></div>
+<div><span style="font-size:28px;font-weight:800;color:#fff;">99.9%</span><br><span style="font-size:12px;color:#64748b;">Uptime</span></div>
+<div><span style="font-size:28px;font-weight:800;color:#fff;">50ms</span><br><span style="font-size:12px;color:#64748b;">Response</span></div>
+</div>
 </div>
 <div style="position:relative;z-index:1;">
-<div style="background:var(--bg2);border-radius:var(--rl);border:1px solid rgba(255,255,255,.08);padding:24px;box-shadow:0 40px 80px rgba(0,0,0,.4);">
+<div style="background:var(--bg2);border-radius:var(--rl);padding:24px;box-shadow:0 40px 80px rgba(0,0,0,.4);">
 <div style="display:flex;gap:8px;margin-bottom:16px;"><div style="width:12px;height:12px;border-radius:50%;background:#ef4444;"></div><div style="width:12px;height:12px;border-radius:50%;background:#f59e0b;"></div><div style="width:12px;height:12px;border-radius:50%;background:#10b981;"></div></div>
-<div style="background:var(--bg);border-radius:var(--rs);padding:16px;margin-bottom:12px;"><div style="font-size:12px;color:var(--brand);margin-bottom:8px;">SENDERION AI</div><div style="font-size:14px;color:#e2e8f0;">Analyzing your Gmail... Found 23 action items, 5 urgent follow-ups, and 2 deal opportunities.</div></div>
+<div style="background:var(--bg);border-radius:var(--rs);padding:16px;margin-bottom:12px;"><div style="font-size:12px;color:var(--brand);margin-bottom:8px;">SENDERION AI AGENT</div><div style="font-size:14px;color:#e2e8f0;">Analyzing your Gmail inbox... Found 23 action items, 5 urgent follow-ups, and 2 deal opportunities.</div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:var(--bg);border-radius:var(--rs);padding:12px;text-align:center;"><div style="font-size:20px;font-weight:800;color:#10b981;">$12.4k</div><div style="font-size:11px;color:#64748b;">Revenue</div></div><div style="background:var(--bg);border-radius:var(--rs);padding:12px;text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--brand);">87%</div><div style="font-size:11px;color:#64748b;">Efficiency</div></div></div>
 </div>
 </div>
@@ -125,24 +135,27 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 </section>
 
 <section id="features" style="padding:80px 32px;max-width:1200px;margin:0 auto;">
-<div style="text-align:center;margin-bottom:48px;"><h2 style="font-size:36px;font-weight:800;margin-bottom:12px;">Everything You Need</h2></div>
+<div style="text-align:center;margin-bottom:48px;"><h2 style="font-size:36px;font-weight:800;margin-bottom:12px;">Everything You Need</h2><p style="color:#94a3b8;">Eight powerful services to run your business on autopilot.</p></div>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" id="servicesGrid"></div>
 </section>
 
 <section id="pricing" style="padding:80px 32px;max-width:1100px;margin:0 auto;">
+<div style="text-align:center;margin-bottom:48px;"><h2 style="font-size:36px;font-weight:800;">Simple Pricing</h2></div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start;">
-<div class="pricing-card"><h3 style="font-size:20px;font-weight:700;margin-bottom:4px;">Starter</h3><div style="font-size:40px;font-weight:900;">$0<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin:20px 0;"><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ 3 Integrations</div><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ Senterion Chat</div></div><button class="btn-secondary" style="width:100%;" onclick="showAuthModal('signup')">Start Free</button></div>
-<div class="pricing-card featured"><h3 style="font-size:20px;font-weight:700;margin-bottom:4px;">Professional</h3><div style="font-size:40px;font-weight:900;">$49<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin:20px 0;"><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ Unlimited Integrations</div><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ AI Triage</div><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ Custom Themes</div></div><button class="btn-primary" style="width:100%;" onclick="showAuthModal('signup')">Get Started</button></div>
-<div class="pricing-card"><h3 style="font-size:20px;font-weight:700;margin-bottom:4px;">Enterprise</h3><div style="font-size:40px;font-weight:900;">$199<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin:20px 0;"><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ Everything in Pro</div><div style="padding:4px 0;font-size:13px;color:#94a3b8;">✓ White Label</div></div><button class="btn-secondary" style="width:100%;" onclick="showToast('Contact team@coultersagents.com','info')">Contact Sales</button></div>
+<div class="pricing-card"><h3 style="font-size:20px;font-weight:700;">Starter</h3><div style="font-size:40px;font-weight:900;margin:12px 0;">$0<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin-bottom:24px;font-size:13px;color:#94a3b8;">✓ 3 Integrations<br>✓ Senterion Chat<br>✓ Basic Analytics</div><button class="btn-secondary" style="width:100%;" onclick="showAuthModal('signup')">Start Free</button></div>
+<div class="pricing-card featured"><h3 style="font-size:20px;font-weight:700;">Professional</h3><div style="font-size:40px;font-weight:900;margin:12px 0;">$49<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin-bottom:24px;font-size:13px;color:#94a3b8;">✓ Unlimited Integrations<br>✓ AI Triage<br>✓ Custom Themes</div><button class="btn-primary" style="width:100%;" onclick="showAuthModal('signup')">Get Started</button></div>
+<div class="pricing-card"><h3 style="font-size:20px;font-weight:700;">Enterprise</h3><div style="font-size:40px;font-weight:900;margin:12px 0;">$199<span style="font-size:16px;color:#64748b;">/mo</span></div><div style="text-align:left;margin-bottom:24px;font-size:13px;color:#94a3b8;">✓ Everything in Pro<br>✓ White Label<br>✓ Priority Support</div><button class="btn-secondary" style="width:100%;" onclick="showToast('Contact team@coultersagents.com','info')">Contact Sales</button></div>
 </div>
 </section>
-<footer style="padding:40px 32px;border-top:1px solid rgba(255,255,255,.06);text-align:center;"><p style="color:#475569;font-size:12px;">© 2026 CoultersAgents</p></footer>
+
+<footer style="padding:40px 32px;border-top:1px solid rgba(255,255,255,.06);text-align:center;"><p style="color:#475569;font-size:12px;">© 2026 CoultersAgents. All rights reserved.</p></footer>
 </div>
 
+<!-- ====== DASHBOARD ====== -->
 <div id="dashboard-page">
 <nav class="dash-sidebar">
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 8px;"><div style="width:28px;height:28px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:11px;">CA</div><span style="font-weight:700;font-size:15px;color:#fff;">CoultersAgents</span></div>
-<div id="sidebarDbStatus" class="db-indicator loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;"></div> Connecting...</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 8px;"><div style="width:28px;height:28px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:11px;">CA</div><span style="font-weight:700;font-size:15px;color:#fff;">CoultersAgents</span></div>
+<div id="sidebarDbBox" class="db-box loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;flex-shrink:0;"></div> <span>Connecting...</span></div>
 <div class="sidebar-item active" data-panel="overview" onclick="switchPanel('overview')">📊 Overview</div>
 <div class="sidebar-item" data-panel="chat" onclick="switchPanel('chat')">💬 Senterion</div>
 <div class="sidebar-item" data-panel="integrations" onclick="switchPanel('integrations')">🔌 Integrations</div>
@@ -164,13 +177,13 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div class="dash-panel active" id="panel-overview">
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;" id="statsRow"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
-<div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🚀 Roadmap</h3><div class="roadmap-item completed"><div style="font-size:13px;font-weight:600;">Core Dashboard</div></div><div class="roadmap-item completed"><div style="font-size:13px;font-weight:600;">Senterion AI</div></div><div class="roadmap-item"><div style="font-size:13px;font-weight:600;">Triage Engine</div></div></div>
+<div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🚀 Roadmap</h3><div class="roadmap-item completed"><div style="font-size:13px;font-weight:600;">Core Dashboard</div><div style="font-size:12px;color:#64748b;">Q1 2026</div></div><div class="roadmap-item completed"><div style="font-size:13px;font-weight:600;">Senterion AI</div><div style="font-size:12px;color:#64748b;">Q1 2026</div></div><div class="roadmap-item"><div style="font-size:13px;font-weight:600;">Triage Engine</div><div style="font-size:12px;color:#64748b;">Q2 2026</div></div></div>
 <div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">💡 Insights</h3><div id="insightsFeed"></div></div>
 </div>
-<div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">📧 Gmail Triage</h3><div id="gmailTriageOverview"><p style="color:#64748b;font-size:13px;">Connect Gmail in Integrations to see triaged emails.</p></div></div>
+<div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">📧 Gmail Triage</h3><div id="gmailTriageOverview"><p style="color:#64748b;font-size:13px;">Connect Gmail in Integrations to see AI-triaged emails.</p></div></div>
 <div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">📊 Metrics</h3><div class="metric-detail"><div class="metric-detail-item"><div style="font-size:22px;font-weight:800;color:var(--brand);" id="metricEmails">0</div><div style="font-size:11px;color:#64748b;">Emails</div></div><div class="metric-detail-item"><div style="font-size:22px;font-weight:800;color:#10b981;">12</div><div style="font-size:11px;color:#64748b;">Tasks</div></div><div class="metric-detail-item"><div style="font-size:22px;font-weight:800;color:#f59e0b;">3</div><div style="font-size:11px;color:#64748b;">Deals</div></div><div class="metric-detail-item"><div style="font-size:22px;font-weight:800;color:#06b6d4;">6</div><div style="font-size:11px;color:#64748b;">Agents</div></div></div></div>
 <div class="card" style="margin-bottom:24px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><h3 style="font-size:16px;font-weight:700;">💰 Profit</h3><span style="color:#10b981;font-weight:600;" id="profitPercent">+0%</span></div><div class="profit-bar" style="margin-bottom:12px;"><div class="profit-bar-fill" id="profitFill" style="width:0%;"></div></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;"><span>Rev: $<span id="profitRevenue">0</span></span><span>Cost: $<span id="profitCosts">0</span></span><span>Net: $<span id="profitNet">0</span></span></div></div>
-<div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🌐 Sandbox</h3><div style="display:flex;gap:8px;margin-bottom:12px;"><input class="input-field" id="sandboxUrl" placeholder="URL..." style="flex:1;font-size:13px;padding:8px 12px;"><button class="btn-primary" style="padding:8px 16px;font-size:13px;" onclick="loadWebsiteSandbox()">Preview</button></div><div style="border-radius:var(--rs);overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#fff;height:250px;"><iframe id="sandboxFrame" style="width:100%;height:100%;border:none;" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe></div></div>
+<div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🌐 Sandbox</h3><div style="display:flex;gap:8px;margin-bottom:12px;"><input class="input-field" id="sandboxUrl" placeholder="URL..." style="flex:1;font-size:13px;padding:8px 12px;"><button class="btn-primary" style="padding:8px 16px;font-size:13px;" onclick="loadWebsiteSandbox()">Preview</button></div><div class="website-frame"><iframe id="sandboxFrame" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe></div></div>
 <div class="card" style="margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🤖 Agents</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="agentsGrid"></div></div>
 <div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🤝 Deal</h3><div class="deal-card"><div style="display:flex;justify-content:space-between;margin-bottom:12px;"><div><div style="font-weight:700;">Acme Corp — Remodeling</div><div style="font-size:12px;color:#64748b;">3 days ago</div></div><div style="font-size:20px;font-weight:800;color:#10b981;" id="dealValue">$24,500</div></div><div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:#94a3b8;">Progress</span><span style="color:var(--brand);" id="dealProgressText">65%</span></div><div class="profit-bar"><div class="profit-bar-fill" id="dealProgressBar" style="width:65%;"></div></div></div><div style="display:flex;gap:8px;"><button class="btn-primary" style="padding:6px 14px;font-size:12px;" onclick="advanceDeal()">Advance</button><button class="btn-secondary" style="padding:6px 14px;font-size:12px;" onclick="triageDealWithAI()">AI Triage</button></div></div></div>
 </div>
@@ -178,7 +191,7 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div class="dash-panel" id="panel-chat">
 <div class="chat-container">
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);"><div style="width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;">S</div><div><div style="font-weight:700;">Senterion</div><div style="font-size:11px;color:#10b981;">● Gemini AI</div></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="clearChat()">Clear</button><button class="btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="exportChat()">Export</button></div></div>
-<div class="chat-messages" id="chatMessages"><div class="chat-bubble ai">👋 I'm Senterion, powered by Gemini. I can help with emails, deals, finance, and more.</div></div>
+<div class="chat-messages" id="chatMessages"><div class="chat-bubble ai">👋 I'm Senterion, powered by Gemini AI. I help with emails, deals, finance, and more.</div></div>
 <div style="display:flex;gap:8px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);"><input class="input-field" id="chatInput" placeholder="Ask anything..." style="flex:1;" onkeydown="if(event.key==='Enter')sendChatMessage()"><button class="btn-primary" onclick="sendChatMessage()">Send</button></div>
 </div>
 </div>
@@ -224,7 +237,7 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">📊 Weekly</h3><div id="weeklyChart" style="padding:20px;"></div></div>
 </div>
 <div class="card" id="plaidAnalyticsCard" style="display:none;margin-bottom:24px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🏦 Bank</h3><div id="plaidAccountsAnalytics"></div></div>
-<div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🔢 Metrics</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="analyticsMetrics"></div></div>
+<div class="card"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="analyticsMetrics"></div></div>
 </div>
 
 <div class="dash-panel" id="panel-settings">
@@ -241,12 +254,7 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div class="card" style="margin-bottom:20px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🔤 Font</h3><div id="fontSelector" style="display:flex;gap:8px;flex-wrap:wrap;"></div></div>
 <div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">📐 Radius</h3><div id="radiusSelector" style="display:flex;gap:8px;flex-wrap:wrap;"></div></div>
 </div>
-<div id="settings-profile" style="display:none;"><div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">👤 Profile</h3>
-<div class="profile-field"><label>Name</label><input class="input-field" id="profileName"></div>
-<div class="profile-field"><label>Email</label><input class="input-field" id="profileEmail" disabled style="opacity:.6;"></div>
-<div class="profile-field"><label>Company</label><input class="input-field" id="profileCompany"></div>
-<div class="profile-field"><label>Phone</label><input class="input-field" id="profilePhone"></div>
-<button class="btn-primary" onclick="saveProfile()">Save</button></div></div>
+<div id="settings-profile" style="display:none;"><div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">👤 Profile</h3><div class="profile-field"><label>Name</label><input class="input-field" id="profileName"></div><div class="profile-field"><label>Email</label><input class="input-field" id="profileEmail" disabled style="opacity:.6;"></div><div class="profile-field"><label>Company</label><input class="input-field" id="profileCompany"></div><div class="profile-field"><label>Phone</label><input class="input-field" id="profilePhone"></div><button class="btn-primary" onclick="saveProfile()">Save</button></div></div>
 <div id="settings-personality" style="display:none;"><div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🧠 Personality</h3><div id="personalityTraits"></div><div style="margin-top:16px;"><label style="font-size:12px;color:#94a3b8;text-transform:uppercase;display:block;margin-bottom:6px;">Style</label><select class="input-field" id="personalityStyle" onchange="updatePersonality()"><option value="professional">Professional</option><option value="friendly">Friendly</option><option value="concise">Concise</option></select></div></div></div>
 <div id="settings-industry" style="display:none;"><div class="card"><h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🏭 Industry</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;" id="industryGrid"></div><div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:var(--rs);">Current: <span style="color:var(--brand);" id="currentIndustry">None</span></div></div></div>
 <div id="settings-account" style="display:none;">
@@ -264,30 +272,32 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <div id="authLogin">
 <h3 style="font-size:22px;font-weight:800;margin-bottom:4px;">Welcome Back</h3>
 <p style="color:#94a3b8;font-size:13px;margin-bottom:16px;">Log in to your dashboard.</p>
-<div id="loginDbStatus" class="db-indicator loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;"></div> Checking database...</div>
-<div class="auth-error" id="loginError"></div>
-<div class="auth-success" id="loginSuccess"></div>
+<div id="loginDbBox" class="db-box loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;flex-shrink:0;"></div> <span>Checking database...</span></div>
+<div class="auth-msg error" id="loginError"></div>
+<div class="auth-msg success" id="loginSuccess"></div>
 <div class="profile-field"><label>Email</label><input class="input-field" id="loginEmail" type="email" placeholder="you@email.com"></div>
 <div class="profile-field"><label>Password</label><input class="input-field" id="loginPassword" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')handleLogin()"></div>
-<button class="btn-primary" style="width:100%;margin-bottom:12px;" id="loginBtn" onclick="handleLogin()">Log In</button>
+<button class="btn-primary" style="width:100%;margin-bottom:8px;" id="loginBtn" onclick="handleLogin()">Log In</button>
+<button class="btn-secondary" style="width:100%;margin-bottom:12px;" onclick="enterDemoMode()">🔓 Skip — Use Demo Mode</button>
 <div style="text-align:center;font-size:13px;color:#94a3b8;"><span onclick="showAuthModal('reset')" style="color:var(--brand);cursor:pointer;">Forgot password?</span> · <span onclick="showAuthModal('signup')" style="color:var(--brand);cursor:pointer;">Create account</span></div>
 </div>
 <div id="authSignup" style="display:none;">
 <h3 style="font-size:22px;font-weight:800;margin-bottom:4px;">Create Account</h3>
 <p style="color:#94a3b8;font-size:13px;margin-bottom:16px;">Start your AI OS journey.</p>
-<div id="signupDbStatus" class="db-indicator loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;"></div> Checking database...</div>
-<div class="auth-error" id="signupError"></div>
-<div class="auth-success" id="signupSuccess"></div>
+<div id="signupDbBox" class="db-box loading"><div class="loading-spinner" style="width:14px;height:14px;border-width:2px;flex-shrink:0;"></div> <span>Checking database...</span></div>
+<div class="auth-msg error" id="signupError"></div>
+<div class="auth-msg success" id="signupSuccess"></div>
 <div class="profile-field"><label>Name</label><input class="input-field" id="signupName" placeholder="Your name"></div>
 <div class="profile-field"><label>Email</label><input class="input-field" id="signupEmail" type="email" placeholder="you@email.com"></div>
 <div class="profile-field"><label>Password</label><input class="input-field" id="signupPassword" type="password" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')handleSignup()"></div>
-<button class="btn-primary" style="width:100%;margin-bottom:12px;" id="signupBtn" onclick="handleSignup()">Create Account</button>
+<button class="btn-primary" style="width:100%;margin-bottom:8px;" id="signupBtn" onclick="handleSignup()">Create Account</button>
+<button class="btn-secondary" style="width:100%;margin-bottom:12px;" onclick="enterDemoMode()">🔓 Skip — Use Demo Mode</button>
 <div style="text-align:center;font-size:13px;color:#94a3b8;">Have an account? <span onclick="showAuthModal('login')" style="color:var(--brand);cursor:pointer;">Log in</span></div>
 </div>
 <div id="authReset" style="display:none;">
 <h3 style="font-size:22px;font-weight:800;margin-bottom:4px;">Reset Password</h3>
 <p style="color:#94a3b8;font-size:13px;margin-bottom:24px;">We'll send a reset link.</p>
-<div class="auth-error" id="resetError"></div>
+<div class="auth-msg error" id="resetError"></div>
 <div class="profile-field"><label>Email</label><input class="input-field" id="resetEmail" type="email" placeholder="you@email.com"></div>
 <button class="btn-primary" style="width:100%;margin-bottom:12px;" id="resetBtn" onclick="handleReset()">Send Reset Link</button>
 <div style="text-align:center;font-size:13px;color:#94a3b8;"><span onclick="showAuthModal('login')" style="color:var(--brand);cursor:pointer;">Back to login</span></div>
@@ -304,48 +314,85 @@ body{font-family:var(--font);background:var(--bg);color:#e2e8f0;overflow-x:hidde
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script>
-const SUPABASE_URL='https://vtydcslxjvncguubwr.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eWRjc2x4anZuYmt1Z3V1YndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NjA3NjIsImV4cCI6MjA5MjIzNjc2Mn0.Y7v9FiRO-aF1N82E01loHm1RtYcuhag9X6JermVB09g';
+// ====== CONFIG ======
+const SB_URL='https://vtydcslxjvncguubwr.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eWRjc2x4anZuYmt1Z3V1YndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NjA3NjIsImV4cCI6MjA5MjIzNjc2Mn0.Y7v9FiRO-aF1N82E01loHm1RtYcuhag9X6JermVB09g';
 const GEMINI_KEY='AIzaSyBcje6SMk8dWbSReA6ywyFnAJ8Ymi2JaSw';
-const GOOGLE_CLIENT_ID='649595626791-1098lp7etn66fp7ifpl2n5u639dkcerl.apps.googleusercontent.com';
+const G_CLIENT_ID='649595626791-1098lp7etn66fp7ifpl2n5u639dkcerl.apps.googleusercontent.com';
+const PLAID_KEY='sb_publishable_QDZrFkZSOhrnc69eMermXg_HZoCiagX';
 const FREE_USERS=['coultersagents@gmail.com','coultersmithremodeling@gmail.com'];
 
 const VIBES={cyberpunk:{name:'Cyberpunk',brand:'#7c3aed',brand2:'#a78bfa',bg:'#0f0f1a',bg2:'#1a1a2e',bg3:'#25253e',preview:'linear-gradient(135deg,#7c3aed,#a78bfa)'},ocean:{name:'Ocean',brand:'#0ea5e9',brand2:'#38bdf8',bg:'#0a1628',bg2:'#0f2040',bg3:'#163060',preview:'linear-gradient(135deg,#0ea5e9,#38bdf8)'},forest:{name:'Forest',brand:'#10b981',brand2:'#34d399',bg:'#0a1a14',bg2:'#0f2a1e',bg3:'#163a28',preview:'linear-gradient(135deg,#10b981,#34d399)'},sunset:{name:'Sunset',brand:'#f59e0b',brand2:'#fbbf24',bg:'#1a0f0a',bg2:'#2e1a0f',bg3:'#3e2515',preview:'linear-gradient(135deg,#f59e0b,#fbbf24)'},royal:{name:'Royal',brand:'#8b5cf6',brand2:'#c084fc',bg:'#12091a',bg2:'#1e0f2e',bg3:'#2a153e',preview:'linear-gradient(135deg,#8b5cf6,#c084fc)'},arctic:{name:'Arctic',brand:'#06b6d4',brand2:'#67e8f9',bg:'#0a1419',bg2:'#0f1f28',bg3:'#152a35',preview:'linear-gradient(135deg,#06b6d4,#67e8f9)'},ember:{name:'Ember',brand:'#ef4444',brand2:'#f87171',bg:'#1a0a0a',bg2:'#2e0f0f',bg3:'#3e1515',preview:'linear-gradient(135deg,#ef4444,#f87171)'},mint:{name:'Mint',brand:'#14b8a6',brand2:'#5eead4',bg:'#0a1a18',bg2:'#0f2a26',bg3:'#153a34',preview:'linear-gradient(135deg,#14b8a6,#5eead4)'}};
 const FONTS=[{name:'Inter',value:"'Inter',sans-serif"},{name:'Space Grotesk',value:"'Space Grotesk',sans-serif"},{name:'Outfit',value:"'Outfit',sans-serif"},{name:'Playfair Display',value:"'Playfair Display',serif"}];
 const RADII=[{name:'Sharp',value:'4px'},{name:'Small',value:'8px'},{name:'Medium',value:'12px'},{name:'Large',value:'20px'},{name:'Round',value:'28px'}];
-const SERVICES=[{icon:'🤖',title:'AI Agents',desc:'Autonomous task handling'},{icon:'📧',title:'Email Triage',desc:'AI categorization'},{icon:'💰',title:'Financial Sync',desc:'Plaid & Stripe'},{icon:'📊',title:'Analytics',desc:'Business insights'},{icon:'🔒',title:'Vault',desc:'AES-256 storage'},{icon:'📱',title:'Social',desc:'FB, IG, Shopify'},{icon:'📞',title:'Phone',desc:'Twilio SMS'},{icon:'🔄',title:'Automation',desc:'Multi-step workflows'}];
+const SERVICES=[{icon:'🤖',title:'AI Agents',desc:'Autonomous agents'},{icon:'📧',title:'Email Triage',desc:'AI categorization'},{icon:'💰',title:'Financial Sync',desc:'Plaid & Stripe'},{icon:'📊',title:'Analytics',desc:'Business insights'},{icon:'🔒',title:'Vault',desc:'AES-256 storage'},{icon:'📱',title:'Social',desc:'FB, IG, Shopify'},{icon:'📞',title:'Phone',desc:'Twilio SMS'},{icon:'🔄',title:'Automation',desc:'Workflows'}];
 const AGENTS=[{name:'Senterion',emoji:'🧠',role:'AI Assistant'},{name:'Triage',emoji:'📧',role:'Email'},{name:'Finance',emoji:'💰',role:'Monitor'},{name:'Social',emoji:'📱',role:'Listener'},{name:'Deals',emoji:'🤝',role:'CRM'},{name:'Vault',emoji:'🔒',role:'Security'},{name:'Data',emoji:'📊',role:'Analytics'},{name:'Scheduler',emoji:'📅',role:'Tasks'}];
 const INDUSTRIES=[{id:'construction',name:'🏗️ Construction'},{id:'real-estate',name:'🏠 Real Estate'},{id:'consulting',name:'💼 Consulting'},{id:'ecommerce',name:'🛒 E-Commerce'},{id:'saas',name:'☁️ SaaS'},{id:'healthcare',name:'🏥 Healthcare'},{id:'finance',name:'🏦 Finance'},{id:'marketing',name:'📣 Marketing'}];
 const PTRAITS=['Analytical','Creative','Empathetic','Direct','Humorous','Formal','Encouraging','Data-driven','Strategic','Proactive'];
 
-const APP={user:null,profile:null,isSubscriber:false,chatHistory:[],vaultItems:[],gmailSyncInterval:null};
+// ====== STATE ======
+const APP={user:null,profile:null,isSubscriber:false,demoMode:false,chatHistory:[],vaultItems:[],gmailSyncInterval:null};
 const intgState={gmail:{connected:false,accessToken:null,emails:[]},outlook:{connected:false,token:null},plaid:{connected:false,accessToken:null,accounts:[]},twilio:{connected:false,accountSid:null,authToken:null,phoneNumber:null},facebook:{connected:false,token:null},instagram:{connected:false,token:null},slack:{connected:false,token:null},quickbooks:{connected:false,token:null},stripe:{connected:false,token:null},shopify:{connected:false,token:null},hubspot:{connected:false,token:null}};
 let selectedTraits=['Analytical','Proactive'],selectedIndustry=null,dealProgress=65;
 
-// ============ SUPABASE ============
-let sb=null,dbReady=false;
+// ====== SUPABASE ======
+let sb=null,dbReady=false,dbStatus='loading';
+
+function setDbUI(state,msg){
+  dbStatus=state;
+  ['sidebarDbBox','loginDbBox','signupDbBox'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.className='db-box '+state;
+    const spin='<div class="loading-spinner" style="width:14px;height:14px;border-width:2px;flex-shrink:0;"></div>';
+    el.innerHTML=state==='ok'?'✅ '+msg:state==='err'?'❌ '+msg:state==='demo'?'🧪 '+msg:spin+' <span>'+msg+'</span>';
+  });
+}
+
+async function testSupabaseConnection(){
+  console.log('[SB] Testing connection to',SB_URL);
+  try{
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),8000);
+    const r=await fetch(SB_URL+'/rest/v1/',{method:'GET',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},signal:ctrl.signal});
+    clearTimeout(tid);
+    console.log('[SB] Health check status:',r.status);
+    if(r.status<500)return true;
+    return false;
+  }catch(e){
+    console.warn('[SB] Connection test failed:',e.message);
+    return false;
+  }
+}
 
 async function initSupabase(){
   console.log('[SB] Starting init...');
-  updateDbUI('loading','Connecting...');
+  setDbUI('loading','Connecting to database...');
+
+  // First test if the Supabase URL is reachable
+  const reachable=await testSupabaseConnection();
+  if(!reachable){
+    console.error('[SB] Cannot reach Supabase — project may be paused');
+    setDbUI('err','Database unreachable — project may be paused. Go to supabase.com → Dashboard → click "Restore project". Or use Demo Mode.');
+    return;
+  }
+
   try{
-    if(!window.supabase||!window.supabase.createClient){
-      console.error('[SB] Library not found');
-      updateDbUI('err','Library not loaded — refresh page');
+    if(!window.supabase?.createClient){
+      setDbUI('err','Supabase library not loaded. Refresh the page.');
       return;
     }
-    sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-    console.log('[SB] Client created, testing connection...');
+    sb=window.supabase.createClient(SB_URL,SB_KEY);
+    console.log('[SB] Client created');
 
-    // Test by getting session
     const{data,error}=await sb.auth.getSession();
     if(error){
-      console.error('[SB] Session error:',error);
-      updateDbUI('err','Auth error: '+error.message);
+      console.warn('[SB] Session error:',error.message);
+      setDbUI('err','Auth error: '+error.message);
       return;
     }
+
     dbReady=true;
-    updateDbUI('ok','Database connected ✓');
+    setDbUI('ok','Database connected ✓');
     console.log('[SB] ✓ Connected. Session:',data.session?'active':'none');
 
     if(data.session?.user){
@@ -355,89 +402,84 @@ async function initSupabase(){
       showDashboard();
     }
 
-    // Listen for auth state changes
-    sb.auth.onAuthStateChange((event,session)=>{
-      console.log('[SB] Auth event:',event);
-      if(event==='SIGNED_IN'&&session?.user){
-        APP.user=session.user;
-        checkFreeUser(session.user.email);
+    sb.auth.onAuthStateChange((ev,sess)=>{
+      console.log('[SB] Auth:',ev);
+      if(ev==='SIGNED_IN'&&sess?.user){
+        APP.user=sess.user;checkFreeUser(sess.user.email);
         loadUserProfile().then(()=>{if(document.getElementById('dashboard-page').style.display==='none')showDashboard();});
-      }else if(event==='SIGNED_OUT'){
-        APP.user=null;APP.profile=null;APP.isSubscriber=false;
-        document.getElementById('landing-page').style.display='block';
-        document.getElementById('dashboard-page').style.display='none';
+      }else if(ev==='SIGNED_OUT'){
+        APP.user=null;APP.profile=null;APP.isSubscriber=false;APP.demoMode=false;
+        document.getElementById('landing-page').style.display='block';document.getElementById('dashboard-page').style.display='none';
       }
     });
   }catch(e){
-    console.error('[SB] Init failed:',e);
-    updateDbUI('err','Failed: '+e.message);
+    console.error('[SB] Init error:',e);
+    setDbUI('err','Error: '+e.message+'. Try Demo Mode.');
   }
 }
 
-function updateDbUI(state,msg){
-  ['sidebarDbStatus','loginDbStatus','signupDbStatus'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    el.className='db-indicator '+state;
-    if(state==='ok')el.innerHTML='✅ '+msg;
-    else if(state==='err')el.innerHTML='❌ '+msg;
-    else el.innerHTML='<div class="loading-spinner" style="width:14px;height:14px;border-width:2px;"></div> '+msg;
-  });
+// ====== DEMO MODE ======
+function enterDemoMode(){
+  APP.demoMode=true;
+  APP.user={id:'demo-'+Date.now(),email:'demo@coultersagents.app',user_metadata:{full_name:'Demo User'},aud:'authenticated'};
+  APP.isSubscriber=true;
+  APP.profile={full_name:'Demo User',email:'demo@coultersagents.app',company:'Demo Corp',industry:'saas',is_subscriber:true};
+  setDbUI('demo','Demo Mode — no server connection needed');
+  closeModal('authModal');
+  showDashboard();
+  showToast('Demo Mode active! Full features, no server needed.','info');
 }
 
-function showAuthError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';}}
-function hideAuthError(id){const el=document.getElementById(id);if(el)el.style.display='none';}
-function showAuthSuccess(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';}}
-function hideAuthSuccess(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function isDemo(){return APP.demoMode;}
 
-// ============ TOAST ============
-function showToast(msg,type='info'){const c=document.getElementById('toastContainer');const t=document.createElement('div');t.className=`toast ${type}`;t.textContent=msg;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},4000);}
+// ====== TOAST ======
+function showToast(msg,type='info'){const c=document.getElementById('toastContainer');const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},4000);}
 
-// ============ MODAL ============
+// ====== MODAL ======
 function openModal(id){document.getElementById(id).classList.add('active');}
 function closeModal(id){document.getElementById(id).classList.remove('active');}
+function showAuthMsg(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.style.display='block';}}
+function hideAuthMsg(id){const e=document.getElementById(id);if(e)e.style.display='none';}
 
-// ============ AUTH ============
+// ====== AUTH ======
 function showAuthModal(mode){
   document.getElementById('authLogin').style.display=mode==='login'?'block':'none';
   document.getElementById('authSignup').style.display=mode==='signup'?'block':'none';
   document.getElementById('authReset').style.display=mode==='reset'?'block':'none';
-  ['loginError','signupError','resetError','loginSuccess','signupSuccess'].forEach(hideAuthError);
-  updateDbUI(dbReady?'ok':'loading',dbReady?'Database connected ✓':'Connecting...');
+  ['loginError','signupError','resetError','loginSuccess','signupSuccess'].forEach(hideAuthMsg);
+  setDbUI(dbStatus,dbStatus==='ok'?'Database connected ✓':dbStatus==='demo'?'Demo Mode active':dbStatus==='err'?'Database unreachable — use Demo Mode':'Connecting...');
   openModal('authModal');
 }
 
 async function handleLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pw=document.getElementById('loginPassword').value;
-  hideAuthError('loginError');hideAuthSuccess('loginSuccess');
+  hideAuthMsg('loginError');hideAuthMsg('loginSuccess');
 
-  if(!email||!pw){showAuthError('loginError','Please fill in all fields');return;}
-  if(!sb||!dbReady){showAuthError('loginError','Database not connected. Please refresh the page.');return;}
+  if(!email||!pw){showAuthMsg('loginError','Please fill in all fields');return;}
 
-  const btn=document.getElementById('loginBtn');
-  btn.disabled=true;btn.textContent='Signing in...';
-  console.log('[AUTH] Login attempt:',email);
+  if(isDemo()||!sb||!dbReady){
+    if(!isDemo())enterDemoMode();
+    return;
+  }
+
+  const btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent='Signing in...';
+  console.log('[AUTH] Login:',email);
 
   try{
     const{data,error}=await sb.auth.signInWithPassword({email,password:pw});
-    if(error){
-      console.error('[AUTH] Login error:',error.message);
-      showAuthError('loginError',error.message);
-      return;
-    }
-    console.log('[AUTH] Login success:',data.user?.id);
-    APP.user=data.user;
-    checkFreeUser(email);
-    await loadUserProfile();
-    addAuditEntry('Logged in');
+    if(error)throw error;
+    console.log('[AUTH] Success:',data.user?.id);
+    APP.user=data.user;checkFreeUser(email);
+    await loadUserProfile();addAuditEntry('Logged in');
     try{await sb.from('activity_logs').insert({user_id:APP.user.id,action:'login',created_at:new Date().toISOString()});}catch(e){}
-    closeModal('authModal');
-    showDashboard();
-    showToast('Welcome back!','success');
+    closeModal('authModal');showDashboard();showToast('Welcome back!','success');
   }catch(err){
-    console.error('[AUTH] Exception:',err);
-    showAuthError('loginError',err.message||'Login failed unexpectedly');
+    console.error('[AUTH] Error:',err);
+    let msg=err.message||'Login failed';
+    if(msg.includes('fetch'))msg='Cannot reach server. The Supabase project may be paused — go to supabase.com to restore it, or use Demo Mode.';
+    if(msg.includes('Invalid login'))msg='Wrong email or password. Check credentials or use Demo Mode.';
+    showAuthMsg('loginError',msg);
   }finally{btn.disabled=false;btn.textContent='Log In';}
 }
 
@@ -445,232 +487,163 @@ async function handleSignup(){
   const name=document.getElementById('signupName').value.trim();
   const email=document.getElementById('signupEmail').value.trim();
   const pw=document.getElementById('signupPassword').value;
-  hideAuthError('signupError');hideAuthSuccess('signupSuccess');
+  hideAuthMsg('signupError');hideAuthMsg('signupSuccess');
 
-  if(!name||!email||!pw){showAuthError('signupError','Please fill in all fields');return;}
-  if(pw.length<8){showAuthError('signupError','Password must be at least 8 characters');return;}
-  if(!sb||!dbReady){showAuthError('signupError','Database not connected. Please refresh.');return;}
+  if(!name||!email||!pw){showAuthMsg('signupError','Fill in all fields');return;}
+  if(pw.length<8){showAuthMsg('signupError','Password needs 8+ chars');return;}
 
-  const btn=document.getElementById('signupBtn');
-  btn.disabled=true;btn.textContent='Creating account...';
-  console.log('[AUTH] Signup attempt:',email);
+  if(isDemo()||!sb||!dbReady){
+    if(!isDemo())enterDemoMode();
+    return;
+  }
 
+  const btn=document.getElementById('signupBtn');btn.disabled=true;btn.textContent='Creating...';
   try{
     const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{full_name:name}}});
-    if(error){
-      console.error('[AUTH] Signup error:',error.message);
-      showAuthError('signupError',error.message);
-      return;
-    }
-
-    // Check if email confirmation is required
+    if(error)throw error;
     if(data.user&&!data.session){
-      console.log('[AUTH] Email confirmation required');
-      showAuthSuccess('signupSuccess','Account created! Check your email for a confirmation link, then log in.');
-      btn.disabled=false;btn.textContent='Create Account';
-      return;
+      showAuthMsg('signupSuccess','Account created! Check email for confirmation link, then log in.');
+      btn.disabled=false;btn.textContent='Create Account';return;
     }
-
-    console.log('[AUTH] Signup success:',data.user?.id);
-    APP.user=data.user;
-    checkFreeUser(email);
+    APP.user=data.user;checkFreeUser(email);
     await createProfile(name,email);
-    try{await sb.from('signups').insert({name,email,created_at:new Date().toISOString()});}catch(e){console.warn('[SB] Signup log:',e);}
+    try{await sb.from('signups').insert({name,email,created_at:new Date().toISOString()});}catch(e){}
     try{await sb.from('activity_logs').insert({user_id:APP.user.id,action:'signup',created_at:new Date().toISOString()});}catch(e){}
-    addAuditEntry('Account created');
-    closeModal('authModal');
-    showDashboard();
-    showToast('Account created! Welcome!','success');
+    addAuditEntry('Account created');closeModal('authModal');showDashboard();showToast('Welcome!','success');
   }catch(err){
-    console.error('[AUTH] Exception:',err);
-    showAuthError('signupError',err.message||'Signup failed');
+    let msg=err.message||'Signup failed';
+    if(msg.includes('fetch'))msg='Cannot reach server. Project may be paused — use Demo Mode.';
+    if(msg.includes('already registered'))msg='Email already registered. Try logging in instead.';
+    showAuthMsg('signupError',msg);
   }finally{btn.disabled=false;btn.textContent='Create Account';}
 }
 
 async function handleReset(){
-  const email=document.getElementById('resetEmail').value.trim();
-  hideAuthError('resetError');
-  if(!email){showAuthError('resetError','Enter your email');return;}
-  if(!sb){showAuthError('resetError','Database not available');return;}
+  const email=document.getElementById('resetEmail').value.trim();hideAuthMsg('resetError');
+  if(!email){showAuthMsg('resetError','Enter your email');return;}
+  if(!sb||!dbReady){showAuthMsg('resetError','Database unavailable. Use Demo Mode.');return;}
   const btn=document.getElementById('resetBtn');btn.disabled=true;btn.textContent='Sending...';
-  try{
-    const{error}=await sb.auth.resetPasswordForEmail(email);
-    if(error){showAuthError('resetError',error.message);return;}
-    showAuthSuccess('loginSuccess','Reset link sent! Check your email.');
-    showAuthModal('login');
-  }catch(err){showAuthError('resetError',err.message);}
+  try{const{error}=await sb.auth.resetPasswordForEmail(email);if(error)throw error;showAuthMsg('loginSuccess','Reset link sent!');showAuthModal('login');}catch(e){let m=e.message;if(m.includes('fetch'))m='Cannot reach server. Project may be paused.';showAuthMsg('resetError',m);}
   finally{btn.disabled=false;btn.textContent='Send Reset Link';}
 }
 
-async function changePassword(){
-  const np=document.getElementById('newPassword').value,cp=document.getElementById('confirmPassword').value;
-  if(!np||!cp){showToast('Fill both fields','error');return;}
-  if(np!==cp){showToast('Passwords don\'t match','error');return;}
-  if(np.length<8){showToast('8+ characters needed','error');return;}
-  if(!sb){showToast('DB unavailable','error');return;}
-  try{const{error}=await sb.auth.updateUser({password:np});if(error)throw error;showToast('Password updated!','success');document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';addAuditEntry('Password changed');}catch(e){showToast(e.message,'error');}
-}
+async function changePassword(){const np=document.getElementById('newPassword').value,cp=document.getElementById('confirmPassword').value;if(!np||!cp){showToast('Fill both','error');return;}if(np!==cp){showToast('Mismatch','error');return;}if(np.length<8){showToast('8+ chars','error');return;}if(!sb||!dbReady){showToast('DB unavailable','error');return;}try{const{error}=await sb.auth.updateUser({password:np});if(error)throw error;showToast('Updated!','success');document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';addAuditEntry('Password changed');}catch(e){showToast(e.message,'error');}}
 
 function checkFreeUser(email){if(FREE_USERS.includes(email?.toLowerCase()))APP.isSubscriber=true;}
+async function createProfile(n,e){if(!sb||!APP.user)return;try{await sb.from('profiles').upsert({id:APP.user.id,full_name:n,email:e,company:'',industry:'',is_subscriber:APP.isSubscriber,created_at:new Date().toISOString()});}catch(e){}}
+async function loadUserProfile(){if(!sb||!APP.user)return;try{const{data}=await sb.from('profiles').select('*').eq('id',APP.user.id).single();if(data){APP.profile=data;if(data.is_subscriber)APP.isSubscriber=true;if(data.industry)selectedIndustry=data.industry;}}catch(e){}}
+async function saveProfileToDb(u){if(!sb||!APP.user||isDemo())return;try{await sb.from('profiles').update(u).eq('id',APP.user.id);}catch(e){}}
+function handleLogout(){if(APP.gmailSyncInterval){clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=null;}if(sb&&!isDemo())sb.auth.signOut();APP.user=null;APP.profile=null;APP.isSubscriber=false;APP.demoMode=false;document.getElementById('landing-page').style.display='block';document.getElementById('dashboard-page').style.display='none';showToast('Logged out','info');}
 
-async function createProfile(name,email){
-  if(!sb||!APP.user)return;
-  try{const{error}=await sb.from('profiles').upsert({id:APP.user.id,full_name:name,email,company:'',industry:'',is_subscriber:APP.isSubscriber,created_at:new Date().toISOString()});if(error)console.warn('[SB] Profile upsert:',error.message);}catch(e){console.warn('[SB] Profile exception:',e);}
-}
-
-async function loadUserProfile(){
-  if(!sb||!APP.user)return;
-  try{const{data,error}=await sb.from('profiles').select('*').eq('id',APP.user.id).single();if(error){console.warn('[SB] Profile load:',error.message);return;}if(data){APP.profile=data;if(data.is_subscriber)APP.isSubscriber=true;if(data.industry)selectedIndustry=data.industry;}}catch(e){console.warn('[SB] Profile exception:',e);}
-}
-
-async function saveProfileToDb(u){if(!sb||!APP.user)return;try{const{error}=await sb.from('profiles').update(u).eq('id',APP.user.id);if(error)console.warn('[SB] Save:',error.message);}catch(e){}}
-
-function handleLogout(){if(APP.gmailSyncInterval){clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=null;}if(sb)sb.auth.signOut();APP.user=null;APP.profile=null;APP.isSubscriber=false;document.getElementById('landing-page').style.display='block';document.getElementById('dashboard-page').style.display='none';showToast('Logged out','info');}
-
-// ============ DASHBOARD ============
+// ====== DASHBOARD ======
 function showDashboard(){document.getElementById('landing-page').style.display='none';document.getElementById('dashboard-page').style.display='block';updateUserDisplay();initializeDashboard();}
-
-function updateUserDisplay(){
-  if(!APP.user)return;
-  const email=APP.user.email||'';const name=APP.profile?.full_name||APP.user.user_metadata?.full_name||email.split('@')[0];const ini=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('sidebarAvatar').textContent=ini;document.getElementById('sidebarUserName').textContent=name;document.getElementById('sidebarUserEmail').textContent=email;
-  document.getElementById('profileName').value=name;document.getElementById('profileEmail').value=email;
-  if(APP.profile?.company)document.getElementById('profileCompany').value=APP.profile.company;
-  if(APP.isSubscriber){document.getElementById('subPlan').textContent='Professional';document.getElementById('subBadge').textContent='PRO';document.getElementById('subBadge').style.color='#10b981';}
-}
-
-function switchPanel(id){document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`panel-${id}`).classList.add('active');document.querySelectorAll('.sidebar-item[data-panel]').forEach(i=>i.classList.toggle('active',i.dataset.panel===id));const t={overview:['Overview','Welcome'],chat:['Senterion','Gemini AI'],integrations:['Integrations','Tools'],vault:['Vault','Encrypted'],analytics:['Analytics','Metrics'],settings:['Settings','Customize']};const[a,b]=t[id]||['',''];document.getElementById('panelTitle').textContent=a;document.getElementById('panelSubtitle').textContent=b;if(id==='analytics')renderAnalytics();}
-
+function updateUserDisplay(){if(!APP.user)return;const e=APP.user.email||'';const n=APP.profile?.full_name||APP.user.user_metadata?.full_name||e.split('@')[0];const ini=n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);document.getElementById('sidebarAvatar').textContent=ini;document.getElementById('sidebarUserName').textContent=n;document.getElementById('sidebarUserEmail').textContent=e+(isDemo()?' (Demo)':'');document.getElementById('profileName').value=n;document.getElementById('profileEmail').value=e;if(APP.profile?.company)document.getElementById('profileCompany').value=APP.profile.company;if(APP.isSubscriber){document.getElementById('subPlan').textContent='Professional';const b=document.getElementById('subBadge');b.textContent='PRO';b.style.color='#10b981';b.style.background='rgba(16,185,129,.15)';}}
+function switchPanel(id){document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.querySelectorAll('.sidebar-item[data-panel]').forEach(i=>i.classList.toggle('active',i.dataset.panel===id));const t={overview:['Overview','Welcome'],chat:['Senterion','Gemini AI'],integrations:['Integrations','Connect tools'],vault:['Vault','Encrypted'],analytics:['Analytics','Metrics'],settings:['Settings','Customize']};const[a,b]=t[id]||['',''];document.getElementById('panelTitle').textContent=a;document.getElementById('panelSubtitle').textContent=b;if(id==='analytics')renderAnalytics();}
 function initializeDashboard(){renderStats();renderAgents();renderInsights();startProfitAnimation();renderVibeGrid('vibeGrid');renderFontSelector();renderRadiusSelector();renderPersonalityTraits();renderIndustryGrid();renderAnalyticsMetrics();updateIntgDisplay();updateGmailTriageOverview();}
-
-function renderStats(){document.getElementById('statsRow').innerHTML=[{l:'Agents',v:'6',i:'🤖',c:'var(--brand)'},{l:'Emails',v:intgState.gmail.emails.length||'0',i:'📧',c:'#0ea5e9'},{l:'Tasks',v:'12',i:'✅',c:'#10b981'},{l:'Revenue',v:'$0',i:'💰',c:'#f59e0b'}].map(s=>`<div class="stat-card"><div style="font-size:24px;margin-bottom:8px;">${s.i}</div><div style="font-size:28px;font-weight:800;color:${s.c};">${s.v}</div><div style="font-size:12px;color:#64748b;">${s.l}</div></div>`).join('');}
-function renderAgents(){document.getElementById('agentsGrid').innerHTML=AGENTS.map(a=>`<div class="agent-card"><div class="agent-avatar" style="background:var(--bg3);">${a.emoji}</div><div style="font-weight:600;font-size:13px;">${a.name}</div><div style="font-size:11px;color:#64748b;">${a.role}</div></div>`).join('');}
-function renderInsights(){document.getElementById('insightsFeed').innerHTML=[{t:'Email response improving',d:'Down 34%'},{t:'New deal',d:'Acme Corp'},{t:'Payment pending',d:'#1042'}].map(i=>`<div class="insight-item"><div style="font-weight:600;">${i.t}</div><div style="color:#64748b;">${i.d}</div></div>`).join('');}
-function startProfitAnimation(){let r=0,c=0;const tR=12480,tC=4320;const step=()=>{r+=Math.ceil((tR-r)*.05)+Math.floor(Math.random()*50);c+=Math.ceil((tC-c)*.05)+Math.floor(Math.random()*20);if(r>tR)r=tR;if(c>tC)c=tC;const n=r-c;document.getElementById('profitRevenue').textContent=r.toLocaleString();document.getElementById('profitCosts').textContent=c.toLocaleString();document.getElementById('profitNet').textContent=n.toLocaleString();document.getElementById('profitPercent').textContent=`+${((n/r)*100).toFixed(1)}%`;document.getElementById('profitFill').style.width=`${Math.min((r/tR)*100,100)}%`;if(r<tR)requestAnimationFrame(step);};requestAnimationFrame(step);}
+function renderStats(){document.getElementById('statsRow').innerHTML=[{l:'Agents',v:'6',i:'🤖',c:'var(--brand)'},{l:'Emails',v:intgState.gmail.emails.length||'0',i:'📧',c:'#0ea5e9'},{l:'Tasks',v:'12',i:'✅',c:'#10b981'},{l:'Revenue',v:'$0',i:'💰',c:'#f59e0b'}].map(s=>'<div class="stat-card"><div style="font-size:24px;margin-bottom:8px;">'+s.i+'</div><div style="font-size:28px;font-weight:800;color:'+s.c+';">'+s.v+'</div><div style="font-size:12px;color:#64748b;">'+s.l+'</div></div>').join('');}
+function renderAgents(){document.getElementById('agentsGrid').innerHTML=AGENTS.map(a=>'<div class="agent-card"><div class="agent-avatar" style="background:var(--bg3);">'+a.emoji+'</div><div style="font-weight:600;font-size:13px;">'+a.name+'</div><div style="font-size:11px;color:#64748b;">'+a.role+'</div></div>').join('');}
+function renderInsights(){document.getElementById('insightsFeed').innerHTML=[{t:'Email response improving',d:'Down 34%'},{t:'New deal',d:'Acme Corp'},{t:'Payment pending',d:'#1042'}].map(i=>'<div class="insight-item"><div style="font-weight:600;">'+i.t+'</div><div style="color:#64748b;">'+i.d+'</div></div>').join('');}
+function startProfitAnimation(){let r=0,c=0;const tR=12480,tC=4320;const step=()=>{r+=Math.ceil((tR-r)*.05)+Math.floor(Math.random()*50);c+=Math.ceil((tC-c)*.05)+Math.floor(Math.random()*20);if(r>tR)r=tR;if(c>tC)c=tC;const n=r-c;document.getElementById('profitRevenue').textContent=r.toLocaleString();document.getElementById('profitCosts').textContent=c.toLocaleString();document.getElementById('profitNet').textContent=n.toLocaleString();document.getElementById('profitPercent').textContent='+'+((n/r)*100).toFixed(1)+'%';document.getElementById('profitFill').style.width=Math.min((r/tR)*100,100)+'%';if(r<tR)requestAnimationFrame(step);};requestAnimationFrame(step);}
 function loadWebsiteSandbox(){const u=document.getElementById('sandboxUrl').value.trim();if(!u){showToast('Enter URL','error');return;}document.getElementById('sandboxFrame').src=u.startsWith('http')?u:'https://'+u;}
 
-// ============ GMAIL ============
-let gmailTokenClient=null;
-function initGmailOAuth(){const tryInit=()=>{if(window.google?.accounts?.oauth2){gmailTokenClient=window.google.accounts.oauth2.initTokenClient({client_id:GOOGLE_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.readonly',callback:resp=>{if(resp.access_token){intgState.gmail.accessToken=resp.access_token;intgState.gmail.connected=true;updateIntgDisplay();syncGmailData();startGmailSyncLoop();addAuditEntry('Gmail connected');closeModal('intgModal');showToast('Gmail connected!','success');}else{showToast('Gmail auth failed','error');}}});console.log('[GMAIL] OAuth ready');}else{setTimeout(tryInit,1000);}};tryInit();}
-function connectGmail(){if(gmailTokenClient){gmailTokenClient.requestAccessToken();}else{showToast('Google OAuth loading...','info');initGmailOAuth();}}
-
-async function syncGmailData(){const token=intgState.gmail.accessToken;if(!token)return;try{const emails=await fetchRealGmailEmails(token);intgState.gmail.emails=emails;updateGmailDisplay(emails);updateGmailTriageOverview();renderStats();if(sb&&APP.user)try{await sb.from('activity_logs').insert({user_id:APP.user.id,action:'gmail_sync:'+emails.length,created_at:new Date().toISOString()});}catch(e){}}catch(e){console.warn('[GMAIL] Sync err:',e);}}
-
-async function fetchRealGmailEmails(token){try{const r=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=10',{headers:{'Authorization':`Bearer ${token}`}});if(!r.ok)throw new Error(r.status);const d=await r.json();if(!d.messages?.length)return[];const emails=[];for(const msg of d.messages.slice(0,10)){try{const dr=await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From`,{headers:{'Authorization':`Bearer ${token}`}});if(dr.ok){const det=await dr.json();const subject=det.payload?.headers?.find(h=>h.name==='Subject')?.value||'(No Subject)';const from=det.payload?.headers?.find(h=>h.name==='From')?.value||'Unknown';emails.push({id:msg.id,subject,from,snippet:det.snippet||'',labels:det.labelIds||[]});}}catch(e){}}return emails;}catch(e){return[];}}
-
-function updateGmailDisplay(emails){const s=document.getElementById('intg-gmail-status');if(s){s.textContent=emails.length>0?emails.length+' emails':'Connected';s.style.color='#10b981';}const i=document.getElementById('intg-gmail-indicator');if(i)i.style.background='#10b981';const c=document.getElementById('intg-gmail');if(c)c.classList.add('connected');}
-
-function updateGmailTriageOverview(){const el=document.getElementById('gmailTriageOverview');if(!intgState.gmail.connected||!intgState.gmail.emails.length){el.innerHTML='<p style="color:#64748b;font-size:13px;">Connect Gmail in Integrations.</p>';return;}const em=intgState.gmail.emails;el.innerHTML=`<div style="display:flex;gap:12px;margin-bottom:12px;"><div style="padding:6px 14px;background:rgba(239,68,68,.1);border-radius:var(--rs);font-size:12px;color:#ef4444;font-weight:600;">🔴 Urgent</div><div style="padding:6px 14px;background:rgba(16,185,129,.1);border-radius:var(--rs);font-size:12px;color:#10b981;font-weight:600;">🟢 ${em.length} Total</div></div>${em.slice(0,5).map(e=>`<div class="email-item" onclick="showEmailDetail('${e.id}')"><div style="font-weight:600;font-size:13px;">${e.subject}</div><div style="font-size:11px;color:#64748b;">${e.from}</div></div>`).join('')}<button class="btn-secondary" style="margin-top:8px;font-size:12px;padding:6px 14px;" onclick="triageEmailsWithAI()">🤖 AI Triage</button>`;}
-
-function showEmailDetail(id){const e=intgState.gmail.emails.find(x=>x.id===id);if(!e)return;document.getElementById('intgModalContent').innerHTML=`<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">${e.subject}</h3><div style="font-size:12px;color:#64748b;margin-bottom:16px;">From: ${e.from}</div><div style="padding:16px;background:var(--bg);border-radius:var(--rs);font-size:14px;color:#94a3b8;">${e.snippet||'No preview'}</div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn-primary" style="font-size:12px;padding:6px 14px;" onclick="aiReplyToEmail('${e.id}')">🤖 Reply</button><button class="btn-secondary" style="font-size:12px;padding:6px 14px;" onclick="closeModal('intgModal')">Close</button></div>`;openModal('intgModal');}
-
-async function aiReplyToEmail(id){const e=intgState.gmail.emails.find(x=>x.id===id);if(!e)return;showToast('Generating reply...','info');try{const r=await callGemini(`Write a professional reply:\nSubject: ${e.subject}\nFrom: ${e.from}\nContent: ${e.snippet}`);closeModal('intgModal');addChatBubble('ai',`📧 **Reply for "${e.subject}":**\n\n${r}`);switchPanel('chat');}catch(x){closeModal('intgModal');addChatBubble('ai',`📧 **Reply:**\n\nThank you for your email. I'll get back to you shortly.\n\nBest regards`);switchPanel('chat');}}
-
-async function triageEmailsWithAI(){if(!intgState.gmail.emails.length){showToast('No emails','error');return;}showToast('AI triaging...','info');const list=intgState.gmail.emails.map(e=>`- ${e.subject}`).join('\n');try{const r=await callGemini(`Categorize as URGENT/ACTION/NORMAL:\n${list}`);addChatBubble('ai',`📧 **Triage:**\n\n${r}`);switchPanel('chat');}catch(x){addChatBubble('ai',`📧 Analyzed ${intgState.gmail.emails.length} emails. See Overview for details.`);switchPanel('chat');}}
-
+// ====== GMAIL ======
+let gmailTC=null;
+function initGmailOAuth(){const tryInit=()=>{if(window.google?.accounts?.oauth2){gmailTC=window.google.accounts.oauth2.initTokenClient({client_id:G_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.readonly',callback:resp=>{if(resp.access_token){intgState.gmail.accessToken=resp.access_token;intgState.gmail.connected=true;updateIntgDisplay();syncGmailData();startGmailSyncLoop();addAuditEntry('Gmail connected');closeModal('intgModal');showToast('Gmail connected!','success');}else showToast('Gmail auth failed','error');}});console.log('[GMAIL] OAuth ready');}else setTimeout(tryInit,1000);};tryInit();}
+function connectGmail(){if(gmailTC){gmailTC.requestAccessToken();}else{showToast('Loading Google OAuth...','info');initGmailOAuth();}}
+async function syncGmailData(){const tk=intgState.gmail.accessToken;if(!tk)return;try{const e=await fetchGmailEmails(tk);intgState.gmail.emails=e;updateGmailDisplay(e);updateGmailTriageOverview();renderStats();}catch(e){console.warn('[GMAIL]',e);}}
+async function fetchGmailEmails(tk){try{const r=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=10',{headers:{Authorization:'Bearer '+tk}});if(!r.ok)throw new Error(r.status);const d=await r.json();if(!d.messages?.length)return[];const out=[];for(const m of d.messages.slice(0,10)){try{const r2=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/'+m.id+'?format=metadata&metadataHeaders=Subject&metadataHeaders=From',{headers:{Authorization:'Bearer '+tk}});if(r2.ok){const d2=await r2.json();out.push({id:m.id,subject:d2.payload?.headers?.find(h=>h.name==='Subject')?.value||'(No Subject)',from:d2.payload?.headers?.find(h=>h.name==='From')?.value||'Unknown',snippet:d2.snippet||'',labels:d2.labelIds||[]});}}catch(e){}}return out;}catch(e){return[];}}
+function updateGmailDisplay(e){const s=document.getElementById('intg-gmail-status');if(s){s.textContent=e.length?e.length+' emails':'Connected';s.style.color='#10b981';}const i=document.getElementById('intg-gmail-indicator');if(i)i.style.background='#10b981';const c=document.getElementById('intg-gmail');if(c)c.classList.add('connected');}
+function updateGmailTriageOverview(){const el=document.getElementById('gmailTriageOverview');if(!intgState.gmail.connected||!intgState.gmail.emails.length){el.innerHTML='<p style="color:#64748b;font-size:13px;">Connect Gmail in Integrations.</p>';return;}const em=intgState.gmail.emails;el.innerHTML='<div style="display:flex;gap:12px;margin-bottom:12px;"><div style="padding:6px 14px;background:rgba(239,68,68,.1);border-radius:var(--rs);font-size:12px;color:#ef4444;font-weight:600;">🔴 Urgent</div><div style="padding:6px 14px;background:rgba(16,185,129,.1);border-radius:var(--rs);font-size:12px;color:#10b981;font-weight:600;">🟢 '+em.length+' Total</div></div>'+em.slice(0,5).map(e=>'<div class="email-item" onclick="showEmailDetail(\''+e.id+'\')"><div style="font-weight:600;font-size:13px;">'+e.subject+'</div><div style="font-size:11px;color:#64748b;">'+e.from+'</div></div>').join('')+'<button class="btn-secondary" style="margin-top:8px;font-size:12px;padding:6px 14px;" onclick="triageEmailsWithAI()">🤖 AI Triage</button>';}
+function showEmailDetail(id){const e=intgState.gmail.emails.find(x=>x.id===id);if(!e)return;document.getElementById('intgModalContent').innerHTML='<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">'+e.subject+'</h3><div style="font-size:12px;color:#64748b;margin-bottom:16px;">From: '+e.from+'</div><div style="padding:16px;background:var(--bg);border-radius:var(--rs);font-size:14px;color:#94a3b8;">'+(e.snippet||'No preview')+'</div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn-primary" style="font-size:12px;padding:6px 14px;" onclick="aiReplyToEmail(\''+e.id+'\')">🤖 Reply</button><button class="btn-secondary" style="font-size:12px;padding:6px 14px;" onclick="closeModal(\'intgModal\')">Close</button></div>';openModal('intgModal');}
+async function aiReplyToEmail(id){const e=intgState.gmail.emails.find(x=>x.id===id);if(!e)return;showToast('Generating...','info');try{const r=await callGemini('Write a professional reply:\nSubject: '+e.subject+'\nFrom: '+e.from+'\nContent: '+e.snippet);closeModal('intgModal');addChatBubble('ai','📧 **Reply for "'+e.subject+'":**\n\n'+r);switchPanel('chat');}catch(x){closeModal('intgModal');addChatBubble('ai','📧 **Reply:**\n\nThank you for your email. I\'ll get back to you shortly.\n\nBest regards');switchPanel('chat');}}
+async function triageEmailsWithAI(){if(!intgState.gmail.emails.length){showToast('No emails','error');return;}showToast('Triaging...','info');const list=intgState.gmail.emails.map(e=>'- '+e.subject).join('\n');try{const r=await callGemini('Categorize URGENT/ACTION/NORMAL:\n'+list);addChatBubble('ai','📧 **Triage:**\n\n'+r);switchPanel('chat');}catch(x){addChatBubble('ai','📧 Analyzed '+intgState.gmail.emails.length+' emails. See Overview.');switchPanel('chat');}}
 function startGmailSyncLoop(){if(APP.gmailSyncInterval)clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=setInterval(()=>{if(intgState.gmail.accessToken&&intgState.gmail.connected)syncGmailData();},30000);}
 
-// ============ PLAID ============
-function connectPlaid(){if(window.Plaid){try{const h=window.Plaid.create({key:'',env:'sandbox',product:['auth','transactions'],onSuccess:t=>{intgState.plaid.connected=true;intgState.plaid.accessToken=t;updateIntgDisplay();addAuditEntry('Plaid linked');closeModal('intgModal');showToast('Connected!','success');},onExit:()=>showToast('Cancelled','info')});h.open();return;}catch(e){}}usePlaidSandbox();}
+// ====== PLAID ======
+function connectPlaid(){if(window.Plaid){try{const h=window.Plaid.create({key:PLAID_KEY,env:'sandbox',product:['auth','transactions'],onSuccess:t=>{intgState.plaid.connected=true;intgState.plaid.accessToken=t;updateIntgDisplay();addAuditEntry('Plaid linked');closeModal('intgModal');showToast('Bank connected!','success');},onExit:()=>showToast('Cancelled','info')});h.open();return;}catch(e){console.warn('[PLAID]',e);}}usePlaidSandbox();}
 function usePlaidSandbox(){intgState.plaid.connected=true;intgState.plaid.accounts=[{name:'Checking',institution:'Chase',balance:24580.43,type:'checking'},{name:'Savings',institution:'Chase',balance:87420,type:'savings'},{name:'Credit',institution:'Amex',balance:-3241.67,type:'credit'}];updateIntgDisplay();addAuditEntry('Plaid sandbox');closeModal('intgModal');showToast('Plaid (sandbox)','success');updatePlaidAnalytics();}
-function updatePlaidAnalytics(){if(!intgState.plaid.connected)return;document.getElementById('plaidAnalyticsCard').style.display='block';document.getElementById('plaidAccountsAnalytics').innerHTML=intgState.plaid.accounts.map(a=>`<div style="padding:12px;background:var(--bg);border-radius:var(--rs);margin-bottom:8px;display:flex;justify-content:space-between;"><div><div style="font-weight:600;">${a.name}</div><div style="font-size:11px;color:#64748b;">${a.institution}</div></div><div style="font-weight:700;color:${a.balance>=0?'#10b981':'#ef4444'};">$${Math.abs(a.balance).toLocaleString('en-US',{minimumFractionDigits:2})}</div></div>`).join('');}
+function updatePlaidAnalytics(){if(!intgState.plaid.connected)return;document.getElementById('plaidAnalyticsCard').style.display='block';document.getElementById('plaidAccountsAnalytics').innerHTML=intgState.plaid.accounts.map(a=>'<div style="padding:12px;background:var(--bg);border-radius:var(--rs);margin-bottom:8px;display:flex;justify-content:space-between;"><div><div style="font-weight:600;">'+a.name+'</div><div style="font-size:11px;color:#64748b;">'+a.institution+'</div></div><div style="font-weight:700;color:'+(a.balance>=0?'#10b981':'#ef4444')+';">$'+Math.abs(a.balance).toLocaleString('en-US',{minimumFractionDigits:2})+'</div></div>').join('');}
 
-// ============ TWILIO ============
+// ====== TWILIO ======
 function connectTwilio(){const s=document.getElementById('twilioSid')?.value?.trim();const a=document.getElementById('twilioAuthToken')?.value?.trim();const p=document.getElementById('twilioPhone')?.value?.trim();if(!s||!a||!p){showToast('Fill all fields','error');return;}intgState.twilio={connected:true,accountSid:s,authToken:a,phoneNumber:p};updateIntgDisplay();addAuditEntry('Twilio');closeModal('intgModal');showToast('Twilio connected!','success');}
 
-// ============ GENERIC ============
-function connectGenericIntg(s){const i=document.getElementById(`intgInput-${s}`);if(!i)return;const t=i.value.trim();if(!t){showToast('Enter API key','error');return;}intgState[s].connected=true;intgState[s].token=t;updateIntgDisplay();addAuditEntry(s+' connected');closeModal('intgModal');showToast(s+' connected!','success');}
+// ====== GENERIC ======
+function connectGenericIntg(s){const i=document.getElementById('intgInput-'+s);if(!i)return;const t=i.value.trim();if(!t){showToast('Enter API key','error');return;}intgState[s].connected=true;intgState[s].token=t;updateIntgDisplay();addAuditEntry(s+' connected');closeModal('intgModal');showToast(s+' connected!','success');}
 function disconnectIntg(s){if(intgState[s]){intgState[s].connected=false;intgState[s].token=null;if(s==='gmail'){intgState.gmail.accessToken=null;intgState.gmail.emails=[];if(APP.gmailSyncInterval){clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=null;}}if(s==='plaid'){intgState.plaid.accounts=[];intgState.plaid.accessToken=null;document.getElementById('plaidAnalyticsCard').style.display='none';}if(s==='twilio'){intgState.twilio.accountSid=null;intgState.twilio.authToken=null;intgState.twilio.phoneNumber=null;}}updateIntgDisplay();updateGmailTriageOverview();addAuditEntry(s+' disconnected');closeModal('intgModal');showToast(s+' disconnected','info');}
 
-// ============ INTG UI ============
+// ====== INTG UI ======
 function showIntgModal(svc){const c=document.getElementById('intgModalContent');const conn=intgState[svc]?.connected;const info={gmail:{i:'G',bg:'#ea4335',n:'Gmail'},outlook:{i:'O',bg:'#0078d4',n:'Outlook'},plaid:{i:'P',bg:'#111',n:'Plaid'},twilio:{i:'TW',bg:'#f22f46',n:'Twilio'},facebook:{i:'FB',bg:'#1877f2',n:'Facebook'},instagram:{i:'IG',bg:'linear-gradient(45deg,#f09433,#dc2743,#bc1888)',n:'Instagram'},slack:{i:'S',bg:'#4a154b',n:'Slack'},quickbooks:{i:'QB',bg:'#2ca01c',n:'QuickBooks'},stripe:{i:'St',bg:'#635bff',n:'Stripe'},shopify:{i:'SH',bg:'#96bf48',n:'Shopify'},hubspot:{i:'HS',bg:'#ff7a59',n:'HubSpot'}}[svc]||{i:'?',bg:'#64748b',n:svc};
 let body='';
-if(svc==='gmail')body=conn?`<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ ${intgState.gmail.emails.length} emails synced</div>${intgState.gmail.emails.slice(0,5).map(e=>`<div style="padding:8px 12px;background:var(--bg);border-radius:var(--rs);margin-bottom:4px;font-size:12px;"><b>${e.subject}</b><br><span style="color:#64748b;">${e.from}</span></div>`).join('')}<button class="btn-danger" style="width:100%;margin-top:12px;" onclick="disconnectIntg('gmail')">Disconnect</button>`:`<button class="btn-primary" style="width:100%;" onclick="connectGmail()">🔗 Connect with Google</button>`;
-else if(svc==='plaid')body=conn?`<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ ${intgState.plaid.accounts.length} accounts</div>${intgState.plaid.accounts.map(a=>`<div style="padding:8px 12px;background:var(--bg);border-radius:var(--rs);margin-bottom:4px;display:flex;justify-content:space-between;font-size:13px;"><span>${a.name}</span><span style="color:${a.balance>=0?'#10b981':'#ef4444'};">$${Math.abs(a.balance).toFixed(2)}</span></div>`).join('')}<button class="btn-danger" style="width:100%;margin-top:12px;" onclick="disconnectIntg('plaid')">Disconnect</button>`:`<button class="btn-primary" style="width:100%;" onclick="connectPlaid()">🏦 Connect Bank (Sandbox)</button>`;
-else if(svc==='twilio')body=conn?`<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ ${intgState.twilio.phoneNumber}</div><button class="btn-danger" style="width:100%;" onclick="disconnectIntg('twilio')">Disconnect</button>`:`<div class="profile-field"><label>Account SID</label><input class="input-field" id="twilioSid" placeholder="ACxxxx"></div><div class="profile-field"><label>Auth Token</label><input class="input-field" id="twilioAuthToken" type="password"></div><div class="profile-field"><label>Phone</label><input class="input-field" id="twilioPhone" placeholder="+1 555-000-0000"></div><button class="btn-primary" style="width:100%;" onclick="connectTwilio()">📞 Connect</button>`;
-else body=conn?`<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ Connected</div><button class="btn-danger" style="width:100%;" onclick="disconnectIntg('${svc}')">Disconnect</button>`:`<div class="profile-field"><label>API Key</label><input class="input-field" id="intgInput-${svc}" type="password" placeholder="Enter key"></div><button class="btn-primary" style="width:100%;" onclick="connectGenericIntg('${svc}')">🔗 Connect</button>`;
-c.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div class="intg-icon" style="background:${info.bg};color:#fff;width:48px;height:48px;font-size:20px;">${info.i}</div><div><h3 style="font-size:18px;font-weight:700;">${info.n}</h3></div></div>${body}`;openModal('intgModal');}
-
-function updateIntgDisplay(){Object.keys(intgState).forEach(s=>{const se=document.getElementById(`intg-${s}-status`);const ind=document.getElementById(`intg-${s}-indicator`);const card=document.getElementById(`intg-${s}`);if(intgState[s]?.connected){if(se){se.textContent='Connected';se.style.color='#10b981';}if(ind)ind.style.background='#10b981';if(card)card.classList.add('connected');}else{if(se){se.textContent='Not connected';se.style.color='#64748b';}if(ind)ind.style.background='#64748b';if(card)card.classList.remove('connected');}});}
+if(svc==='gmail')body=conn?'<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ '+intgState.gmail.emails.length+' emails</div>'+intgState.gmail.emails.slice(0,5).map(e=>'<div style="padding:8px 12px;background:var(--bg);border-radius:var(--rs);margin-bottom:4px;font-size:12px;"><b>'+e.subject+'</b><br><span style="color:#64748b;">'+e.from+'</span></div>').join('')+'<button class="btn-danger" style="width:100%;margin-top:12px;" onclick="disconnectIntg(\'gmail\')">Disconnect</button>':'<button class="btn-primary" style="width:100%;" onclick="connectGmail()">🔗 Connect with Google</button>';
+else if(svc==='plaid')body=conn?'<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ '+intgState.plaid.accounts.length+' accounts</div>'+intgState.plaid.accounts.map(a=>'<div style="padding:8px 12px;background:var(--bg);border-radius:var(--rs);margin-bottom:4px;display:flex;justify-content:space-between;font-size:13px;"><span>'+a.name+'</span><span style="color:'+(a.balance>=0?'#10b981':'#ef4444')+';">$'+Math.abs(a.balance).toFixed(2)+'</span></div>').join('')+'<button class="btn-danger" style="width:100%;margin-top:12px;" onclick="disconnectIntg(\'plaid\')">Disconnect</button>':'<button class="btn-primary" style="width:100%;" onclick="connectPlaid()">🏦 Connect Bank</button>';
+else if(svc==='twilio')body=conn?'<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ '+intgState.twilio.phoneNumber+'</div><button class="btn-danger" style="width:100%;" onclick="disconnectIntg(\'twilio\')">Disconnect</button>':'<div class="profile-field"><label>Account SID</label><input class="input-field" id="twilioSid" placeholder="ACxxxx"></div><div class="profile-field"><label>Auth Token</label><input class="input-field" id="twilioAuthToken" type="password"></div><div class="profile-field"><label>Phone</label><input class="input-field" id="twilioPhone" placeholder="+1 555-000-0000"></div><button class="btn-primary" style="width:100%;" onclick="connectTwilio()">📞 Connect</button>';
+else body=conn?'<div style="padding:16px;background:rgba(16,185,129,.1);border-radius:var(--rs);margin-bottom:16px;color:#10b981;font-weight:600;">✓ Connected</div><button class="btn-danger" style="width:100%;" onclick="disconnectIntg(\''+svc+'\')">Disconnect</button>':'<div class="profile-field"><label>API Key</label><input class="input-field" id="intgInput-'+svc+'" type="password" placeholder="Enter key"></div><button class="btn-primary" style="width:100%;" onclick="connectGenericIntg(\''+svc+'\')">🔗 Connect</button>';
+c.innerHTML='<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div class="intg-icon" style="background:'+info.bg+';color:#fff;width:48px;height:48px;font-size:20px;">'+info.i+'</div><h3 style="font-size:18px;font-weight:700;">'+info.n+'</h3></div>'+body;openModal('intgModal');}
+function updateIntgDisplay(){Object.keys(intgState).forEach(s=>{const se=document.getElementById('intg-'+s+'-status');const ind=document.getElementById('intg-'+s+'-indicator');const card=document.getElementById('intg-'+s);if(intgState[s]?.connected){if(se){se.textContent='Connected';se.style.color='#10b981';}if(ind)ind.style.background='#10b981';if(card)card.classList.add('connected');}else{if(se){se.textContent='Not connected';se.style.color='#64748b';}if(ind)ind.style.background='#64748b';if(card)card.classList.remove('connected');}});}
 function switchIntgTab(t,b){document.getElementById('intg-workspace').style.display=t==='workspace'?'block':'none';document.getElementById('intg-marketplace').style.display=t==='marketplace'?'block':'none';b.parentElement.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
 
-// ============ CHAT ============
-function addChatBubble(role,text){const c=document.getElementById('chatMessages');const b=document.createElement('div');b.className=`chat-bubble ${role}`;b.innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');c.appendChild(b);c.scrollTop=c.scrollHeight;APP.chatHistory.push({role,text});}
-function clearChat(){document.getElementById('chatMessages').innerHTML='';APP.chatHistory=[];addChatBubble('ai','👋 Chat cleared.');showToast('Cleared','info');}
-function exportChat(){if(!APP.chatHistory.length){showToast('Empty','error');return;}const t=APP.chatHistory.map(m=>`[${m.role.toUpperCase()}] ${m.text}`).join('\n\n');const b=new Blob([t],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='chat.txt';a.click();URL.revokeObjectURL(u);}
+// ====== CHAT ======
+function addChatBubble(role,text){const c=document.getElementById('chatMessages');const b=document.createElement('div');b.className='chat-bubble '+role;b.innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');c.appendChild(b);c.scrollTop=c.scrollHeight;APP.chatHistory.push({role,text});}
+function clearChat(){document.getElementById('chatMessages').innerHTML='';APP.chatHistory=[];addChatBubble('ai','👋 Cleared.');showToast('Cleared','info');}
+function exportChat(){if(!APP.chatHistory.length){showToast('Empty','error');return;}const t=APP.chatHistory.map(m=>'['+m.role.toUpperCase()+'] '+m.text).join('\n\n');const b=new Blob([t],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='chat.txt';a.click();URL.revokeObjectURL(u);}
+async function sendChatMessage(){const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;input.value='';addChatBubble('user',msg);const tid='t'+Date.now();const tb=document.createElement('div');tb.className='chat-bubble ai';tb.id=tid;tb.innerHTML='<div class="loading-spinner" style="margin:0 auto;"></div>';document.getElementById('chatMessages').appendChild(tb);document.getElementById('chatMessages').scrollTop=99999;try{const r=await callGemini(msg);document.getElementById(tid)?.remove();addChatBubble('ai',r);}catch(e){document.getElementById(tid)?.remove();addChatBubble('ai',fallback(msg));}}
+async function callGemini(prompt){const ctx='You are Senterion, AI assistant. Integrations: '+Object.entries(intgState).filter(([,v])=>v.connected).map(([k])=>k).join(', ')||'none'+'. '+((intgState.gmail.emails.length)?'Gmail: '+intgState.gmail.emails.length+' emails.':'')+' '+((intgState.plaid.connected)?'Plaid: $'+intgState.plaid.accounts.reduce((s,a)=>s+a.balance,0).toLocaleString()+'.':'')+' User: '+prompt;const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+GEMINI_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:ctx}]}],generationConfig:{temperature:0.7,maxOutputTokens:1024}})});if(!r.ok)throw new Error('API '+r.status);const d=await r.json();return d.candidates?.[0]?.content?.parts?.[0]?.text||'No response.';}
+function fallback(m){const l=m.toLowerCase();if(l.includes('email'))return'📧 Connect Gmail for triage!';if(l.includes('deal'))return'🤝 Check the deal card.';if(l.includes('bank'))return'💰 Connect Plaid for bank data.';return'I help with emails, deals, finance & more!';}
 
-async function sendChatMessage(){const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;input.value='';addChatBubble('user',msg);if(sb&&APP.user)try{await sb.from('activity_logs').insert({user_id:APP.user.id,action:'chat:'+msg.substring(0,50),created_at:new Date().toISOString()});}catch(e){}const tid='t'+Date.now();const tb=document.createElement('div');tb.className='chat-bubble ai';tb.id=tid;tb.innerHTML='<div class="loading-spinner" style="margin:0 auto;"></div>';document.getElementById('chatMessages').appendChild(tb);document.getElementById('chatMessages').scrollTop=99999;try{const r=await callGemini(msg);document.getElementById(tid)?.remove();addChatBubble('ai',r);}catch(e){document.getElementById(tid)?.remove();addChatBubble('ai',generateFallback(msg));}}
+// ====== DEAL ======
+function advanceDeal(){dealProgress=Math.min(dealProgress+10,100);document.getElementById('dealProgressText').textContent=dealProgress+'%';document.getElementById('dealProgressBar').style.width=dealProgress+'%';if(dealProgress>=100){showToast('🎉 Deal closed!','success');document.getElementById('dealValue').textContent='$24,500 ✓';}else showToast('Deal: '+dealProgress+'%','success');addAuditEntry('Deal '+dealProgress+'%');}
+async function triageDealWithAI(){showToast('Triaging...','info');try{const r=await callGemini('Analyze: Acme Corp $24,500 deal at '+dealProgress+'%. Next steps?');addChatBubble('ai','📋 **Deal:**\n\n'+r);switchPanel('chat');}catch(e){addChatBubble('ai','📋 Next: follow-up, timeline, contract.');switchPanel('chat');}}
 
-async function callGemini(prompt){const ctx=`You are Senterion, AI assistant for CoultersAgents. Integrations: ${Object.entries(intgState).filter(([,v])=>v.connected).map(([k])=>k).join(', ')||'none'}. ${intgState.gmail.emails.length?`Gmail: ${intgState.gmail.emails.length} emails.`:''} ${intgState.plaid.connected?`Plaid: $${intgState.plaid.accounts.reduce((s,a)=>s+a.balance,0).toLocaleString()}.`:''} User: ${prompt}`;const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:ctx}]}],generationConfig:{temperature:0.7,maxOutputTokens:1024}})});if(!r.ok)throw new Error('API '+r.status);const d=await r.json();return d.candidates?.[0]?.content?.parts?.[0]?.text||'No response.';}
-function generateFallback(m){const l=m.toLowerCase();if(l.includes('email'))return"📧 Connect Gmail for email triage!";if(l.includes('deal'))return"🤝 Check the deal card on Overview.";if(l.includes('bank'))return"💰 Connect Plaid for bank data.";return"I help with emails, deals, finance & more!";}
-
-// ============ DEAL ============
-function advanceDeal(){dealProgress=Math.min(dealProgress+10,100);document.getElementById('dealProgressText').textContent=dealProgress+'%';document.getElementById('dealProgressBar').style.width=dealProgress+'%';if(dealProgress>=100){showToast('🎉 Deal closed!','success');document.getElementById('dealValue').textContent='$24,500 ✓';}else showToast(`Deal: ${dealProgress}%`,'success');addAuditEntry('Deal '+dealProgress+'%');}
-async function triageDealWithAI(){showToast('AI triaging...','info');try{const r=await callGemini(`Analyze: Acme Corp $24,500 deal at ${dealProgress}%. Next steps?`);addChatBubble('ai',`📋 **Deal:**\n\n${r}`);switchPanel('chat');}catch(e){addChatBubble('ai',`📋 Next: follow-up call, timeline, contract.`);switchPanel('chat');}}
-
-// ============ VAULT ============
+// ====== VAULT ======
 function addVaultItem(){const t=document.getElementById('vaultItemType').value;const n=document.getElementById('vaultItemName').value.trim();const v=document.getElementById('vaultItemValue').value.trim();if(!n||!v){showToast('Fill fields','error');return;}APP.vaultItems.push({id:Date.now(),type:t,name:n,encrypted:btoa(v)});document.getElementById('vaultItemName').value='';document.getElementById('vaultItemValue').value='';document.getElementById('vaultItemsCount').textContent=APP.vaultItems.length;document.getElementById('vaultLastAccess').textContent='Now';addAuditEntry('Vault: +'+n);showToast(n+' stored','success');}
-function addAuditEntry(a){const l=document.getElementById('auditLog');const e=document.createElement('div');e.className='audit-item';e.innerHTML=`<div class="glow-dot"></div><div style="flex:1;font-weight:600;">${a}</div><div style="color:#64748b;font-size:11px;">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>`;l.insertBefore(e,l.firstChild);}
+function addAuditEntry(a){const l=document.getElementById('auditLog');const e=document.createElement('div');e.className='audit-item';e.innerHTML='<div class="glow-dot"></div><div style="flex:1;font-weight:600;">'+a+'</div><div style="color:#64748b;font-size:11px;">'+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div>';l.insertBefore(e,l.firstChild);}
 
-// ============ ANALYTICS ============
+// ====== ANALYTICS ======
 function renderAnalytics(){renderDonutChart();renderWeeklyChart();if(intgState.plaid.connected)updatePlaidAnalytics();}
-function renderDonutChart(){const svg=document.getElementById('donutSvg');const lg=document.getElementById('donutLegend');const data=[{l:'Services',v:45,c:'#7c3aed'},{l:'Products',v:25,c:'#10b981'},{l:'Consulting',v:20,c:'#f59e0b'},{l:'Other',v:10,c:'#06b6d4'}];const cx=100,cy=100,r=70,circ=2*Math.PI*r;let off=0;svg.innerHTML='';data.forEach(d=>{const len=(d.v/100)*circ;const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill','none');c.setAttribute('stroke',d.c);c.setAttribute('stroke-width','20');c.setAttribute('stroke-dasharray',`${len} ${circ-len}`);c.setAttribute('stroke-dashoffset',-off);c.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);svg.appendChild(c);off+=len;});const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',cx);t.setAttribute('y',cy+5);t.setAttribute('text-anchor','middle');t.setAttribute('fill','#e2e8f0');t.setAttribute('font-size','22');t.setAttribute('font-weight','800');t.textContent='$12.4k';svg.appendChild(t);lg.innerHTML=data.map(d=>`<div style="display:flex;align-items:center;gap:6px;font-size:12px;"><div style="width:10px;height:10px;border-radius:3px;background:${d.c};"></div>${d.l} ${d.v}%</div>`).join('');}
-function renderWeeklyChart(){const d=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],v=[65,78,52,89,95,42,71],m=Math.max(...v);document.getElementById('weeklyChart').innerHTML=`<div style="display:flex;align-items:flex-end;gap:12px;height:180px;">${d.map((x,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="font-size:11px;color:#94a3b8;">${v[i]}</div><div style="width:100%;height:${(v[i]/m)*140}px;background:var(--grad);border-radius:6px 6px 0 0;"></div><div style="font-size:11px;color:#64748b;">${x}</div></div>`).join('')}</div>`;}
-function renderAnalyticsMetrics(){document.getElementById('analyticsMetrics').innerHTML=[{l:'Conversion',v:'3.2%',c:'+0.4%'},{l:'Response',v:'2.4h',c:'-18m'},{l:'NPS',v:'72',c:'+5'},{l:'Churn',v:'2.1%',c:'-0.3%'}].map(m=>`<div style="background:var(--bg3);border-radius:var(--rs);padding:16px;text-align:center;"><div style="font-size:20px;font-weight:800;">${m.v}</div><div style="font-size:11px;color:#64748b;margin:4px 0;">${m.l}</div><div style="font-size:12px;color:#10b981;">${m.c}</div></div>`).join('');}
+function renderDonutChart(){const svg=document.getElementById('donutSvg');const lg=document.getElementById('donutLegend');const data=[{l:'Services',v:45,c:'#7c3aed'},{l:'Products',v:25,c:'#10b981'},{l:'Consulting',v:20,c:'#f59e0b'},{l:'Other',v:10,c:'#06b6d4'}];const cx=100,cy=100,r=70,circ=2*Math.PI*r;let off=0;svg.innerHTML='';data.forEach(d=>{const len=(d.v/100)*circ;const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill','none');c.setAttribute('stroke',d.c);c.setAttribute('stroke-width','20');c.setAttribute('stroke-dasharray',len+' '+(circ-len));c.setAttribute('stroke-dashoffset',-off);c.setAttribute('transform','rotate(-90 '+cx+' '+cy+')');svg.appendChild(c);off+=len;});const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',cx);t.setAttribute('y',cy+5);t.setAttribute('text-anchor','middle');t.setAttribute('fill','#e2e8f0');t.setAttribute('font-size','22');t.setAttribute('font-weight','800');t.textContent='$12.4k';svg.appendChild(t);lg.innerHTML=data.map(d=>'<div style="display:flex;align-items:center;gap:6px;font-size:12px;"><div style="width:10px;height:10px;border-radius:3px;background:'+d.c+';"></div>'+d.l+' '+d.v+'%</div>').join('');}
+function renderWeeklyChart(){const d=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],v=[65,78,52,89,95,42,71],m=Math.max(...v);document.getElementById('weeklyChart').innerHTML='<div style="display:flex;align-items:flex-end;gap:12px;height:180px;">'+d.map((x,i)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="font-size:11px;color:#94a3b8;">'+v[i]+'</div><div style="width:100%;height:'+(v[i]/m)*140+'px;background:var(--grad);border-radius:6px 6px 0 0;"></div><div style="font-size:11px;color:#64748b;">'+x+'</div></div>').join('')+'</div>';}
+function renderAnalyticsMetrics(){document.getElementById('analyticsMetrics').innerHTML=[{l:'Conversion',v:'3.2%',c:'+0.4%'},{l:'Response',v:'2.4h',c:'-18m'},{l:'NPS',v:'72',c:'+5'},{l:'Churn',v:'2.1%',c:'-0.3%'}].map(m=>'<div style="background:var(--bg3);border-radius:var(--rs);padding:16px;text-align:center;"><div style="font-size:20px;font-weight:800;">'+m.v+'</div><div style="font-size:11px;color:#64748b;margin:4px 0;">'+m.l+'</div><div style="font-size:12px;color:#10b981;">'+m.c+'</div></div>').join('');}
 
-// ============ THEME ============
-function setVibe(id){const v=VIBES[id];if(!v)return;const r=document.documentElement;['brand','brand2','bg','bg2','bg3'].forEach(k=>r.style.setProperty('--'+k,v[k]));r.style.setProperty('--grad',`linear-gradient(135deg, ${v.brand}, ${v.brand2})`);['colorBrand','colorBrand2','colorBg','colorBg2','colorBg3'].forEach((el,i)=>{const e=document.getElementById(el);if(e)e.value=[v.brand,v.brand2,v.bg,v.bg2,v.bg3][i];});['colorBrandHex','colorBrand2Hex','colorBgHex','colorBg2Hex','colorBg3Hex'].forEach((el,i)=>{const e=document.getElementById(el);if(e)e.textContent=[v.brand,v.brand2,v.bg,v.bg2,v.bg3][i];});document.querySelectorAll('.vibe-card').forEach(c=>c.classList.toggle('active',c.dataset.vibe===id));showToast('Vibe: '+v.name,'success');}
-function onColorPick(){const ids=['colorBrand','colorBrand2','colorBg','colorBg2','colorBg3'];const vars=['brand','brand2','bg','bg2','bg3'];ids.forEach((id,i)=>{const v=document.getElementById(id).value;document.documentElement.style.setProperty('--'+vars[i],v);document.getElementById(id+'Hex').textContent=v;});document.documentElement.style.setProperty('--grad',`linear-gradient(135deg, ${document.getElementById('colorBrand').value}, ${document.getElementById('colorBrand2').value})`);document.querySelectorAll('.vibe-card').forEach(c=>c.classList.remove('active'));}
+// ====== THEME ======
+function setVibe(id){const v=VIBES[id];if(!v)return;const r=document.documentElement;['brand','brand2','bg','bg2','bg3'].forEach(k=>r.style.setProperty('--'+k,v[k]));r.style.setProperty('--grad','linear-gradient(135deg, '+v.brand+', '+v.brand2+')');['colorBrand','colorBrand2','colorBg','colorBg2','colorBg3'].forEach((el,i)=>{const e=document.getElementById(el);if(e)e.value=[v.brand,v.brand2,v.bg,v.bg2,v.bg3][i];});['colorBrandHex','colorBrand2Hex','colorBgHex','colorBg2Hex','colorBg3Hex'].forEach((el,i)=>{const e=document.getElementById(el);if(e)e.textContent=[v.brand,v.brand2,v.bg,v.bg2,v.bg3][i];});document.querySelectorAll('.vibe-card').forEach(c=>c.classList.toggle('active',c.dataset.vibe===id));showToast('Vibe: '+v.name,'success');}
+function onColorPick(){const ids=['colorBrand','colorBrand2','colorBg','colorBg2','colorBg3'];const vars=['brand','brand2','bg','bg2','bg3'];ids.forEach((id,i)=>{const v=document.getElementById(id).value;document.documentElement.style.setProperty('--'+vars[i],v);document.getElementById(id+'Hex').textContent=v;});document.documentElement.style.setProperty('--grad','linear-gradient(135deg, '+document.getElementById('colorBrand').value+', '+document.getElementById('colorBrand2').value+')');document.querySelectorAll('.vibe-card').forEach(c=>c.classList.remove('active'));}
 function setFont(v){document.documentElement.style.setProperty('--font',v);document.body.style.fontFamily=v;document.querySelectorAll('.font-option').forEach(o=>o.classList.toggle('active',o.dataset.font===v));}
 function setRadius(v){document.documentElement.style.setProperty('--rs',v);document.documentElement.style.setProperty('--rl',Math.round(parseInt(v)*1.6)+'px');document.querySelectorAll('.radius-option').forEach(o=>o.classList.toggle('active',o.dataset.radius===v));}
-function renderVibeGrid(id){const c=document.getElementById(id);if(!c)return;c.innerHTML=Object.entries(VIBES).map(([id,v])=>`<div class="vibe-card ${id==='cyberpunk'?'active':''}" data-vibe="${id}" onclick="setVibe('${id}')" style="background:var(--bg3);"><div class="vibe-preview" style="background:${v.preview};"></div><div style="font-size:11px;font-weight:600;">${v.name}</div></div>`).join('');}
-function renderFontSelector(){document.getElementById('fontSelector').innerHTML=FONTS.map(f=>`<div class="font-option ${f.name==='Inter'?'active':''}" data-font="${f.value}" onclick="setFont('${f.value}')" style="font-family:${f.value};">${f.name}</div>`).join('');}
-function renderRadiusSelector(){document.getElementById('radiusSelector').innerHTML=RADII.map(r=>`<div class="radius-option ${r.value==='12px'?'active':''}" data-radius="${r.value}" onclick="setRadius('${r.value}')">${r.name}</div>`).join('');}
+function renderVibeGrid(id){const c=document.getElementById(id);if(!c)return;c.innerHTML=Object.entries(VIBES).map(([id,v])=>'<div class="vibe-card '+(id==='cyberpunk'?'active':'')+'" data-vibe="'+id+'" onclick="setVibe(\''+id+'\')" style="background:var(--bg3);"><div class="vibe-preview" style="background:'+v.preview+';"></div><div style="font-size:11px;font-weight:600;">'+v.name+'</div></div>').join('');}
+function renderFontSelector(){document.getElementById('fontSelector').innerHTML=FONTS.map(f=>'<div class="font-option '+(f.name==='Inter'?'active':'')+'" data-font="'+f.value+'" onclick="setFont(\''+f.value+'\')" style="font-family:'+f.value+';">'+f.name+'</div>').join('');}
+function renderRadiusSelector(){document.getElementById('radiusSelector').innerHTML=RADII.map(r=>'<div class="radius-option '+(r.value==='12px'?'active':'')+'" data-radius="'+r.value+'" onclick="setRadius(\''+r.value+'\')">'+r.name+'</div>').join('');}
 
-// ============ PERSONALITY ============
-function renderPersonalityTraits(){document.getElementById('personalityTraits').innerHTML=PTRAITS.map(t=>`<span class="personality-trait ${selectedTraits.includes(t)?'selected':''}" onclick="toggleTrait('${t}',this)">${t}</span>`).join('');}
+// ====== PERSONALITY ======
+function renderPersonalityTraits(){document.getElementById('personalityTraits').innerHTML=PTRAITS.map(t=>'<span class="personality-trait '+(selectedTraits.includes(t)?'selected':'')+'" onclick="toggleTrait(\''+t+'\',this)">'+t+'</span>').join('');}
 function toggleTrait(t,el){if(selectedTraits.includes(t)){selectedTraits=selectedTraits.filter(x=>x!==t);el.classList.remove('selected');}else{selectedTraits.push(t);el.classList.add('selected');}updatePersonality();}
 function updatePersonality(){showToast('Style: '+document.getElementById('personalityStyle').value,'success');}
 
-// ============ INDUSTRY ============
-function renderIndustryGrid(){document.getElementById('industryGrid').innerHTML=INDUSTRIES.map(i=>`<div class="intg-card ${selectedIndustry===i.id?'connected':''}" onclick="selectIndustry('${i.id}')" style="flex-direction:column;text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:8px;">${i.name.split(' ')[0]}</div><div style="font-weight:600;font-size:13px;">${i.name.split(' ').slice(1).join(' ')}</div></div>`).join('');}
+// ====== INDUSTRY ======
+function renderIndustryGrid(){document.getElementById('industryGrid').innerHTML=INDUSTRIES.map(i=>'<div class="intg-card '+(selectedIndustry===i.id?'connected':'')+'" onclick="selectIndustry(\''+i.id+'\')" style="flex-direction:column;text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:8px;">'+i.name.split(' ')[0]+'</div><div style="font-weight:600;font-size:13px;">'+i.name.split(' ').slice(1).join(' ')+'</div></div>').join('');}
 function selectIndustry(id){selectedIndustry=id;document.getElementById('currentIndustry').textContent=INDUSTRIES.find(i=>i.id===id)?.name.split(' ').slice(1).join(' ')||'None';renderIndustryGrid();saveProfileToDb({industry:id});const t={construction:'ember','real-estate':'sunset',consulting:'royal',ecommerce:'mint',saas:'cyberpunk',healthcare:'ocean',finance:'forest',marketing:'arctic'};if(t[id])setVibe(t[id]);}
 
-// ============ PROFILE ============
+// ====== PROFILE ======
 async function saveProfile(){const n=document.getElementById('profileName').value.trim();const c=document.getElementById('profileCompany').value.trim();const p=document.getElementById('profilePhone').value.trim();if(!n){showToast('Name required','error');return;}await saveProfileToDb({full_name:n,company:c,phone:p,industry:selectedIndustry||''});APP.profile={...APP.profile,full_name:n,company:c};updateUserDisplay();addAuditEntry('Profile saved');showToast('Saved!','success');}
-
 function switchSettingsTab(t,b){['appearance','profile','personality','industry','account'].forEach(x=>{const e=document.getElementById('settings-'+x);if(e)e.style.display=x===t?'block':'none';});b.parentElement.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
 
-// ============ DANGER ============
-function deleteAllData(){if(!confirm('Delete ALL data?'))return;APP.vaultItems=[];APP.chatHistory=[];Object.keys(intgState).forEach(k=>{intgState[k].connected=false;intgState[k].token=null;if(k==='gmail'){intgState[k].accessToken=null;intgState[k].emails=[];}if(k==='plaid'){intgState[k].accounts=[];intgState[k].accessToken=null;}if(k==='twilio'){intgState[k].accountSid=null;intgState[k].authToken=null;intgState[k].phoneNumber=null;}});if(APP.gmailSyncInterval){clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=null;}updateIntgDisplay();updateGmailTriageOverview();document.getElementById('vaultItemsCount').textContent='0';document.getElementById('plaidAnalyticsCard').style.display='none';showToast('Data deleted','info');}
-async function deleteAccount(){if(!confirm('Delete account permanently?'))return;if(!confirm('FINAL WARNING'))return;if(sb&&APP.user)try{await sb.from('profiles').delete().eq('id',APP.user.id);}catch(e){}handleLogout();showToast('Account deleted','info');}
+// ====== DANGER ======
+function deleteAllData(){if(!confirm('Delete ALL data?'))return;APP.vaultItems=[];APP.chatHistory=[];Object.keys(intgState).forEach(k=>{intgState[k].connected=false;intgState[k].token=null;if(k==='gmail'){intgState[k].accessToken=null;intgState[k].emails=[];}if(k==='plaid'){intgState[k].accounts=[];intgState[k].accessToken=null;document.getElementById('plaidAnalyticsCard').style.display='none';}if(k==='twilio'){intgState[k].accountSid=null;intgState[k].authToken=null;intgState[k].phoneNumber=null;}});if(APP.gmailSyncInterval){clearInterval(APP.gmailSyncInterval);APP.gmailSyncInterval=null;}updateIntgDisplay();updateGmailTriageOverview();document.getElementById('vaultItemsCount').textContent='0';showToast('Data deleted','info');}
+function deleteAccount(){if(!confirm('Delete account permanently?'))return;if(!confirm('FINAL WARNING'))return;if(sb&&!isDemo())try{sb.from('profiles').delete().eq('id',APP.user.id);}catch(e){}handleLogout();showToast('Account deleted','info');}
 
-// ============ LANDING ============
-function renderServices(){document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>`<div class="service-card"><div style="font-size:32px;margin-bottom:12px;">${s.icon}</div><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">${s.title}</h3><p style="font-size:13px;color:#94a3b8;">${s.desc}</p></div>`).join('');}
+// ====== LANDING ======
+function renderServices(){document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>'<div class="service-card"><div style="font-size:32px;margin-bottom:12px;">'+s.icon+'</div><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">'+s.title+'</h3><p style="font-size:13px;color:#94a3b8;">'+s.desc+'</p></div>').join('');}
 
-// ============ INIT ============
+// ====== INIT ======
 document.addEventListener('DOMContentLoaded',()=>{
-  console.log('[INIT] Page loaded, starting...');
+  console.log('[INIT] Page loaded');
   renderServices();
-  // Wait for supabase-js to be available
   let attempts=0;
-  const tryInit=()=>{
-    attempts++;
-    if(window.supabase&&window.supabase.createClient){
-      initSupabase();
-    }else if(attempts<20){
-      console.log('[INIT] Waiting for Supabase library... attempt '+attempts);
-      setTimeout(tryInit,300);
-    }else{
-      console.error('[INIT] Supabase library never loaded');
-      updateDbUI('err','Library failed to load — check connection');
-    }
-  };
-  tryInit();
+  const trySB=()=>{attempts++;if(window.supabase?.createClient){initSupabase();}else if(attempts<30){setTimeout(trySB,200);}else{setDbUI('err','Supabase library failed to load. Use Demo Mode.');}};
+  trySB();
   initGmailOAuth();
 });
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));if(e.ctrlKey&&e.key==='k'){e.preventDefault();if(document.getElementById('dashboard-page').style.display!=='none'){switchPanel('chat');document.getElementById('chatInput').focus();}}});
 </script>
 </body>
 </html>
